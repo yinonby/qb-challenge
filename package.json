@@ -29,7 +29,8 @@
     "prepare": "husky"
   },
   "workspaces": [
-    "packages/*",
+    "packages/qb-dev-lib/*",
+    "packages/qb-lib/*",
     "apps/*"
   ],
   "devDependencies": {

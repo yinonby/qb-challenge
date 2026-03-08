@@ -1,0 +1,18 @@
+{
+  "name": "@qb/vitest",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "build": "echo nothing to do",
+    "test": "npm run pretty",
+    "pretty": "npm run pretty:package",
+    "pretty:package": "prettier --write package.json"
+  },
+  "devDependencies": {
+    "@vitest/coverage-istanbul": "^3.2.3",
+    "@vitest/coverage-v8": "^3.2.3",
+    "std-env": "^3.10.0",
+    "vitest": "^3.2.3"
+  }
+}

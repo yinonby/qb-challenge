@@ -1,0 +1,21 @@
+{
+  "name": "@qb/lint",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo nothing to do",
+    "test": "npm run pretty",
+    "pretty": "npm run pretty:package",
+    "pretty:package": "prettier --write package.json"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@typescript-eslint/eslint-plugin": "8.12.2",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react": "^7.37.5",
+    "madge": "^8.0.0",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.15.0"
+  }
+}

@@ -1,0 +1,55 @@
+
+import { RnuiButtonPropsT } from "@/button/RnuiButton";
+
+export const initRnuiMocks = () => {
+  jest.mock("@qb/rnui", () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { Text, View } = require('react-native');
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const React = require('react');
+    const onShowSnackbarMock = jest.fn();
+
+    const RnuiButton = (props: RnuiButtonPropsT) => {
+      // Render a View wrapping the children in a Text
+      return React.createElement(
+        View,
+        props,
+        React.createElement(Text, null, props.children)
+      );
+    };
+
+    return {
+      __esModule: true,
+      RnuiText: Text,
+      RnuiButton: RnuiButton,
+      RnuiIconButton: View,
+      RnuiProvider: View,
+      RnuiCard: View,
+      RnuiGrid: View,
+      RnuiMasonryGrid: View,
+      RnuiGridItem: View,
+      RnuiBlinker: View,
+      RnuiTextInput: View,
+      RnuiTableRow: View,
+      RnuiTableCell: View,
+      RnuiTable: View,
+      RnuiTableHeader: View,
+      RnuiTableTitle: View,
+      RnuiAppContent: View,
+      RnuiCopyToClipboard: View,
+      RnuiQrCode: View,
+      RnuiActivityIndicator: View,
+      RnuiErrorBoundary: View,
+      RnuiCodeInput: View,
+
+      useRnuiSnackbar: () => ({
+        onShowSnackbar: onShowSnackbarMock,
+      }),
+
+      // expose for tests
+      __rnuiMocks: {
+        onShowSnackbarMock,
+      },
+    };
+  });
+}
