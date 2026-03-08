@@ -1,0 +1,33 @@
+
+name: Pipeline
+
+on:
+  # Trigger PRs targeting devel for feature merges, and pushes to devel for main merge
+  pull_request:
+    branches:
+      - devel
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - devel
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This job takes care of running all tests
+  test:
+    uses: ./.github/workflows/test.yml
+
+  # This job takes care of merging code into other branches, once tests passed
+  merge_devel_to_main:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/devel'
+    uses: ./.github/workflows/merge_to_target.yml
+    with:
+      source_branch: devel
+      target_branch: main
