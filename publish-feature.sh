@@ -65,6 +65,16 @@ if ! git rev-parse --verify "feature/$FEATURE_NAME" >/dev/null 2>&1; then
     exit 1
 fi
 
+if ! gh --version &> /dev/null; then
+    echo "Error: Github CLI is not installed. If you are on mac, you can run: <brew install gh>"
+    exit 1
+fi
+
+if ! gh auth status >/dev/null; then
+    echo "Error: you are not logged into Github, please run: <gh auth login>."
+    exit 1
+fi
+
 # ----------------------------
 # Push branch to origin
 # ----------------------------
@@ -75,10 +85,6 @@ git push -u origin "feature/$FEATURE_NAME"
 # Create Pull Request
 # ----------------------------
 echo "Creating PR from 'feature/$FEATURE_NAME' into '$BASE_BRANCH'..."
-if [[ -n "$PR_BODY" ]]; then
-  gh pr create --base "$BASE_BRANCH" --head "feature/$FEATURE_NAME" --title "$PR_TITLE" --body "$PR_BODY"
-else
-  gh pr create --base "$BASE_BRANCH" --head "feature/$FEATURE_NAME" --title "$PR_TITLE"
-fi
+gh pr create --base "$BASE_BRANCH" --head "feature/$FEATURE_NAME" --title "$PR_TITLE" --body "$PR_BODY"
 
 echo "PR created successfully!"
