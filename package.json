@@ -16,20 +16,16 @@
   "scripts": {
     "test": "npm run husky:verify:setup && npm run test:all",
     "test:all": "./scripts/python/src/test/test-all.py",
-
     "cover:report": "npm run cover:report:produce && npm run cover:report:open",
     "cover:report:produce": "npm run cover:report:produce:npm",
     "cover:report:produce:npm": "./scripts/python/src/coverage/npm/produce-coverage-report.py",
     "cover:report:open": "npm run cover:report:open:npm",
     "cover:report:open:npm": "./scripts/python/src/coverage/npm/open-coverage-report.py",
-
     "husky:verify:setup": "npm run husky:verify:installed && npm run husky:verify:configured",
     "husky:verify:installed": "[ $(git config --get core.hooksPath) = \".husky/_\" ]",
     "husky:verify:configured": "[ -f \".husky/pre-push\" ]",
-
     "pre-push": "npm run pre-push:no-local-changes && npm test",
     "pre-push:no-local-changes": "[ ! -n \"$(git status --porcelain)\" ]",
-
     "prepare": "husky"
   },
   "workspaces": [
