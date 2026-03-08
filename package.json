@@ -13,8 +13,23 @@
   "license": "ISC",
   "author": "Yinon",
   "type": "module",
+  "scripts": {
+    "test": "npm run husky:verify:setup",
+
+    "husky:verify:setup": "npm run husky:verify:installed && npm run husky:verify:configured",
+    "husky:verify:installed": "[ $(git config --get core.hooksPath) = \".husky/_\" ]",
+    "husky:verify:configured": "[ -f \".husky/pre-push\" ]",
+
+    "pre-push": "npm run pre-push:no-local-changes && npm test",
+    "pre-push:no-local-changes": "[ ! -n \"$(git status --porcelain)\" ]",
+
+    "prepare": "husky"
+  },
   "workspaces": [
     "packages/*",
     "apps/*"
-  ]
+  ],
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }
