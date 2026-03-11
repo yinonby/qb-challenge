@@ -25,7 +25,8 @@ const jestConfig = {
   },
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    "/src/types/"
+    "/src/types/",
+    "/src/mocks/",
   ],
 }
 

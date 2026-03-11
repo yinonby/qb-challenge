@@ -50,6 +50,7 @@ export const initReactNativeMocks = () => {
       View: RN.View,
       Text: RN.Text,
       ScrollView: RN.View,
+      Pressable: RN.View,
       FlatList: createFlatMock(React, RN),
       ActivityIndicator: RN.View,
       StyleSheet: { create: (styles: object) => styles, flatten: (style: object) => style },
