@@ -18,7 +18,7 @@ jest.mock('react-native-paper', () => {
 describe('RnuiTableHeader', () => {
   it('renders correctly with default props', () => {
     const { getByTestId } = render(
-      <RnuiTableHeader ><Text testID="text-test-id">Hello</Text></RnuiTableHeader>
+      <RnuiTableHeader><Text testID="text-test-id">Hello</Text></RnuiTableHeader>
     );
 
     getByTestId('DataTableHeader-tid');

@@ -1,4 +1,5 @@
 
+
 import { rnJestConfig } from '@qb/rn-testing';
 
 export default {
@@ -11,4 +12,7 @@ export default {
     // Don't ignore these
     'node_modules/(?!(react-native|@react-native)/)',
   ],
+  moduleNameMapper: {
+    '@qb-rnui/(.*)$': '<rootDir>/src/$1',
+  },
 }

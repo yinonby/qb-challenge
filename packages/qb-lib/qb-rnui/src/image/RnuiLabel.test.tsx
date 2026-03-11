@@ -1,5 +1,5 @@
 
-import type { RnuiLabelPropsT } from '@/types/ComponentTypes';
+import type { RnuiLabelPropsT } from '@qb-rnui/types/ComponentTypes';
 import { render } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import * as RnuiProvider from '../theme/RnuiProvider';

@@ -10,8 +10,7 @@
     "./test-utils": "./test/index.ts"
   },
   "scripts": {
-    "build": "echo nothing to do",
-    "test": "npm run pretty && npm run build && npm run tsc && npm run lint && npm run cover:unit",
+    "test": "npm run pretty && npm run tsc && npm run lint && npm run cover:unit",
     "pretty": "npm run pretty:package",
     "pretty:package": "prettier --write package.json",
     "tsc": "npx tsc",
@@ -25,7 +24,6 @@
   },
   "dependencies": {
     "@qb/utils": "*",
-    "@react-native-clipboard/clipboard": "^1.16.3",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-confirmation-code-field": "^8.0.1",

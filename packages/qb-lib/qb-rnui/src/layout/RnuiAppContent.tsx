@@ -1,6 +1,8 @@
 
 import React, { ReactElement } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
+import { useRnuiContext } from '../theme/RnuiProvider';
 
 export type RnuiAppContentPropsT = {
   children: ReactElement | ReactElement[],
@@ -8,8 +10,18 @@ export type RnuiAppContentPropsT = {
 };
 
 export const RnuiAppContent: React.FC<RnuiAppContentPropsT> = ({ children }) => {
+  const { rnuiStyles } = useRnuiContext();
+  const theme = useTheme();
+
   return (
-    <ScrollView style={styles.container} testID="scroll-view-tid" >
+    <ScrollView
+      testID='ScrollViewTid'
+      style={[
+        { backgroundColor: theme?.colors.background }, // must set backgroundColor manually
+        styles.container,
+        rnuiStyles.content?.padding ? { padding: rnuiStyles.content.padding } : styles.padding,
+      ]}
+    >
       {children}
     </ScrollView>
   );
@@ -17,8 +29,10 @@ export const RnuiAppContent: React.FC<RnuiAppContentPropsT> = ({ children }) => 
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    minHeight: "100%",
+    width: '100%',
+    minHeight: '100%',
+  },
+  padding: {
     padding: 24,
   },
 });

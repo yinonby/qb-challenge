@@ -35,7 +35,7 @@ describe('RnuiGrid', () => {
     ];
 
     const { getAllByTestId } = render(
-      <RnuiGrid >{children}</RnuiGrid>
+      <RnuiGrid>{children}</RnuiGrid>
     );
 
     // verify positions
@@ -51,7 +51,7 @@ describe('RnuiGrid', () => {
     ];
 
     const { getAllByTestId } = render(
-      <RnuiGrid >{children}</RnuiGrid>
+      <RnuiGrid>{children}</RnuiGrid>
     );
 
     // verify positions
@@ -67,7 +67,7 @@ describe('RnuiGrid', () => {
     ];
 
     const { getAllByTestId } = render(
-      <RnuiGrid spacing={12} >{children}</RnuiGrid>
+      <RnuiGrid spacing={12}>{children}</RnuiGrid>
     );
 
     // verify positions
@@ -82,7 +82,7 @@ describe('RnuiGrid', () => {
     ];
 
     const { getAllByTestId } = render(
-      <RnuiGrid spacing={12} >{children}</RnuiGrid>
+      <RnuiGrid spacing={12}>{children}</RnuiGrid>
     );
 
     // verify positions
@@ -98,7 +98,7 @@ describe('RnuiGrid', () => {
     ];
 
     const { getAllByTestId } = render(
-      <RnuiGrid >{children}</RnuiGrid>
+      <RnuiGrid>{children}</RnuiGrid>
     );
 
     // verify positions
@@ -114,7 +114,7 @@ describe('RnuiGrid', () => {
     ];
 
     const { getAllByTestId } = render(
-      <RnuiGrid >{children}</RnuiGrid>
+      <RnuiGrid>{children}</RnuiGrid>
     );
 
     // verify positions

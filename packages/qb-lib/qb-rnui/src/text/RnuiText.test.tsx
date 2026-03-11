@@ -11,7 +11,7 @@ jest.mock('react-native-paper', () => {
   // Outer dumb component holds all props
   const RnpTextMock: FC<RnuiTextPropsT> = ({ children, ...props }) => {
     return (
-      <Text {...props} testID="text-test-id" >{children}</Text>
+      <Text {...props} testID="text-test-id">{children}</Text>
     );
   };
 
@@ -23,7 +23,7 @@ jest.mock('react-native-paper', () => {
 describe('RnuiText', () => {
   it('renders correctly with default props', () => {
     const { getByTestId } = render(
-      <RnuiText >{"Hello"}</RnuiText>
+      <RnuiText>{"Hello"}</RnuiText>
     );
 
     const text = getByTestId('text-test-id');

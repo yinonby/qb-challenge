@@ -23,7 +23,7 @@ describe('RnuiTableRow', () => {
     useRnuiContextSpy.mockReturnValue({ rnuiStyles: {} });
 
     const { getByTestId } = render(
-      <RnuiTableRow ><Text testID="Text-id">Hello</Text></RnuiTableRow>
+      <RnuiTableRow><Text testID="Text-id">Hello</Text></RnuiTableRow>
     );
 
     getByTestId('DataTableRow-tid');

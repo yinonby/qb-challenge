@@ -13,7 +13,7 @@ jest.mock('react-native-confirmation-code-field', () => {
 
   return {
     CodeField: ({ renderCell, cellCount, testID, ...rest }: CodeFieldProps) => (
-      <View testID={testID} {...rest} >
+      <View testID={testID} {...rest}>
         {cellCount !== undefined && Array.from({ length: cellCount }).map((_, index) =>
           renderCell({ index, symbol: '', isFocused: index === 0 })
         )}

@@ -18,7 +18,7 @@ jest.mock('react-native-paper', () => {
 describe('RnuiTableCell', () => {
   it('renders correctly with default props', () => {
     const { getByTestId } = render(
-      <RnuiTableCell ><Text testID="text-test-id">Hello</Text></RnuiTableCell>
+      <RnuiTableCell><Text testID="text-test-id">Hello</Text></RnuiTableCell>
     );
 
     const cut = getByTestId('DataTableCell-tid');

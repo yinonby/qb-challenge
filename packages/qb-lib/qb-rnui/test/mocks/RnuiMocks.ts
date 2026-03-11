@@ -1,5 +1,5 @@
 
-import { RnuiButtonPropsT } from "@/button/RnuiButton";
+import { RnuiButtonPropsT } from "@qb-rnui/button/RnuiButton";
 
 export const initRnuiMocks = () => {
   jest.mock("@qb/rnui", () => {

@@ -10,14 +10,14 @@ jest.mock('react-native-paper', () => {
   const { View } = require('react-native');
 
   // Outer dumb component holds all props
-  const RnpThemeProviderMock: FC<{children: React.ReactNode }> = ({ children, ...props }) => {
+  const RnpPaperProviderMock: FC<{children: React.ReactNode }> = ({ children, ...props }) => {
     return (
-      <View {...props} testID="theme-provider-test-id" >{children}</View>
+      <View {...props} testID="theme-provider-test-id">{children}</View>
     );
   };
 
   return {
-    ThemeProvider: (props: { children: React.ReactNode }) => <RnpThemeProviderMock {...props} />,
+    PaperProvider: (props: { children: React.ReactNode }) => <RnpPaperProviderMock {...props} />,
   };
 });
 
@@ -29,8 +29,8 @@ describe('RnuiProvider', () => {
       </RnuiProvider>
     );
 
-    const themeProvider = getByTestId('theme-provider-test-id');
-    expect(themeProvider).not.toBeNull();
+    const PaperProvider = getByTestId('theme-provider-test-id');
+    expect(PaperProvider).not.toBeNull();
     const text = getByTestId('text-test-id');
     expect(text.props.children).toBe('Hello');
   });

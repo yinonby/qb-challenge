@@ -1,10 +1,13 @@
 
 import React, { createContext, useContext, type PropsWithChildren } from 'react';
-import type { ColorValue, TextStyle } from 'react-native';
-import { ThemeProvider, type MD3Theme } from 'react-native-paper';
+import { type ColorValue, type TextStyle } from 'react-native';
+import { PaperProvider, type MD3Theme } from 'react-native-paper';
 import { RnuiSnackbarProvider } from '../snackbar/RnuiSnackbarProvider';
 
 export type RnuiStylesT = {
+  content?: {
+    padding?: number,
+  },
   xsButtonLabelStyle?: TextStyle,
   imageLabel?: {
     textColor?: ColorValue,
@@ -39,11 +42,11 @@ export const RnuiProvider: React.FC<PropsWithChildren<RnuiProviderPropsT>> = (pr
 
   return (
     <RnuiContext.Provider value={value}>
-      <ThemeProvider theme={theme}>
+      <PaperProvider theme={theme}>
         <RnuiSnackbarProvider /* depends on ThemeProvider */>
           {children}
         </RnuiSnackbarProvider>
-      </ThemeProvider>
+      </PaperProvider>
     </RnuiContext.Provider>
   );
 };

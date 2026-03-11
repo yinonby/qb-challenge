@@ -1,10 +1,12 @@
 
+import * as RnuiUtils from '@qb-rnui/utils/RnuiUtils';
 import { render } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import * as RnuiProvider from '../theme/RnuiProvider';
 import { RnuiButton } from './RnuiButton';
 
-// Mock react-native-paper Button
+// mocks
+
 jest.mock('react-native-paper', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
@@ -14,11 +16,16 @@ jest.mock('react-native-paper', () => {
   };
 });
 
+// tests
+
 describe('RnuiButton', () => {
   const useRnuiContextSpy = jest.spyOn(RnuiProvider, 'useRnuiContext');
+  const spy_isWeb = jest.spyOn(RnuiUtils, 'isWeb');
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    spy_isWeb.mockReturnValue(false);
   });
 
   it('renders correctly with children', () => {
@@ -34,7 +41,7 @@ describe('RnuiButton', () => {
     expect(button.props.children).toBe('Click me');
   });
 
-  it('applies default mode "contained" and uppercase "false"', () => {
+  it('applies default mode contained and uppercase false', () => {
     useRnuiContextSpy.mockReturnValue({
       rnuiStyles: {}
     });
@@ -54,7 +61,7 @@ describe('RnuiButton', () => {
     });
 
     const { getByTestId } = render(
-      <RnuiButton mode="outlined" uppercase>
+      <RnuiButton mode='outlined' uppercase>
         Custom Props
       </RnuiButton>
     );
@@ -64,13 +71,13 @@ describe('RnuiButton', () => {
     expect(button.props.uppercase).toBe(true);
   });
 
-  it('renders with size xs', () => {
+  it('renders with size xs, without rnuiStyles override', () => {
     useRnuiContextSpy.mockReturnValue({
       rnuiStyles: {}
     });
 
     const { getByTestId } = render(
-      <RnuiButton size="xs">XS Button</RnuiButton>
+      <RnuiButton size='xs'>XS Button</RnuiButton>
     );
 
     const button = getByTestId('btn-tid');
@@ -83,7 +90,7 @@ describe('RnuiButton', () => {
     expect(finalButtonStyle.minWidth).toBe(48);
   });
 
-  it('renders with size xs, override defaults', () => {
+  it('renders with size xs, with rnuiStyles override, not in web', () => {
     const xsButtonLabelStyle = {
       margin: 18,
       fontSize: 112,
@@ -91,17 +98,76 @@ describe('RnuiButton', () => {
     };
     useRnuiContextSpy.mockReturnValue({
       rnuiStyles: {
-        xsButtonLabelStyle
+        xsButtonLabelStyle,
       }
     });
+    spy_isWeb.mockReturnValue(false);
 
     const { getByTestId } = render(
-      <RnuiButton size="xs">XS Button</RnuiButton>
+      <RnuiButton size='xs'>XS Button</RnuiButton>
     );
 
     const button = getByTestId('btn-tid');
     expect(button.props.labelStyle).toBeDefined();
-    expect(button.props.labelStyle).toBe(xsButtonLabelStyle);
+    expect(button.props.labelStyle).toEqual({
+      ...xsButtonLabelStyle,
+    });
+
+    const finalButtonStyle = StyleSheet.flatten(button.props.style);
+    expect(finalButtonStyle.minWidth).toBe(48);
+  });
+
+  it('renders with size xs, with rnuiStyles override, in web, with icon', () => {
+    const xsButtonLabelStyle = {
+      margin: 18,
+      fontSize: 112,
+      lineHeight: 116
+    };
+    useRnuiContextSpy.mockReturnValue({
+      rnuiStyles: {
+        xsButtonLabelStyle,
+      }
+    });
+    spy_isWeb.mockReturnValue(true);
+
+    const { getByTestId } = render(
+      <RnuiButton size='xs' icon='close'>XS Button</RnuiButton>
+    );
+
+    const button = getByTestId('btn-tid');
+    expect(button.props.labelStyle).toBeDefined();
+    expect(button.props.labelStyle).toEqual({
+      ...xsButtonLabelStyle,
+      paddingHorizontal: 16,
+    });
+
+    const finalButtonStyle = StyleSheet.flatten(button.props.style);
+    expect(finalButtonStyle.minWidth).toBe(48);
+  });
+
+  it('renders with size xs, with rnuiStyles override, in web, without icon', () => {
+    const xsButtonLabelStyle = {
+      margin: 18,
+      fontSize: 112,
+      lineHeight: 116
+    };
+    useRnuiContextSpy.mockReturnValue({
+      rnuiStyles: {
+        xsButtonLabelStyle,
+      }
+    });
+    spy_isWeb.mockReturnValue(true);
+
+    const { getByTestId } = render(
+      <RnuiButton size='xs'>XS Button</RnuiButton>
+    );
+
+    const button = getByTestId('btn-tid');
+    expect(button.props.labelStyle).toBeDefined();
+    expect(button.props.labelStyle).toEqual({
+      ...xsButtonLabelStyle,
+      paddingHorizontal: 8,
+    });
 
     const finalButtonStyle = StyleSheet.flatten(button.props.style);
     expect(finalButtonStyle.minWidth).toBe(48);
@@ -113,7 +179,7 @@ describe('RnuiButton', () => {
     });
 
     const { getByTestId } = render(
-      <RnuiButton size="small">Small Button</RnuiButton>
+      <RnuiButton size='small'>Small Button</RnuiButton>
     );
 
     const button = getByTestId('btn-tid');
@@ -129,7 +195,7 @@ describe('RnuiButton', () => {
     });
 
     const { getByTestId } = render(
-      <RnuiButton size="medium">Medium Button</RnuiButton>
+      <RnuiButton size='medium'>Medium Button</RnuiButton>
     );
 
     const button = getByTestId('btn-tid');

@@ -1,6 +1,7 @@
 
 import { FC, ReactNode } from 'react';
 import { StyleSheet, View, type DimensionValue } from 'react-native';
+import { Card } from 'react-native-paper';
 import { RnuiImage, RnuiImagePropsT } from '../image/RnuiImage';
 
 export type RnuiCardPropsT = {
@@ -16,24 +17,24 @@ export const RnuiCard: FC<RnuiCardPropsT> = ({
   children,
 }) => {
   return (
-    <View testID="container-tid" style={[styles.card, { height }]}>
-      {imageProps && <RnuiImage testID="image-tid" {...imageProps} />}
+    <Card testID='CardTid' style={[styles.card, { height }]}>
+      <View style={styles.imageContainer}>
+        {imageProps && <RnuiImage testID='RnuiImageTid' {...imageProps} />}
+      </View>
 
-      <View testID="content-tid" style={styles.content}>{children}</View>
-    </View>
+      <View testID='contentTid' style={styles.content}>{children}</View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
     borderRadius: 12,
-    overflow: "hidden",
-    elevation: 2, // Android shadow
-    shadowColor: "#000", // iOS shadow
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
+  },
+  imageContainer: {
+    overflow: 'hidden',
+    borderTopStartRadius: 12,
+    borderTopEndRadius: 12,
   },
   content: {
     padding: 12,
