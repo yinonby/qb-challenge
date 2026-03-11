@@ -14,7 +14,7 @@
     "allowImportingTsExtensions": true,
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["src/*"],
+      "@qb-utils/*": ["src/*"],
     }
   }
 }

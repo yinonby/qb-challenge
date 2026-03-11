@@ -1,5 +1,5 @@
 
-import { generateUuidv4 } from './UtilsLib';
+import { generateUuidv4, stableHash } from './UtilsLib';
 
 const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -37,3 +37,13 @@ describe('generateUuidv4', () => {
     expect(set.size).toBe(iterations);
   });
 });
+
+describe('stableHash', () => {
+  it('creates the same hash for different object with same properties', () => {
+    const hash1 = stableHash({ a: 1, b: "2" });
+    const hash2 = stableHash({ b: "2", a: 1 });
+
+    expect(hash1).toEqual(hash2);
+  });
+});
+
