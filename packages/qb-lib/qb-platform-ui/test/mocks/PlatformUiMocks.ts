@@ -27,6 +27,7 @@ export const initPlatformUiMocks = () => {
         mock_navigateReplace,
         mock_useSearchParams,
         mock_useSetSearchParams,
+        mock_usePlatformUiLocalization,
       },
     };
   });
