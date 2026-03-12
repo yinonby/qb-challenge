@@ -12,8 +12,5 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "allowImportingTsExtensions": true,
-    "paths": {
-      "@/*": ["src/*"],
-    }
   }
 }

@@ -7,7 +7,6 @@
     "typescript": "^5.6.3"
   },
   "scripts": {
-    "build": "echo nothing to do",
     "test": "npm run pretty",
     "pretty": "npm run pretty:package",
     "pretty:package": "prettier --write package.json"
