@@ -4,13 +4,13 @@ export const initPlatformUiMocks = () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { View } = require('react-native');
 
-    const mock_usePlatformUiLocalization = jest.fn().mockReturnValue({ languageCode: 'en' });
+    const mock_getDeviceLangCodeStr = jest.fn();
     const mock_navigate = jest.fn();
     const mock_navigateReplace = jest.fn();
     const mock_useSearchParams = jest.fn();
     const mock_useSetSearchParams = jest.fn();
-    const mock_getItem = jest.fn();
-    const mock_setItem = jest.fn();
+    const mock_getStorageItem = jest.fn();
+    const mock_setStorageItem = jest.fn();
     const mock_isWeb = jest.fn();
     const mock_isIos = jest.fn();
 
@@ -18,7 +18,9 @@ export const initPlatformUiMocks = () => {
       __esModule: true,
       PlatformUiLink: View,
 
-      usePlatformUiLocalization: mock_usePlatformUiLocalization,
+      usePlatformUiLocalization: {
+        getDeviceLangCodeStr: mock_getDeviceLangCodeStr,
+      },
       usePlatformUiNavigation: () => ({
         navigate: mock_navigate,
         navigateReplace: mock_navigateReplace,
@@ -26,21 +28,21 @@ export const initPlatformUiMocks = () => {
       useSearchParams: mock_useSearchParams,
       useSetSearchParams: mock_useSetSearchParams,
       useStorage: () => ({
-        getStorageItem: mock_getItem,
-        setStorageItem: mock_setItem,
+        getStorageItem: mock_getStorageItem,
+        setStorageItem: mock_setStorageItem,
       }),
       isWeb: mock_isWeb,
       isIos: mock_isIos,
 
       // expose for tests
       __puiMocks: {
-        mock_usePlatformUiLocalization,
+        mock_getDeviceLangCodeStr,
         mock_navigate,
         mock_navigateReplace,
         mock_useSearchParams,
         mock_useSetSearchParams,
-        mock_getItem,
-        mock_setItem,
+        mock_getStorageItem,
+        mock_setStorageItem,
         mock_isWeb,
         mock_isIos,
       },

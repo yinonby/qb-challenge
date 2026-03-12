@@ -3,12 +3,12 @@ import * as PlatformUtils from '../platform/PlatformUtils';
 import type { StorageAdapter } from '../types/StorageTypes';
 import { useStorage } from './Storage';
 
-const mock_getItem = jest.fn();
-const mock_setItem = jest.fn();
+const mock_getStorageItem = jest.fn();
+const mock_setStorageItem = jest.fn();
 const mock_removeItem = jest.fn();
 const mock_AsyncStorage = {
-  getItem: mock_getItem,
-  setItem: mock_setItem,
+  getItem: mock_getStorageItem,
+  setItem: mock_setStorageItem,
   removeItem: mock_removeItem,
 };
 
@@ -21,8 +21,8 @@ describe('useStorage', () => {
   const isWebSpy = jest.spyOn(PlatformUtils, "isWeb");
   let storageMap: Map<string, string> = new Map<string, string>();
 
-  mock_getItem.mockImplementation((key: string) => storageMap.get(key) === undefined ? null : storageMap.get(key));
-  mock_setItem.mockImplementation((key: string, value: string) => { storageMap.set(key, value); });
+  mock_getStorageItem.mockImplementation((key: string) => storageMap.get(key) === undefined ? null : storageMap.get(key));
+  mock_setStorageItem.mockImplementation((key: string, value: string) => { storageMap.set(key, value); });
   mock_removeItem.mockImplementation((key: string) => { storageMap.delete(key); });
 
   beforeEach(() => {
@@ -36,8 +36,8 @@ describe('useStorage', () => {
   describe('web platform', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).localStorage = {
-      getItem: mock_getItem,
-      setItem: mock_setItem,
+      getItem: mock_getStorageItem,
+      setItem: mock_setStorageItem,
       removeItem: mock_removeItem,
     };
 
@@ -49,10 +49,10 @@ describe('useStorage', () => {
       const storage: StorageAdapter = useStorage();
 
       await storage.setStorageItem('key', 'value');
-      expect(mock_setItem).toHaveBeenCalledTimes(1);
+      expect(mock_setStorageItem).toHaveBeenCalledTimes(1);
 
       const result = await storage.getStorageItem('key');
-      expect(mock_getItem).toHaveBeenCalledTimes(1);
+      expect(mock_getStorageItem).toHaveBeenCalledTimes(1);
       expect(result).toBe('value');
 
       await storage.removeStorageItem('key');
@@ -69,10 +69,10 @@ describe('useStorage', () => {
       const storage = useStorage();
 
       await storage.setStorageItem('key', 'value');
-      expect(mock_setItem).not.toHaveBeenCalled();
+      expect(mock_setStorageItem).not.toHaveBeenCalled();
 
       const result = await storage.getStorageItem('key');
-      expect(mock_getItem).not.toHaveBeenCalled();
+      expect(mock_getStorageItem).not.toHaveBeenCalled();
       expect(result).toBeNull();
 
       await storage.removeStorageItem('key');
@@ -94,10 +94,10 @@ describe('useStorage', () => {
       const storage = useStorage();
 
       await storage.getStorageItem('KEY1');
-      expect(mock_getItem).toHaveBeenCalledWith('KEY1');
+      expect(mock_getStorageItem).toHaveBeenCalledWith('KEY1');
 
       await storage.setStorageItem('KEY1', 'VAL1');
-      expect(mock_setItem).toHaveBeenCalledWith('KEY1', 'VAL1');
+      expect(mock_setStorageItem).toHaveBeenCalledWith('KEY1', 'VAL1');
 
       await storage.removeStorageItem('KEY1');
       expect(mock_removeItem).toHaveBeenCalledWith('KEY1');

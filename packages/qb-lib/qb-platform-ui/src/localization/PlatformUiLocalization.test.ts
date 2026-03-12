@@ -13,51 +13,27 @@ jest.mock('expo-localization', () => ({
 // tests
 
 describe('usePlatformUiLocalization', () => {
-  const spyOnGetLocales = jest.spyOn(ExpoLocalization, "getLocales");
+  const spy_getLocales = jest.spyOn(ExpoLocalization, "getLocales");
 
   beforeEach(() => {
-    spyOnGetLocales.mockReset();
+    spy_getLocales.mockReset();
   });
 
   it('returns the first locale from getLocales', () => {
     const first: Locale = {
       languageTag: 'en-US',
-      region: 'US',
-      // other fields may exist; include representative ones
-      currencyCode: 'USD',
-      measurementSystem: 'metric',
     } as unknown as Locale;
 
     const second: Locale = {
       languageTag: 'fr-FR',
-      region: 'FR',
-      currencyCode: 'EUR',
-      measurementSystem: 'metric',
     } as unknown as Locale;
 
-    spyOnGetLocales.mockReturnValue([first, second]);
+    spy_getLocales.mockReturnValue([first, second]);
 
-    const result = usePlatformUiLocalization();
+    const { getDeviceLangCodeStr: getLangCodeStr, getDeviceLocale: getLocale } = usePlatformUiLocalization();
 
-    expect(spyOnGetLocales).toHaveBeenCalled();
-    expect(result).toBe(first);
-  });
-
-  it('handles web-like locales where currencyCode and measurementSystem may be null', () => {
-    const webLocale: Locale = {
-      languageTag: 'en-GB',
-      region: 'GB',
-      currencyCode: null as unknown as string | null,
-      measurementSystem: null as unknown as string | null,
-    } as unknown as Locale;
-
-    spyOnGetLocales.mockReturnValue([webLocale]);
-
-    const result = usePlatformUiLocalization();
-
-    expect(spyOnGetLocales).toHaveBeenCalled();
-    expect(result).toBe(webLocale);
-    expect(result.currencyCode).toBeNull();
-    expect(result.measurementSystem).toBeNull();
+    expect(spy_getLocales).toHaveBeenCalled();
+    expect(getLocale()).toBe(first);
+    expect(getLangCodeStr()).toBe(first.languageCode);
   });
 });
