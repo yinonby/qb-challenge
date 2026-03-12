@@ -4,10 +4,9 @@ export type GeoLocationCoordsT = {
   longitude: number,
 }
 
-
-const _langCodes = ['en', 'es' , 'fr'];
+const _langCodes = ['en', 'es' , 'fr'] as const;
 export type LangCodeT = typeof _langCodes[number];
-export const langCodes: LangCodeT[] = _langCodes as unknown as LangCodeT[];
+export const langCodes: LangCodeT[] = [..._langCodes];
 
 export type CurrencyCodeT = 'EUR' | 'USD' | 'GBP';
 
