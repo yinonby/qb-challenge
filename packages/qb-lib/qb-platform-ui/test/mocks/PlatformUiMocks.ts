@@ -9,9 +9,15 @@ export const initPlatformUiMocks = () => {
     const mock_navigateReplace = jest.fn();
     const mock_useSearchParams = jest.fn();
     const mock_useSetSearchParams = jest.fn();
+    const mock_getItem = jest.fn();
+    const mock_setItem = jest.fn();
+    const mock_isWeb = jest.fn();
+    const mock_isIos = jest.fn();
 
     return {
       __esModule: true,
+      PlatformUiLink: View,
+
       usePlatformUiLocalization: mock_usePlatformUiLocalization,
       usePlatformUiNavigation: () => ({
         navigate: mock_navigate,
@@ -19,15 +25,24 @@ export const initPlatformUiMocks = () => {
       }),
       useSearchParams: mock_useSearchParams,
       useSetSearchParams: mock_useSetSearchParams,
-      PlatformUiLink: View,
+      useStorage: () => ({
+        getStorageItem: mock_getItem,
+        setStorageItem: mock_setItem,
+      }),
+      isWeb: mock_isWeb,
+      isIos: mock_isIos,
 
       // expose for tests
       __puiMocks: {
+        mock_usePlatformUiLocalization,
         mock_navigate,
         mock_navigateReplace,
         mock_useSearchParams,
         mock_useSetSearchParams,
-        mock_usePlatformUiLocalization,
+        mock_getItem,
+        mock_setItem,
+        mock_isWeb,
+        mock_isIos,
       },
     };
   });
