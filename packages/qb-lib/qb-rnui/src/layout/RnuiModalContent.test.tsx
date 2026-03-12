@@ -2,6 +2,7 @@
 import * as RnuiProvider from '@qb-rnui/theme/RnuiProvider';
 import { fireEvent, render } from '@testing-library/react-native';
 import { View } from 'react-native';
+import { defaultContentPaddingHorizontal } from './RnuiAppContent';
 import { RnuiModalContent } from './RnuiModalContent';
 
 // mocks
@@ -34,7 +35,7 @@ describe('RnuiModalContent', () => {
 
     spy_useRnuiContext.mockReturnValue({
       rnuiStyles: {
-        content: { padding: 30 },
+        content: { paddingHorizontal: 30 },
       },
     });
   });
@@ -63,7 +64,7 @@ describe('RnuiModalContent', () => {
 
     const view = getByTestId('ScrollViewTid');
     expect(view.props.style).toEqual(
-      expect.arrayContaining([expect.objectContaining({ paddingHorizontal: 24 })])
+      expect.arrayContaining([expect.objectContaining({ paddingHorizontal: defaultContentPaddingHorizontal })])
     );
   });
 
@@ -72,7 +73,7 @@ describe('RnuiModalContent', () => {
     spy_useRnuiContext.mockReturnValue({
       rnuiStyles: {
         content: {
-          padding: 13,
+          paddingHorizontal: 13,
         }
       },
     });

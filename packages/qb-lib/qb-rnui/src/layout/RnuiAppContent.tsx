@@ -4,6 +4,8 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useRnuiContext } from '../theme/RnuiProvider';
 
+export const defaultContentPaddingHorizontal = 32;
+
 export type RnuiAppContentPropsT = {
   children: ReactElement | ReactElement[],
   testID?: string,
@@ -19,7 +21,10 @@ export const RnuiAppContent: React.FC<RnuiAppContentPropsT> = ({ children }) => 
       style={[
         { backgroundColor: theme?.colors.background }, // must set backgroundColor manually
         styles.container,
-        rnuiStyles.content?.padding ? { padding: rnuiStyles.content.padding } : styles.padding,
+        rnuiStyles.content?.paddingHorizontal ?
+          { paddingHorizontal: rnuiStyles.content.paddingHorizontal } : styles.paddingHorizontal,
+        rnuiStyles.content?.paddingVertical ?
+          { paddingVertical: rnuiStyles.content.paddingVertical } : styles.paddingVertical,
       ]}
     >
       {children}
@@ -32,7 +37,10 @@ const styles = StyleSheet.create({
     width: '100%',
     minHeight: '100%',
   },
-  padding: {
-    padding: 24,
+  paddingHorizontal: {
+    paddingHorizontal: defaultContentPaddingHorizontal,
+  },
+  paddingVertical: {
+    paddingVertical: 12,
   },
 });

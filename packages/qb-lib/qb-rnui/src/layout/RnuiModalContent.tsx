@@ -5,6 +5,7 @@ import { type FC, type PropsWithChildren } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Surface } from 'react-native-paper';
 import { RnuiMaterialIcon } from '../icon/RnuiMaterialIcon';
+import { defaultContentPaddingHorizontal } from './RnuiAppContent';
 
 type RnuiModalContentPropsT = TestableComponentT & {
   includeCloseButton ?: boolean,
@@ -29,7 +30,7 @@ export const RnuiModalContent: FC<PropsWithChildren<RnuiModalContentPropsT>> = (
   // variables
   const closeButtomMargin = 4;
   const keyboardShouldPersistTaps = 'always'; // this is required so the scroll view doesn't handle any taps
-  const appContentPaddingHorizontal: number = rnuiStyles.content?.padding || 24;
+  const appContentPaddingHorizontal: number = rnuiStyles.content?.paddingHorizontal || defaultContentPaddingHorizontal;
 
   return (
     <Surface

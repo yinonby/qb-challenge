@@ -6,7 +6,8 @@ import { RnuiSnackbarProvider } from '../snackbar/RnuiSnackbarProvider';
 
 export type RnuiStylesT = {
   content?: {
-    padding?: number,
+    paddingHorizontal?: number,
+    paddingVertical?: number,
   },
   xsButtonLabelStyle?: TextStyle,
   imageLabel?: {

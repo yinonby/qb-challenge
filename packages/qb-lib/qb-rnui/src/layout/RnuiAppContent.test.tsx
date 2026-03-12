@@ -70,7 +70,8 @@ describe('RnuiAppContent', () => {
     // setup mocks
     spy_useRnuiContext.mockReturnValue({ rnuiStyles: {
       content: {
-        padding: 13,
+        paddingHorizontal: 13,
+        paddingVertical: 33,
       }
     } });
 
@@ -84,6 +85,7 @@ describe('RnuiAppContent', () => {
     // verify backgroundColor applied
     const view = getByTestId('ScrollViewTid');
     const finalStyle = StyleSheet.flatten(view.props.style);
-    expect(finalStyle.padding).toEqual(13);
+    expect(finalStyle.paddingHorizontal).toEqual(13);
+    expect(finalStyle.paddingVertical).toEqual(33);
   });
 });

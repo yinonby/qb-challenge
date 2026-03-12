@@ -15,6 +15,7 @@ type RnuiModalPropsT = TestableComponentT & {
   notScrollable?: boolean,
   fullScreenMarginTop?: number,
   minWideWebWidth?: number,
+  nonFullScreenWidthLimit?: number,
 }
 
 export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode {
@@ -27,6 +28,7 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
     notScrollable,
     fullScreenMarginTop,
     minWideWebWidth = 768,
+    nonFullScreenWidthLimit,
     children
   } = props;
 
@@ -34,7 +36,7 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
   const { width } = useRnuiDimensions()
 
   // variables
-  const isWideWeb = isWeb() && width > minWideWebWidth;
+  const isWideWeb = isWeb() && width >= minWideWebWidth;
   const isFullScreen = !isWideWeb;
   const marginTop: number | undefined = isFullScreen ? fullScreenMarginTop : 0;
   const webPaddingHorizontal = 32;
@@ -43,10 +45,12 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
   const justifyContent = placement === 'top' ? 'flex-start' : (placement === 'bottom' ? 'flex-end' : 'center');
 
   const modalStyle: ViewStyle = {
+
     marginTop: marginTop,
     paddingHorizontal: paddingHorizontal,
     paddingVertical: paddingVertical,
     justifyContent: justifyContent,
+    alignItems: 'center',
     cursor: 'auto',
   }
 
@@ -57,7 +61,10 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
           testID='ModalTid'
           visible
           style={modalStyle}
-          contentContainerStyle={{ height: isFullScreen ? '100%' : undefined }}
+          contentContainerStyle={{
+            height: isFullScreen ? '100%' : undefined,
+            width: !isFullScreen ? nonFullScreenWidthLimit : '100%',
+          }}
           onDismiss={onDismiss}
         >
           <RnuiModalContent
