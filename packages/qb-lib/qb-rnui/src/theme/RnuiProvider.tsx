@@ -1,4 +1,5 @@
 
+import type { TestableComponentT } from '@qb-rnui/types/ComponentTypes';
 import React, { createContext, useContext, type PropsWithChildren } from 'react';
 import { type ColorValue, type TextStyle } from 'react-native';
 import { PaperProvider, type MD3Theme } from 'react-native-paper';
@@ -26,7 +27,7 @@ export interface RnuiContextT {
   rnuiStyles: RnuiStylesT,
 }
 
-export type RnuiProviderPropsT = {
+export type RnuiProviderPropsT = TestableComponentT & {
   theme?: MD3Theme,
   rnuiStyles?: RnuiStylesT,
 };

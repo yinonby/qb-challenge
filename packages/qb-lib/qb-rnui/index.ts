@@ -11,6 +11,7 @@ export * from './src/icon/RnuiMaterialIcon';
 export * from './src/image/RnuiImage';
 export * from './src/input/RnuiCodeInput';
 export * from './src/input/RnuiRadioButtonGroup';
+export * from './src/input/RnuiSwitch';
 export * from './src/input/RnuiTextInput';
 export * from './src/layout/RnuiAppContent';
 export * from './src/layout/RnuiModal';

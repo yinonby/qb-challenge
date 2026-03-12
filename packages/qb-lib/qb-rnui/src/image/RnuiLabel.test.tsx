@@ -2,11 +2,36 @@
 import type { RnuiLabelPropsT } from '@qb-rnui/types/ComponentTypes';
 import { render } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
+import * as ReactNativepaper from 'react-native-paper';
 import * as RnuiProvider from '../theme/RnuiProvider';
 import { RnuiLabel } from './RnuiLabel';
 
+// mocks
+
+jest.mock('react-native-paper', () => {
+  return {
+    useTheme: jest.fn(),
+  };
+});
+
+
+jest.mock('../text/RnuiText', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    RnuiText: View,
+  }
+});
+
+// tests
+
 describe('RnuiLabel', () => {
   const useRnuiContextSpy = jest.spyOn(RnuiProvider, 'useRnuiContext');
+  const spy_useTheme = jest.spyOn(ReactNativepaper, 'useTheme');
+  const backgroundColor = 'black';
+  const textColor = 'white';
+  spy_useTheme.mockReturnValue({ colors: { primary: backgroundColor, onPrimary: textColor }});
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,13 +45,13 @@ describe('RnuiLabel', () => {
     const labelProps: RnuiLabelPropsT = {
       text: 'Sample Label',
     }
-    const { getByTestId, getByText } = render(<RnuiLabel {...labelProps} />);
+    const { getByTestId } = render(<RnuiLabel {...labelProps} />);
 
     const container = getByTestId('container-tid');
     expect(container).toBeTruthy();
 
     const containerFinalStyle = StyleSheet.flatten(container.props.style);
-    expect(containerFinalStyle.backgroundColor).toBe("black");
+    expect(containerFinalStyle.backgroundColor).toBe(backgroundColor);
     expect(containerFinalStyle.borderRadius).toBe(8);
     expect(containerFinalStyle.paddingHorizontal).toBe(8);
     expect(containerFinalStyle.paddingVertical).toBe(4);
@@ -35,11 +60,9 @@ describe('RnuiLabel', () => {
     expect(labelText).toBeTruthy();
 
     const labelFinalStyle = StyleSheet.flatten(labelText.props.style);
-    expect(labelFinalStyle.color).toBe("white");
+    expect(labelFinalStyle.color).toBe(textColor);
 
     expect(labelText.props.children).toBe('Sample Label');
-
-    expect(getByText('Sample Label')).toBeTruthy();
   });
 
   it('renders correctly with rnuiStyle props', () => {
@@ -58,7 +81,7 @@ describe('RnuiLabel', () => {
     const labelProps: RnuiLabelPropsT = {
       text: 'Sample Label',
     }
-    const { getByTestId, getByText } = render(<RnuiLabel {...labelProps} />);
+    const { getByTestId } = render(<RnuiLabel {...labelProps} />);
 
     const container = getByTestId('container-tid');
     expect(container).toBeTruthy();
@@ -76,7 +99,6 @@ describe('RnuiLabel', () => {
     expect(labelFinalStyle.color).toBe("red");
 
     expect(labelText.props.children).toBe('Sample Label');
-    expect(getByText('Sample Label')).toBeTruthy();
   });
 
   it('renders correctly with component props overriding rnuiStyle', () => {
@@ -97,7 +119,7 @@ describe('RnuiLabel', () => {
       textColor: "blue",
       backgroundColor: "yellow",
     }
-    const { getByTestId, getByText } = render(<RnuiLabel {...labelProps} />);
+    const { getByTestId } = render(<RnuiLabel {...labelProps} />);
 
     const container = getByTestId('container-tid');
     expect(container).toBeTruthy();
@@ -112,6 +134,5 @@ describe('RnuiLabel', () => {
     expect(labelFinalStyle.color).toBe("blue");
 
     expect(labelText.props.children).toBe('Sample Label');
-    expect(getByText('Sample Label')).toBeTruthy();
   });
 });

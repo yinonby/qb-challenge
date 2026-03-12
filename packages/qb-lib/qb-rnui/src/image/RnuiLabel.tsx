@@ -1,6 +1,7 @@
 
 import type { FC } from 'react';
-import { type ViewStyle, StyleSheet, View } from 'react-native';
+import { type TextStyle, type ViewStyle, StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { RnuiText } from '../text/RnuiText';
 import { useRnuiContext } from '../theme/RnuiProvider';
 import type { RnuiLabelPropsT } from '../types/ComponentTypes';
@@ -8,12 +9,25 @@ import type { RnuiLabelPropsT } from '../types/ComponentTypes';
 export const RnuiLabel: FC<RnuiLabelPropsT> = (props) => {
   const { rnuiStyles } = useRnuiContext();
   const labelStyle: ViewStyle = {};
+  const textStyle: TextStyle = {};
+  const theme = useTheme();
 
   // background color
   if (props.backgroundColor) {
     labelStyle.backgroundColor = props.backgroundColor;
   } else if (rnuiStyles.imageLabel?.backgroundColor) {
     labelStyle.backgroundColor = rnuiStyles.imageLabel.backgroundColor;
+  } else {
+    labelStyle.backgroundColor = theme.colors.primary;
+  }
+
+  // text color
+  if (props.textColor) {
+    textStyle.color = props.textColor;
+  } else if (rnuiStyles.imageLabel?.textColor) {
+    textStyle.color = rnuiStyles.imageLabel.textColor;
+  } else {
+    textStyle.color = theme.colors.onPrimary;
   }
 
   // border radius
@@ -31,18 +45,15 @@ export const RnuiLabel: FC<RnuiLabelPropsT> = (props) => {
 
   return (
     <View
-      testID="container-tid"
+      testID='container-tid'
       style={[
         styles.label,
         labelStyle,
       ]}
     >
-      <RnuiText testID="label-text-tid"
+      <RnuiText testID='label-text-tid'
         style={[
-          styles.labelText,
-          (props.textColor || rnuiStyles.imageLabel?.textColor) && {
-            color: props.textColor || rnuiStyles.imageLabel?.textColor
-          }
+          textStyle,
         ]}
       >
         {props.text}
@@ -56,9 +67,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
-    backgroundColor: "black",
-  },
-  labelText: {
-    color: "white",
   },
 });

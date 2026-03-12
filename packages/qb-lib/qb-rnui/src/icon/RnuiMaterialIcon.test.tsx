@@ -24,7 +24,7 @@ jest.mock('@expo/vector-icons', () => {
 
 describe('RnuiMaterialIcon', () => {
   const spy_useTheme = jest.spyOn(ReactNativepaper, 'useTheme');
-  spy_useTheme.mockReturnValue({ colors: { surfaceVariant: 'red', onSurface: 'black' } });
+  spy_useTheme.mockReturnValue({ colors: { surfaceVariant: 'red', onSurface: 'black' }});
 
   beforeEach(() => {
     jest.clearAllMocks();

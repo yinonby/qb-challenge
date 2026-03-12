@@ -1,9 +1,10 @@
 
+import type { TestableComponentT } from '@qb-rnui/types/ComponentTypes';
 import * as React from "react";
 import { Pressable, View } from "react-native";
 import { RadioButton, useTheme } from "react-native-paper";
 
-export type RnuiRadioButtonGroupProps<T extends string> = {
+export type RnuiRadioButtonGroupProps<T extends string> = TestableComponentT & {
   optionKeys: T[],
   selectedOptionKey: T | undefined,
   onChange: (optionKey: T) => void,
