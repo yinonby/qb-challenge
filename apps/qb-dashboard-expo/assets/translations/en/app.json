@@ -1,0 +1,48 @@
+{
+  "app": {
+    "dashboard": "Dashboard",
+    "productListing": "Product Listing",
+    "productDetails": "Product Details",
+    "inventoryManagement": "Inventory Management",
+    "productName": "Product name",
+    "description": "Description",
+    "fullDescription": "Full description",
+    "price": "Price",
+    "category": "Category",
+    "stockLevel": "Stock level",
+    "prevStockLevel": "Previous stock level",
+    "newStockLevel": "New stock level",
+    "reorderLevel": "Reorder level",
+    "popularity": "Popularity",
+    "reviews": "Reviews",
+    "count": "Count",
+    "rating": "Rating",
+    "reason": "Reason",
+    "changeNum": "Change",
+    "lastUpdateTime": "Last update time",
+    "next": "Next",
+    "previous": "Previous",
+    "sort": "Sort",
+    "filterAndSort": "Filter and Sort",
+    "all": "All",
+    "availability": "Availability",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "apply": "Apply",
+    "noProducts": "No products found",
+    "darkMode": "Dark mode",
+    "language": "Language"
+  },
+  "category": {
+    "beauty": "Beauty",
+    "entertainment": "Entertainment",
+    "food": "Food",
+    "electronics": "Electronics"
+  },
+  "sort": {
+    "priceAscending": "Price (ascending)",
+    "priceDescending": "Price (descending)",
+    "popularity": "Popularity",
+    "newest": "Newest"
+  }
+}

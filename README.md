@@ -26,3 +26,11 @@ npm run cover:report
     - `qb/vitest` - provides generic vitest config and dependencies.
     - `qb/ts-deps` - provides typescript dependencies. Simplifies typescript version upgrades.
     - `qb/rn-testing` - provides React Native testing utilities and dependencies.
+
+## Shared application packages (under `packages/qb-app`)
+- `qb/models` - a library for shared models.
+- `qb/dashboard-ui` - a library for shared UI compponents.
+
+## Application package (under `apps`)
+- `@qb/dashboard-expo` - an minimal expo app, using shared UI components from `qb/dashboard-ui`.
+

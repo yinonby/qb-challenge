@@ -21,6 +21,9 @@
     "cover:report:produce:npm": "./scripts/python/src/coverage/npm/produce-coverage-report.py",
     "cover:report:open": "npm run cover:report:open:npm",
     "cover:report:open:npm": "./scripts/python/src/coverage/npm/open-coverage-report.py",
+    "clean": "npm run clean:modules && npm run clean:lock",
+    "clean:modules": "for x in $(find . -name node_modules); do rm -rf $x; done",
+    "clean:lock": "rm package-lock.json",
     "husky:verify:setup": "npm run husky:verify:installed && npm run husky:verify:configured",
     "husky:verify:installed": "[ $(git config --get core.hooksPath) = \".husky/_\" ]",
     "husky:verify:configured": "[ -f \".husky/pre-push\" ]",
@@ -31,6 +34,7 @@
   "workspaces": [
     "packages/qb-dev-lib/*",
     "packages/qb-lib/*",
+    "packages/qb-app/*",
     "apps/*"
   ],
   "devDependencies": {

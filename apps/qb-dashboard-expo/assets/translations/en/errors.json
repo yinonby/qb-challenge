@@ -1,0 +1,7 @@
+{
+  "apiError": {
+    "server": "A server error has occurred",
+    "unknown": "An unknown error has occurred",
+    "invalidInput": "Input is invalid"
+  }
+}

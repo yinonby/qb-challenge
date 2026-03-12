@@ -1,0 +1,48 @@
+{
+  "app": {
+    "dashboard": "Tableau de bord",
+    "productListing": "Liste des produits",
+    "productDetails": "Détails du produit",
+    "inventoryManagement": "Gestion des stocks",
+    "productName": "Nom du produit",
+    "description": "Description",
+    "fullDescription": "Description complète",
+    "price": "Prix",
+    "category": "Catégorie",
+    "stockLevel": "Niveau de stock",
+    "prevStockLevel": "Niveau de stock précédent",
+    "newStockLevel": "Nouveau niveau de stock",
+    "reorderLevel": "Seuil de réapprovisionnement",
+    "popularity": "Popularité",
+    "reviews": "Avis",
+    "count": "Nombre",
+    "rating": "Note",
+    "reason": "Raison",
+    "changeNum": "Variation",
+    "lastUpdateTime": "Dernière mise à jour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "sort": "Trier",
+    "filterAndSort": "Filtrer et trier",
+    "all": "Tous",
+    "availability": "Disponibilité",
+    "inStock": "En stock",
+    "outOfStock": "Rupture de stock",
+    "apply": "Appliquer",
+    "noProducts": "Aucun produit trouvé",
+    "darkMode": "Mode sombre",
+    "language": "Langue"
+  },
+  "category": {
+    "beauty": "Beauté",
+    "entertainment": "Divertissement",
+    "food": "Alimentation",
+    "electronics": "Électronique"
+  },
+  "sort": {
+    "priceAscending": "Prix (croissant)",
+    "priceDescending": "Prix (décroissant)",
+    "popularity": "Popularité",
+    "newest": "Plus récents"
+  }
+}
