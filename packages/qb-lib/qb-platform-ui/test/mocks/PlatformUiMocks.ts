@@ -18,9 +18,9 @@ export const initPlatformUiMocks = () => {
       __esModule: true,
       PlatformUiLink: View,
 
-      usePlatformUiLocalization: {
+      usePlatformUiLocalization: () => ({
         getDeviceLangCodeStr: mock_getDeviceLangCodeStr,
-      },
+      }),
       usePlatformUiNavigation: () => ({
         navigate: mock_navigate,
         navigateReplace: mock_navigateReplace,
