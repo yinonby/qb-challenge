@@ -54,6 +54,7 @@ export const initReactNativeMocks = () => {
       FlatList: createFlatMock(React, RN),
       ActivityIndicator: RN.View,
       StyleSheet: { create: (styles: object) => styles, flatten: (style: object) => style },
+      useColorScheme: jest.fn(),
     };
   });
 }
