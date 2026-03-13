@@ -8,6 +8,12 @@ jest.mock('../rtk/ProductRtkApi');
 
 describe('ProductsPageModel', () => {
   const spy_useGetProductSummariesPaginatedQuery = jest.spyOn(ProductRtkApi, 'useGetProductSummariesPaginatedQuery');
+  const params: GetProductsPageParamsT = {
+    langCode: 'en',
+    pageNum: 0,
+    productsPerPage: 12,
+    sort: 'priceAscending',
+  };
 
   it('calls hooks with correct args', () => {
     // setup mocks
@@ -17,12 +23,6 @@ describe('ProductsPageModel', () => {
     });
 
     // render
-    const params: GetProductsPageParamsT = {
-      langCode: 'en',
-      pageNum: 0,
-      productsPerPage: 12,
-      sort: 'priceAscending',
-    };
     renderHook(() => useProductsPageModel(params));
 
     // verify
@@ -37,12 +37,6 @@ describe('ProductsPageModel', () => {
     });
 
     // render
-    const params: GetProductsPageParamsT = {
-      langCode: 'en',
-      pageNum: 0,
-      productsPerPage: 12,
-      sort: 'priceAscending',
-    };
     expect(useProductsPageModel(params)).toEqual({
       isLoading: false,
       isError: true,
@@ -60,12 +54,6 @@ describe('ProductsPageModel', () => {
     });
 
     // render
-    const params: GetProductsPageParamsT = {
-      langCode: 'en',
-      pageNum: 0,
-      productsPerPage: 12,
-      sort: 'priceAscending',
-    };
     const { result } = renderHook(() => useProductsPageModel(params));
 
     expect(result.current).toEqual({
@@ -86,12 +74,6 @@ describe('ProductsPageModel', () => {
     });
 
     // render
-    const params: GetProductsPageParamsT = {
-      langCode: 'en',
-      pageNum: 0,
-      productsPerPage: 12,
-      sort: 'priceAscending',
-    };
     const { result } = renderHook(() => useProductsPageModel(params));
 
     expect(result.current).toEqual({
@@ -121,12 +103,6 @@ describe('ProductsPageModel', () => {
     });
 
     // render
-    const params: GetProductsPageParamsT = {
-      langCode: 'en',
-      pageNum: 0,
-      productsPerPage: 12,
-      sort: 'priceAscending',
-    };
     const { result } = renderHook(() => useProductsPageModel(params));
 
     expect(result.current).toEqual({
@@ -159,12 +135,6 @@ describe('ProductsPageModel', () => {
     });
 
     // render
-    const params: GetProductsPageParamsT = {
-      langCode: 'en',
-      pageNum: 0,
-      productsPerPage: 12,
-      sort: 'priceAscending',
-    };
     const { result } = renderHook(() => useProductsPageModel(params));
 
     expect(result.current).toEqual({

@@ -1,6 +1,6 @@
 
 import type {
-  ApiServerErrorCodeT, AppTextTranslationKeyT,
+  ApiServerErrorCodeT, AppClientErrorCodeT, AppTextTranslationKeyT,
   ProductCategoryTranslationKeyT,
   SortOptionTranslationKeyT,
 } from '@qb/models';
@@ -22,29 +22,34 @@ type UnionToIntersectionT<U> =
 type AppTranslationShapeT = UnionToIntersectionT<ExpandKeyT<AppTextTranslationKeyT>>;
 type ProductCategoryTranslationShapeT = UnionToIntersectionT<ExpandKeyT<ProductCategoryTranslationKeyT>>;
 type SortOptionTranslationShapeT = UnionToIntersectionT<ExpandKeyT<SortOptionTranslationKeyT>>;
-type ErrorTranslationShapeT = UnionToIntersectionT<ExpandKeyT<ApiServerErrorCodeT>>;
+type ApiServerErrorTranslationShapeT = UnionToIntersectionT<ExpandKeyT<ApiServerErrorCodeT>>;
+type AppClientErrorTranslationShapeT = UnionToIntersectionT<ExpandKeyT<AppClientErrorCodeT>>;
 
 // currently only support english
 const enResource = {
   apiError: enErrosTranslationsJson.apiError,
+  appClientError: enErrosTranslationsJson.appClientError,
   app: enAppTranslationsJson.app,
   category: enAppTranslationsJson.category,
   sort: enAppTranslationsJson.sort,
 } satisfies AppTranslationShapeT
   & ProductCategoryTranslationShapeT
   & SortOptionTranslationShapeT
-  & ErrorTranslationShapeT
+  & ApiServerErrorTranslationShapeT
+  & AppClientErrorTranslationShapeT
 ;
 
 const frResource = {
   apiError: frErrosTranslationsJson.apiError,
+  appClientError: frErrosTranslationsJson.appClientError,
   app: frAppTranslationsJson.app,
   category: frAppTranslationsJson.category,
   sort: frAppTranslationsJson.sort,
 } satisfies AppTranslationShapeT
   & ProductCategoryTranslationShapeT
   & SortOptionTranslationShapeT
-  & ErrorTranslationShapeT
+  & ApiServerErrorTranslationShapeT
+  & AppClientErrorTranslationShapeT
 ;
 
 export const getI18nResources = () => {

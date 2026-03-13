@@ -76,7 +76,7 @@ export type ProductSummaryT = Pick<ProductT,
   imageUrl: string,
 };
 
-export function toProductSummary(product: ProductT, langCode: QbLangCodeT): ProductSummaryT {
+export function toProductSummary(product: ProductT): ProductSummaryT {
   return {
     productId: product.productId,
     name: product.name,
@@ -86,7 +86,7 @@ export function toProductSummary(product: ProductT, langCode: QbLangCodeT): Prod
     stock: product.stock,
     popularity: product.popularity,
     createdAtTs: product.createdAtTs,
-    langCode: langCode,
+    langCode: product.langCode,
     imageUrl: product.imageUrls[0],
   }
 }
@@ -109,7 +109,7 @@ export type ProductDetailsT = Pick<ProductT,
   lastStockUpdateTs: number,
 };
 
-export function toProductDetails(product: ProductT, langCode: QbLangCodeT): ProductDetailsT {
+export function toProductDetails(product: ProductT): ProductDetailsT {
   const lastStockUpdateTs = product.stockHistoryItems.length ?
     product.stockHistoryItems[product.stockHistoryItems.length - 1].stockUpdateTs : product.createdAtTs;
 
@@ -126,7 +126,7 @@ export function toProductDetails(product: ProductT, langCode: QbLangCodeT): Prod
     popularity: product.popularity,
     reviews: product.reviews,
     createdAtTs: product.createdAtTs,
-    langCode: langCode,
+    langCode: product.langCode,
     lastStockUpdateTs: lastStockUpdateTs,
   }
 }

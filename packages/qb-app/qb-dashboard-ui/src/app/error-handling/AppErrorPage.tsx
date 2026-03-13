@@ -14,9 +14,10 @@ export const AppErrorPage: React.FC<PropsWithChildren<AppErrorPagePropsT>> = () 
   // keep this component without any dependencies
   const genericStyles = useGenericStyles();
   const { navigateReplace } = usePlatformUiNavigation();
+  // don't access any hooks here to keep it safe
 
   const handlePress = (): void => {
-    navigateReplace('/app/dashboard/listing');
+    navigateReplace('/');
   }
 
   return (

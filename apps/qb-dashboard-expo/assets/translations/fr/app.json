@@ -1,12 +1,15 @@
 {
   "app": {
     "dashboard": "Tableau de bord",
+    "cart": "Panier",
+    "showAllPhotos": "Toutes les photos",
     "productListing": "Liste des produits",
     "productDetails": "Détails du produit",
     "inventoryManagement": "Gestion des stocks",
     "productName": "Nom du produit",
     "description": "Description",
     "fullDescription": "Description complète",
+    "specifications": "Spécifications",
     "price": "Prix",
     "category": "Catégorie",
     "stockLevel": "Niveau de stock",

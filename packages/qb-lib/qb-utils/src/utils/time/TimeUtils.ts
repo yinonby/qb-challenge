@@ -67,3 +67,12 @@ export function msToStr(ms: number): string {
     return `${ms} milliseconds`
   }
 }
+
+export const tsToLocalDateString = (ts: number): string => new Intl.DateTimeFormat(undefined, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  timeZoneName: 'short',
+}).format(new Date(ts));

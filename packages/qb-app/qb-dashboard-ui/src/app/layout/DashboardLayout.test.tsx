@@ -1,5 +1,6 @@
 
 import * as ClientLogger from '@qb-dashboard-ui/logger/ClientLogger';
+import type { DashboardRouterAdapter } from '@qb-dashboard-ui/types/DashboardTypes';
 import { __puiMocks } from '@qb/platform-ui';
 import type { LoggerAdapter } from '@qb/utils';
 import { act, render, waitFor } from '@testing-library/react-native';
@@ -46,6 +47,15 @@ jest.mock('../error-handling/AppErrorHandlingProvider', () => {
   };
 });
 
+jest.mock('@qb-dashboard-ui/features/cart/context/CartProvider', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    CartProvider: View,
+  };
+});
+
 // tests
 
 describe('DashboardLayout', () => {
@@ -60,11 +70,39 @@ describe('DashboardLayout', () => {
     error: jest.fn(),
   } as unknown as LoggerAdapter);
 
+  const mock_dashboardRouterAdapter: DashboardRouterAdapter = {} as unknown as DashboardRouterAdapter;
+
   beforeEach(() => {
     jest.clearAllMocks();
 
     spy_useColorScheme.mockReturnValue(null);
     mock_setStorageItem.mockReset();
+  });
+
+  it('renders correctly', async () => {
+    mock_getStorageItem.mockResolvedValue(null);
+
+    const { getByTestId, getAllByTestId } = render(
+      <DashboardLayout
+        apiUrl="api"
+        appHeaderHeight={10}
+        productsPerPage={20}
+        lightTheme={lightTheme}
+        darkTheme={darkTheme}
+        rnuiStyles={rnuiStyles}
+        dashboardRouterAdapter={mock_dashboardRouterAdapter}
+      >
+        <Text>Child</Text>
+      </DashboardLayout>
+    );
+
+    await waitFor(() => {
+      const rnuiProviders = getAllByTestId('RnuiProviderTid');
+      expect(rnuiProviders).toHaveLength(2);
+    });
+    getByTestId('AppLocalizationProviderTid');
+    getByTestId('AppErrorHandlingProviderTid');
+    getByTestId('CartProviderTid');
   });
 
   it('renders children after initialization', async () => {
@@ -78,6 +116,7 @@ describe('DashboardLayout', () => {
         lightTheme={lightTheme}
         darkTheme={darkTheme}
         rnuiStyles={rnuiStyles}
+        dashboardRouterAdapter={mock_dashboardRouterAdapter}
       >
         <Text>Child</Text>
       </DashboardLayout>
@@ -107,6 +146,7 @@ describe('DashboardLayout', () => {
         lightTheme={lightTheme}
         darkTheme={darkTheme}
         rnuiStyles={rnuiStyles}
+        dashboardRouterAdapter={mock_dashboardRouterAdapter}
       >
         <TestComponent />
       </DashboardLayout>
@@ -139,6 +179,7 @@ describe('DashboardLayout', () => {
         lightTheme={lightTheme}
         darkTheme={darkTheme}
         rnuiStyles={rnuiStyles}
+        dashboardRouterAdapter={mock_dashboardRouterAdapter}
       >
         <TestComponent />
       </DashboardLayout>
@@ -186,6 +227,7 @@ describe('DashboardLayout', () => {
         lightTheme={lightTheme}
         darkTheme={darkTheme}
         rnuiStyles={rnuiStyles}
+        dashboardRouterAdapter={mock_dashboardRouterAdapter}
       >
         <TestComponent />
       </DashboardLayout>
@@ -233,6 +275,7 @@ describe('DashboardLayout', () => {
         lightTheme={lightTheme}
         darkTheme={darkTheme}
         rnuiStyles={rnuiStyles}
+        dashboardRouterAdapter={mock_dashboardRouterAdapter}
       >
         <TestComponent />
       </DashboardLayout>

@@ -2,11 +2,13 @@
 import type { ExpoEnvVarsT } from '@/src/types/ExpoTypes';
 import { contentPaddingHorizontal, useAppTheme } from '@/src/utils/ThemeAssetDefs';
 import { getI18nResources } from '@/src/utils/TranslationsAssetDefs';
+import type { DashboardRouterAdapter } from '@qb-dashboard-ui/types/DashboardTypes';
 import {
   createMockApiServer,
   DashboardLayout, initI18n,
   SettingsButton, useAppLocalization, useDashboard
 } from '@qb/dashboard-ui';
+import type { ProductIdT } from '@qb/models';
 import Constants from 'expo-constants';
 import { Drawer } from 'expo-router/drawer';
 import { useEffect, useState, type PropsWithChildren } from 'react';
@@ -23,18 +25,20 @@ export default function RootLayout() {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    const startMockApiServer = async (): Promise<void> => {
-      if (__DEV__) {
-        await server.start();
+    if (!initialized) {
+      const startMockApiServer = async (): Promise<void> => {
+        if (__DEV__) {
+          await server.start();
+        }
+        setInitialized(true);
       }
-      setInitialized(true);
-    }
 
-    startMockApiServer();
+      startMockApiServer();
 
-    return () => {
-      if (__DEV__) {
-        server.stop(); // Clean up on unmount
+      return () => {
+        if (__DEV__ && initialized) {
+          server.stop(); // Clean up on unmount
+        }
       }
     };
   }, [server, initialized]);
@@ -55,6 +59,14 @@ export default function RootLayout() {
 function ConfiguredDashboarfdLayout(props: PropsWithChildren) {
   const appTheme = useAppTheme();
   const expoEnvVars: ExpoEnvVarsT = Constants.expoConfig?.extra?.env.expoEnvVars;
+  const dashboardRouterAdapter: DashboardRouterAdapter = {
+    buildDashboardListingRoute: () => '/app/dashboard/listing',
+    buildDashboardDetailsRoute: (productId: ProductIdT) => `/app/dashboard/product/${productId}`,
+    buildDashboardDetailsFullRoute: (productId: ProductIdT) =>
+      expoEnvVars.appUrl + `/app/dashboard/product/${productId}`,
+    buildDashboardInventoryRoute: () => '/app/dashboard/inventory',
+    buildCartRoute: () => '/app/cart',
+  }
 
   return (
     <DashboardLayout
@@ -64,6 +76,7 @@ function ConfiguredDashboarfdLayout(props: PropsWithChildren) {
       apiUrl={expoEnvVars.apiUrl}
       appHeaderHeight={expoEnvVars.appHeaderHeight}
       productsPerPage={expoEnvVars.productsPerPage}
+      dashboardRouterAdapter={dashboardRouterAdapter}
     >
       {props.children}
     </DashboardLayout>
@@ -116,14 +129,19 @@ function StackLayout() {
       <Drawer.Screen
         name='app/dashboard/listing'
         options={{ title: t('app:productListing'), drawerLabel: t('app:productListing') }}
-      />
+      >
+      </Drawer.Screen>
       <Drawer.Screen
         name='app/dashboard/product/[productId]'
-        options={{ title: t('app:productDetails'), drawerLabel: t('app:productDetails') }}
+        options={{ title: t('app:productDetails'), drawerItemStyle: { display: 'none' } }}
       />
       <Drawer.Screen
         name='app/dashboard/inventory'
         options={{ title: t('app:inventoryManagement'), drawerLabel: t('app:inventoryManagement') }}
+      />
+      <Drawer.Screen
+        name='app/cart'
+        options={{ title: t('app:cart'), drawerLabel: t('app:cart') }}
       />
     </Drawer>
   )

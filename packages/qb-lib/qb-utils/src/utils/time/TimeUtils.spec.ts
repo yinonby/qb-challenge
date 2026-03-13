@@ -1,5 +1,6 @@
 
 import * as TimeUtils from './TimeUtils';
+import { tsToLocalDateString } from './TimeUtils';
 
 // chai.use(chaiAsPromised)
 
@@ -76,4 +77,12 @@ describe("TimeUtils Tests", () => {
   it("should MS_TO_DAYS", () => {
     assert(TimeUtils.MS_TO_DAYS(1000 * 60 * 60 * 24) === 1);
   });
+
+  describe('tsToLocalDateString', () => {
+    it('should return timestamp as string', () => {
+      const date = new Date('2024-03-13T16:42:00+03:00');
+      const tsStr = tsToLocalDateString(date.getTime());
+      assert(tsStr === 'Mar 13, 2024, 02:42 PM GMT+1')
+    })
+  })
 });

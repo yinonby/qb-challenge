@@ -1,7 +1,9 @@
 
 import { AppLocalizationProvider } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { createReduxStore } from '@qb-dashboard-ui/app/redux/reducers/AppReduxStore';
+import { CartProvider } from '@qb-dashboard-ui/features/cart/context/CartProvider';
 import { useClientLogger } from '@qb-dashboard-ui/logger/ClientLogger';
+import type { DashboardRouterAdapter } from '@qb-dashboard-ui/types/DashboardTypes';
 import { useStorage } from '@qb/platform-ui';
 import { RnuiProvider, type RnuiStylesT } from '@qb/rnui';
 import { StatusBar } from 'expo-status-bar';
@@ -19,6 +21,7 @@ export interface DashboardContextT {
   productsPerPage: number,
   themeMode: 'light' | 'dark',
   onChangeThemeMode: (newThemeMode: 'light' | 'dark') => Promise<void>,
+  dashboardRouterAdapter: DashboardRouterAdapter,
 }
 
 const DashboardContext = createContext<DashboardContextT | undefined>(undefined);
@@ -30,10 +33,11 @@ export type DashboardLayoutPropsT = {
   apiUrl: string,
   appHeaderHeight: number,
   productsPerPage: number,
+  dashboardRouterAdapter: DashboardRouterAdapter,
 }
 
 export const DashboardLayout: FC<PropsWithChildren<DashboardLayoutPropsT>> = (props) => {
-  const { lightTheme, darkTheme, rnuiStyles, apiUrl, appHeaderHeight, productsPerPage, children } = props;
+  const { lightTheme, darkTheme, rnuiStyles, apiUrl, children } = props;
   const colorSchemeName: ColorSchemeName = useColorScheme();
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>(colorSchemeName ?? 'light');
   const reduxStore = createReduxStore(apiUrl);
@@ -57,10 +61,11 @@ export const DashboardLayout: FC<PropsWithChildren<DashboardLayoutPropsT>> = (pr
 
   const context: DashboardContextT = {
     apiUrl,
-    appHeaderHeight,
-    productsPerPage,
+    appHeaderHeight: props.appHeaderHeight,
+    productsPerPage: props.productsPerPage,
     themeMode,
     onChangeThemeMode: handleChangeThemeMode,
+    dashboardRouterAdapter: props.dashboardRouterAdapter,
   }
 
   useEffect(() => {
@@ -86,9 +91,11 @@ export const DashboardLayout: FC<PropsWithChildren<DashboardLayoutPropsT>> = (pr
           <AppErrorHandlingProvider testID='AppErrorHandlingProviderTid'>
             <ReduxProvider store={reduxStore}>
               <DashboardContext.Provider value={context}>
-                <StatusBar style='auto' />
+                <CartProvider testID='CartProviderTid'>
+                  <StatusBar style='auto' />
 
-                {children}
+                  {children}
+                </CartProvider>
               </DashboardContext.Provider>
             </ReduxProvider>
           </AppErrorHandlingProvider>

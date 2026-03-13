@@ -1,9 +1,9 @@
 
 import { appRtkApi } from '@qb-dashboard-ui/app/redux/rtk/AppRtkApi';
 import {
-  mock_getProductGraphqlQuery,
-  mock_getProductsPageGraphqlQuery, mock_updateProductGraphqlQuery,
-  type GetProductParamsT, type GetProductResponseT,
+  mock_getProductDetailsGraphqlQuery,
+  mock_getProductSummariesPaginatedGraphqlQuery, mock_updateProductGraphqlQuery,
+  type GetProductDetailsParamsT, type GetProductDetailsResponseT,
   type GetProductsPageParamsT,
   type GetProductsPageResponseT,
   type ProductUpdateParamsT, type ProductUpdateResponseT
@@ -21,7 +21,7 @@ const productRtkApi = appRtkApi.injectEndpoints({
         url: '/product/graphql',
         kind: 'graphql',
         graphql: {
-          document: mock_getProductsPageGraphqlQuery,
+          document: mock_getProductSummariesPaginatedGraphqlQuery,
           variables: params,
         }
       }),
@@ -30,12 +30,12 @@ const productRtkApi = appRtkApi.injectEndpoints({
       ],
     }),
 
-    getProduct: builder.query<GetProductResponseT['data'], GetProductParamsT>({
-      query: (params: GetProductParamsT) => ({
+    getProductDetails: builder.query<GetProductDetailsResponseT['data'], GetProductDetailsParamsT>({
+      query: (params: GetProductDetailsParamsT) => ({
         url: '/product/graphql',
         kind: 'graphql',
         graphql: {
-          document: mock_getProductGraphqlQuery,
+          document: mock_getProductDetailsGraphqlQuery,
           variables: params,
         }
       }),
@@ -64,7 +64,7 @@ const productRtkApi = appRtkApi.injectEndpoints({
 
 export const {
   useGetProductSummariesPaginatedQuery,
-  useGetProductQuery,
+  useGetProductDetailsQuery,
   useUpdateProductMutation,
   util: productRtkApiUtil,
   endpoints: productRtkApiEndpoints,

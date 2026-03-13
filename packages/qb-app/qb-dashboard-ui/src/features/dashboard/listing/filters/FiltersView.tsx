@@ -6,7 +6,7 @@ import { useSearchParams } from '@qb/platform-ui';
 import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
 import { View } from 'react-native';
-import type { ProductListingPageUrlParamsT } from '../../../../types/ProductListingDefs';
+import type { ProductListingPageUrlParamsT } from '../../../../types/UrlDefs';
 import { AvailabilitySelect } from './AvailabilitySelect';
 import { CategorySelect } from './CategorySelect';
 import { SortSelect } from './SortSelect';

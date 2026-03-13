@@ -22,7 +22,7 @@ export const createMockApiServer = (apiUrl: string): MockApiServerProvider => {
   return {
     start: async (): Promise<void> => {
       await server.start({
-        onUnhandledRequest: 'warn',
+        onUnhandledRequest: 'bypass',
       });
     },
 

@@ -1,5 +1,5 @@
 
-import ProductDetailsPage from '@/src/pages/products/ProductDetailsPage';
+import ProductDetailsPage from '@/src/pages/ProductDetailsPage';
 
 export default function Page() {
   return (

@@ -1,43 +1,56 @@
 
-import { FC, ReactNode } from 'react';
+import type { TestableComponentT } from '@qb-rnui/types/ComponentTypes';
+import { FC, type PropsWithChildren } from 'react';
 import { StyleSheet, View, type DimensionValue } from 'react-native';
 import { Card } from 'react-native-paper';
 import { RnuiImage, RnuiImagePropsT } from '../image/RnuiImage';
 
-export type RnuiCardPropsT = {
+export type RnuiCardPropsT = TestableComponentT & {
   height?: DimensionValue;
   imageProps?: RnuiImagePropsT;
-  children?: ReactNode;
-  testID?: string;
+  borderRadius?: number,
+  noPadding?: boolean,
 };
 
-export const RnuiCard: FC<RnuiCardPropsT> = ({
+export const RnuiCard: FC<PropsWithChildren<RnuiCardPropsT>> = ({
   height,
   imageProps,
+  borderRadius = 12,
+  noPadding = false,
   children,
 }) => {
-  return (
-    <Card testID='CardTid' style={[styles.card, { height }]}>
-      <View style={styles.imageContainer}>
-        {imageProps && <RnuiImage testID='RnuiImageTid' {...imageProps} />}
-      </View>
+  const cardStyle = {
+    borderRadius,
+  }
+  const imageContainerStyle = {
+    borderTopStartRadius: borderRadius,
+    borderTopEndRadius: borderRadius,
+  }
 
-      <View testID='contentTid' style={styles.content}>{children}</View>
+  return (
+    <Card testID='CardTid' style={[styles.card, cardStyle, { height }]}>
+      {imageProps &&
+        <View style={[styles.imageContainer, imageContainerStyle]}>
+          <RnuiImage testID='RnuiImageTid' {...imageProps} />
+        </View>
+      }
+
+      <View testID='contentTid' style={[styles.content, !noPadding && styles.padding]}>{children}</View>
     </Card>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 12,
+    overflow: 'hidden',
   },
   imageContainer: {
     overflow: 'hidden',
-    borderTopStartRadius: 12,
-    borderTopEndRadius: 12,
   },
   content: {
-    padding: 12,
     flexGrow: 1,
+  },
+  padding: {
+    padding: 12,
   },
 });

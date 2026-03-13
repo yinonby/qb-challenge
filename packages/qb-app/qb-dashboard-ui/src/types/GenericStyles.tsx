@@ -5,6 +5,9 @@ export const useGenericStyles = () => StyleSheet.create({
   spacing: {
     gap: 8,
   },
+  spacingLg: {
+    gap: 16,
+  },
   flexRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -37,6 +40,9 @@ export const useGenericStyles = () => StyleSheet.create({
   },
   spacingBottom: {
     marginBottom: 8,
+  },
+  spacingBottomLg: {
+    marginBottom: 16,
   },
   alignTextToTableCell: {
     paddingStart: 16,

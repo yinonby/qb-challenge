@@ -1,10 +1,13 @@
 
-import { toProductSummary, type ProductT } from '@qb/models';
+import { toProductDetails, toProductSummary, type ProductT } from '@qb/models';
 import type { CurrencyCodeT, PriceT } from '@qb/utils';
 import { mockProducts } from './MockApiProductDb';
 import {
   MAX_PRODUCTS_PER_PAGE,
-  mock_getProductsPageGraphqlQuery,
+  mock_getProductDetailsGraphqlQuery,
+  mock_getProductSummariesPaginatedGraphqlQuery,
+  type GetProductDetailsParamsT,
+  type GetProductDetailsResponseT,
   type GetProductsPageParamsT,
   type GetProductsPageResponseT,
   type GraphQLResponse, type GraphQLVariables
@@ -13,15 +16,18 @@ import {
 export const handleMockApiServerRequest = (
   query: string,
   variabales: GraphQLVariables,
-): GraphQLResponse<GetProductsPageResponseT> => {
-  if (query === mock_getProductsPageGraphqlQuery) {
-    const response = getProductsPage(variabales as GetProductsPageParamsT);
+): GraphQLResponse<GetProductsPageResponseT | GetProductDetailsResponseT> => {
+  if (query === mock_getProductSummariesPaginatedGraphqlQuery) {
+    const response = getProductSummariesPaginated(variabales as GetProductsPageParamsT);
+    return response;
+  } else if (query === mock_getProductDetailsGraphqlQuery) {
+    const response = getProductDetails(variabales as GetProductDetailsParamsT);
     return response;
   }
   throw new Error('Unexpected request');
 }
 
-const getProductsPage = (params: GetProductsPageParamsT): GraphQLResponse<GetProductsPageResponseT> => {
+const getProductSummariesPaginated = (params: GetProductsPageParamsT): GraphQLResponse<GetProductsPageResponseT> => {
   let filteredProducts = mockProducts.filter(e => e.langCode === params.langCode);
 
   if (params.productsPerPage > MAX_PRODUCTS_PER_PAGE) {
@@ -70,7 +76,7 @@ const getProductsPage = (params: GetProductsPageParamsT): GraphQLResponse<GetPro
   const endIdx = Math.min(startIdx + params.productsPerPage, filteredProducts.length);
   const productSummaries = filteredProducts
     .slice(startIdx, endIdx)
-    .map(e => toProductSummary(e, params.langCode));
+    .map(e => toProductSummary(e));
 
   const response: GetProductsPageResponseT = {
     data: {
@@ -112,5 +118,23 @@ const mockConvertPriceToEur = (price: PriceT): PriceT => {
   return {
     currencyCode: 'EUR',
     rate: mockCurrencyConvertorToEur[price.currencyCode] * price.rate,
+  }
+}
+
+const getProductDetails = (params: GetProductDetailsParamsT): GraphQLResponse<GetProductDetailsResponseT> => {
+  const product = mockProducts.find(e => e.langCode === params.langCode && e.productId === params.productId);
+
+  if (product === undefined) {
+    return {
+      errors: [{
+        message: `Product not found, langCode ${params.langCode}, productId ${params.productId}`,
+        extensions: { apiServerErrCode: 'apiError:invalidInput' },
+      }],
+    };
+  }
+  return {
+    data: {
+      productDetails: toProductDetails(product),
+    }
   }
 }

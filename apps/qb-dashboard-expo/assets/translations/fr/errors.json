@@ -3,5 +3,8 @@
     "server": "Une erreur serveur s'est produite",
     "unknown": "Une erreur inconnue s'est produite",
     "invalidInput": "Les données saisies sont invalides"
+  },
+  "appClientError": {
+    "unknown": "Une erreur inconnue s'est produite"
   }
 }

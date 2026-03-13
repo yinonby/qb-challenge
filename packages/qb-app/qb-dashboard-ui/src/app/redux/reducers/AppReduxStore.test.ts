@@ -34,6 +34,11 @@ jest.mock('./DashboardReducer', () => ({
   dashboardReducerPath: 'dashboardReducer',
 }));
 
+jest.mock('@qb-dashboard-ui/features/cart/reducer/CartSlice', () => ({
+  cartReducer: jest.fn(),
+  cartReducerPath: 'cartReducer',
+}));
+
 // tests
 
 describe('AppReduxStore', () => {

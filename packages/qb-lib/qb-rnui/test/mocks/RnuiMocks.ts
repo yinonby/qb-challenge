@@ -44,6 +44,7 @@ export const initRnuiMocks = () => {
       RnuiRadioButtonGroup: View,
       RnuiModal: View,
       RnuiSwitch: View,
+      RnuiImage: View,
 
       useRnuiSnackbar: () => ({
         onShowSnackbar: onShowSnackbarMock,

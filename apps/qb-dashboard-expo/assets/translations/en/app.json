@@ -1,12 +1,15 @@
 {
   "app": {
     "dashboard": "Dashboard",
+    "cart": "Cart",
+    "showAllPhotos": "Show all photos",
     "productListing": "Product Listing",
     "productDetails": "Product Details",
     "inventoryManagement": "Inventory Management",
     "productName": "Product name",
     "description": "Description",
     "fullDescription": "Full description",
+    "specifications": "Specifications",
     "price": "Price",
     "category": "Category",
     "stockLevel": "Stock level",

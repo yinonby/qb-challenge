@@ -55,6 +55,9 @@ export const initReactNativeMocks = () => {
       ActivityIndicator: RN.View,
       StyleSheet: { create: (styles: object) => styles, flatten: (style: object) => style },
       useColorScheme: jest.fn(),
+      Share: {
+        share: jest.fn(),
+      },
     };
   });
 }

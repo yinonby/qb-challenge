@@ -7,3 +7,7 @@ export type ProductListingPageUrlParamsT = {
   availability?: AvailabilityOptionT,
   sort?: SortT,
 }
+
+export type ProductDetailsPageSearchParamsT = {
+  imgView?: 'true',
+}

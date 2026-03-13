@@ -15,6 +15,6 @@ describe('AppErrorPage', () => {
 
     const button = getByTestId('RnuiButtonTid');
     button.props.onPress();
-    expect(mock_navigateReplace).toHaveBeenCalledWith('/app/dashboard/listing');
+    expect(mock_navigateReplace).toHaveBeenCalledWith('/');
   });
 });

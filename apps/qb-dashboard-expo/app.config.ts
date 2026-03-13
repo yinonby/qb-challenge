@@ -14,9 +14,14 @@ export function getExpoEnvVars(): ExpoEnvVarsT {
   if (apiUrl === undefined) {
     throw new Error("Missing env var: QB_ENV__API_URL");
   }
+  const appUrl = process.env.QB_ENV__APP_URL;
+  if (appUrl === undefined) {
+    throw new Error("Missing env var: QB_ENV__APP_URL");
+  }
 
   return {
     apiUrl,
+    appUrl,
     appHeaderHeight: 64,
     productsPerPage: 12,
   }

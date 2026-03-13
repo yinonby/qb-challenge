@@ -35,13 +35,13 @@ export const buildProductMock = (overrides?: Partial<ProductT>): ProductT => ({
   ...overrides,
 });
 
-const baseProductSummary = toProductSummary(baseProduct, 'en');
+const baseProductSummary = toProductSummary(baseProduct);
 export const buildProductSummaryMock = (overrides?: Partial<ProductSummaryT>): ProductSummaryT => ({
   ...baseProductSummary,
   ...overrides,
 });
 
-const baseProductDetails = toProductDetails(baseProduct, 'en');
+const baseProductDetails = toProductDetails(baseProduct);
 export const buildProductDetailsMock = (overrides?: Partial<ProductDetailsT>): ProductDetailsT => ({
   ...baseProductDetails,
   ...overrides,

@@ -1,7 +1,7 @@
 
 import { appRtkApiReducerPath } from '@qb-dashboard-ui/app/redux/rtk/AppRtkApi';
 import type {
-  GetProductResponseT,
+  GetProductDetailsResponseT,
   GetProductsPageResponseT,
   ProductUpdateResponseT
 } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
@@ -19,9 +19,9 @@ import {
 
 const apiUrl = 'https://api.test';
 const productId1 = 'PID1';
-let currentRequest: 'getProductsPage' | 'getProduct' | 'updateProduct' | 'error' = 'error';
+let currentRequest: 'getProductsPage' | 'getProductDetails' | 'updateProduct' | 'error' = 'error';
 
-const getProductResponse: GetProductResponseT = {
+const getProductResponse: GetProductDetailsResponseT = {
   data: {
     productDetails: buildProductDetailsMock({
       productId: productId1,
@@ -54,7 +54,7 @@ export const server = setupServer(
   http.post(apiUrl + '/product/graphql', () => {
     if (currentRequest === 'getProductsPage') {
       return HttpResponse.json(getProductsPageResponse);
-    } else if (currentRequest === 'getProduct') {
+    } else if (currentRequest === 'getProductDetails') {
       return HttpResponse.json(getProductResponse);
     } else if (currentRequest === 'updateProduct') {
       return HttpResponse.json(productUpdateResponse);
@@ -147,13 +147,13 @@ describe('ProductRtkApi', () => {
     });
   });
 
-  describe('getProduct', () => {
+  describe('getProductDetails', () => {
     it('succeeds', async () => {
       const store = createTestStore();
 
-      currentRequest = 'getProduct';
+      currentRequest = 'getProductDetails';
       const rtkResult = await store.dispatch(
-        productRtkApiEndpoints.getProduct.initiate({
+        productRtkApiEndpoints.getProductDetails.initiate({
           langCode: 'en',
           productId: 'PID1',
         })
@@ -167,7 +167,7 @@ describe('ProductRtkApi', () => {
 
       currentRequest = 'error';
       const rtkResult = await store.dispatch(
-        productRtkApiEndpoints.getProduct.initiate({
+        productRtkApiEndpoints.getProductDetails.initiate({
           langCode: 'en',
           productId: 'PID1',
         })

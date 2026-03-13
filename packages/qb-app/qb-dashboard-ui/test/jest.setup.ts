@@ -27,6 +27,7 @@ declare module '@qb/platform-ui' {
     mock_navigateReplace: jest.Mock,
     mock_useSearchParams: jest.Mock,
     mock_useSetSearchParams: jest.Mock,
+    mock_useSetParams: jest.Mock,
     mock_usePlatformUiLocalization: jest.Mock,
     mock_getStorageItem: jest.Mock,
     mock_setStorageItem: jest.Mock,

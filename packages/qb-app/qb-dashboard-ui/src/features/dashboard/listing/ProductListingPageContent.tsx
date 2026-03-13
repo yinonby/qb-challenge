@@ -8,7 +8,7 @@ import { isIos, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiAppContent, RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
-import type { ProductListingPageUrlParamsT } from '../../../types/ProductListingDefs';
+import type { ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
 import { ModelLoadingView } from '../../common/ModelLoadingView';
 import { FiltersButton } from './filters/FiltersButton';
 import { ProductListingGrid } from './product-summary/ProductListingGrid';

@@ -5,8 +5,8 @@ import type {
 } from '@qb/models';
 
 export const MAX_PRODUCTS_PER_PAGE = 24;
-export const mock_getProductsPageGraphqlQuery = 'mock_getProductsPageGraphqlQuery';
-export const mock_getProductGraphqlQuery = 'mock_getProductGraphqlQuery';
+export const mock_getProductSummariesPaginatedGraphqlQuery = 'mock_getProductSummariesPaginatedGraphqlQuery';
+export const mock_getProductDetailsGraphqlQuery = 'mock_getProductDetailsGraphqlQuery';
 export const mock_updateProductGraphqlQuery = 'mock_updateProductGraphqlQuery';
 
 export interface MockApiServerProvider{
@@ -19,7 +19,7 @@ export type GraphQLBody = {
   variables: GraphQLVariables;
 }
 
-export type GraphQLVariables = GetProductsPageParamsT | GetProductParamsT | ProductUpdateParamsT;
+export type GraphQLVariables = GetProductsPageParamsT | GetProductDetailsParamsT | ProductUpdateParamsT;
 
 export type GraphQLResponse<T> = T | {
   errors: GraphQLFormattedError[],
@@ -61,12 +61,12 @@ export type GetProductsPageResponseT = {
   data: PaginatedResponseT<ProductSummaryT>,
 }
 
-export type GetProductParamsT = {
+export type GetProductDetailsParamsT = {
   langCode: QbLangCodeT,
   productId: ProductIdT,
 }
 
-export type GetProductResponseT = {
+export type GetProductDetailsResponseT = {
   data: {
     productDetails: ProductDetailsT,
   }

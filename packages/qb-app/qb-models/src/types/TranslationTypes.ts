@@ -1,15 +1,18 @@
 
-import type { ApiServerErrorCodeT } from './ErrorTypes';
+import type { AppErrorCodeT } from './ErrorTypes';
 import type { ProductCategoryT, SortT } from './ProductTypes';
 
 export type AppTextTranslationKeyT =
   | 'app:dashboard'
+  | 'app:cart'
+  | 'app:showAllPhotos'
   | 'app:productListing'
   | 'app:productDetails'
   | 'app:inventoryManagement'
   | 'app:productName'
   | 'app:description'
   | 'app:fullDescription'
+  | 'app:specifications'
   | 'app:price'
   | 'app:category'
   | 'app:stockLevel'
@@ -66,7 +69,7 @@ export const sortOptionToTranslationKeyMap: Record<SortT, SortOptionTranslationK
 }
 
 export type AppTranslationKeyT =
-  | ApiServerErrorCodeT
+  | AppErrorCodeT
   | ProductCategoryTranslationKeyT
   | SortOptionTranslationKeyT
   | AppTextTranslationKeyT

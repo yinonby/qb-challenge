@@ -8,7 +8,10 @@ export const initPlatformUiMocks = () => {
     const mock_navigate = jest.fn();
     const mock_navigateReplace = jest.fn();
     const mock_useSearchParams = jest.fn();
-    const mock_useSetSearchParams = jest.fn();
+    const mock_useSetParams = jest.fn();
+    const mock_useSetSearchParams = jest.fn().mockReturnValue({
+      setParams: mock_useSetParams,
+    });
     const mock_getStorageItem = jest.fn();
     const mock_setStorageItem = jest.fn();
     const mock_isWeb = jest.fn();
@@ -41,6 +44,7 @@ export const initPlatformUiMocks = () => {
         mock_navigateReplace,
         mock_useSearchParams,
         mock_useSetSearchParams,
+        mock_useSetParams,
         mock_getStorageItem,
         mock_setStorageItem,
         mock_isWeb,

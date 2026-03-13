@@ -18,7 +18,7 @@ const initialState: DashboardReducerStateT = {
 /**
  * Dashboard slice
  */
-const DashboardSlice = createSlice({
+const dashboardSlice = createSlice({
   name: 'dashboardReducer',
   initialState,
   reducers: {},
@@ -27,7 +27,7 @@ const DashboardSlice = createSlice({
 /**
  * Reducer
  */
-export const { reducerPath: dashboardReducerPath } = DashboardSlice;
-export const { reducer: dashboardReducer } = DashboardSlice;
+export const { reducerPath: dashboardReducerPath } = dashboardSlice;
+export const { reducer: dashboardReducer } = dashboardSlice;
 export type DashboardPartialReducerStateT = { [dashboardReducerPath]: DashboardReducerStateT };
 

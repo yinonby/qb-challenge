@@ -6,6 +6,10 @@ import { useLocalSearchParams } from 'expo-router';
 export default function ProductDetailsPage() {
   const { productId } = useLocalSearchParams<{ productId: string }>();
 
+  if (productId === undefined) { // when navigating back
+    return null;
+  }
+
   return (
     <ProductDetailsPageContent productId={productId} />
   );

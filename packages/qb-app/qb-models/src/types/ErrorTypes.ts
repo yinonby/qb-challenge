@@ -5,4 +5,8 @@ export type ApiServerErrorCodeT =
   | 'apiError:invalidInput'
 ;
 
-export type AppErrorCodeT = ApiServerErrorCodeT; // here we can add more error types
+export type AppClientErrorCodeT =
+  | 'appClientError:unknown'
+;
+
+export type AppErrorCodeT = ApiServerErrorCodeT | AppClientErrorCodeT; // here we can add more error types
