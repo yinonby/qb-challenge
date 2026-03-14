@@ -6,6 +6,7 @@
     "productListing": "Liste des produits",
     "productDetails": "Détails du produit",
     "inventoryManagement": "Gestion des stocks",
+    "inventoryManagementDesc": "Sélectionnez les produits dont vous souhaitez modifier le stock",
     "productName": "Nom du produit",
     "description": "Description",
     "fullDescription": "Description complète",

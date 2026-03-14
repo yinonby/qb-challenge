@@ -10,8 +10,8 @@ import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
 import { ModelLoadingView } from '../../common/ModelLoadingView';
+import { PaginationControl } from '../../common/PaginationControl';
 import { FiltersButton } from './filters/FiltersButton';
-import { PaginationControl } from './PaginationControl';
 import { ProductListingGrid } from './product-summary/ProductListingGrid';
 
 export const ProductListingPageContent: FC<TestableComponentT> = () => {
@@ -116,6 +116,7 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
           <View style={genericStyles.flex1} />
 
           <PaginationControl
+            testID='PaginationControlTid'
             totalItemsNum={data.totalItems}
             curPage={pageNum}
             curPageItemsNum={data.productSummaries.length}

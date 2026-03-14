@@ -2,7 +2,7 @@
 import type { DashboardContextT } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as DashboardLayout from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as ProductsPageModel from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
-import { DEFAULT_SORT_OPTION, type ProductSummaryT } from '@qb/models';
+import { DEFAULT_SORT_OPTION } from '@qb/models';
 import { buildProductSummaryMock } from '@qb/models/test-utils';
 import { __puiMocks } from '@qb/platform-ui';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
@@ -15,6 +15,15 @@ jest.mock('../../common/ModelLoadingView', () => {
 
   return {
     ModelLoadingView: View,
+  };
+});
+
+jest.mock('../../common/PaginationControl', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    PaginationControl: View,
   };
 });
 
@@ -89,7 +98,7 @@ describe('ProductListingPageContent', () => {
     getByTestId('ModelLoadingViewTid');
   });
 
-  it('displays content', async () => {
+  it('displays content, no products', async () => {
     // setup mocks
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
@@ -98,12 +107,33 @@ describe('ProductListingPageContent', () => {
     });
 
     // render
+    const { getByTestId, getByText } = render(
+      <ProductListingPageContent />
+    );
+
+    // verify components
+    getByTestId('FiltersButtonTid');
+    getByTestId('PaginationControlTid');
+    getByText('mocked-t-app:noProducts');
+  });
+
+  it('displays content, with products', async () => {
+    // setup mocks
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [buildProductSummaryMock()], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+
+    // render
     const { getByTestId } = render(
       <ProductListingPageContent />
     );
 
     // verify components
-    getByTestId('RnuiAppContentTid');
+    getByTestId('FiltersButtonTid');
+    getByTestId('PaginationControlTid');
+    getByTestId('ProductListingGridTid');
   });
 
   it('sets different margin for clear filters button in ios', async () => {
@@ -127,75 +157,51 @@ describe('ProductListingPageContent', () => {
     expect(clearBtn.props.style.marginStart).toEqual(-6);
   });
 
-  it('handles next / previous clicks, first page', async () => {
+  it('handles next / prev', async () => {
     // setup mocks
-    const productSummaries: ProductSummaryT[] = [
-      buildProductSummaryMock(),
-      buildProductSummaryMock(),
-      buildProductSummaryMock(),
-    ];
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: productSummaries.slice(0, 2), totalItems: 10, pageNum: 0, isLastPage: false },
-    });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify components
-    const prevBtn = getByTestId('PrevButtonTid');
-    const nextBtn = getByTestId('NextButtonTid');
-
-    expect(prevBtn.props.disabled).toEqual(true);
-    expect(nextBtn.props.disabled).toEqual(false);
-
-    // request next page
-    act(() => {
-      fireEvent.press(nextBtn);
-    });
-
-    expect(mock_setParams).toHaveBeenCalledWith(
-      expect.objectContaining({ pageNumStr: "1" })
-    );
-  });
-
-  it('handles next / previous clicks, last page', async () => {
-    // setup mocks
-    const productSummaries: ProductSummaryT[] = [
-      buildProductSummaryMock(),
-      buildProductSummaryMock(),
-      buildProductSummaryMock(),
-    ];
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: productSummaries.slice(2, 3), totalItems: 10, pageNum: 1, isLastPage: true },
-    });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
 
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+
     // render
     const { getByTestId } = render(
       <ProductListingPageContent />
     );
 
     // verify components
-    const prevBtn = getByTestId('PrevButtonTid');
-    const nextBtn = getByTestId('NextButtonTid');
+    const pagControl = getByTestId('PaginationControlTid');
+    expect(pagControl.props.totalItemsNum).toEqual(10);
+    expect(pagControl.props.curPage).toEqual(1);
+    expect(pagControl.props.curPageItemsNum).toEqual(0);
+    expect(pagControl.props.isLastPage).toEqual(false);
+    expect(pagControl.props.itemsPerPage).toEqual(productsPerPage);
 
-    expect(prevBtn.props.disabled).toEqual(false);
-    expect(nextBtn.props.disabled).toEqual(true);
-
-    // request prev page
-    act(() => {
-      fireEvent.press(prevBtn);
+    // next
+    jest.clearAllMocks();
+    pagControl.props.onNext();
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: '2',
+      category: undefined,
+      availabilityMinStr: undefined,
+      availabilityMaxStr: undefined,
+      sort: undefined,
     });
 
-    expect(mock_setParams).toHaveBeenCalledWith(
-      expect.objectContaining({ pageNumStr: "0" })
-    );
+
+    // prev
+    jest.clearAllMocks();
+    pagControl.props.onPrev();
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: '0',
+      category: undefined,
+      availabilityMinStr: undefined,
+      availabilityMaxStr: undefined,
+      sort: undefined,
+    });
   });
 
   it('does not render clear filters button', async () => {

@@ -2,16 +2,17 @@
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { type ProductSummaryT } from '@qb/models';
-import { RnuiCheckbox, RnuiTable, RnuiTableCell, RnuiTableHeader, RnuiTableRow, RnuiTableTitle, RnuiText, type TestableComponentT } from '@qb/rnui';
+import { RnuiCard, RnuiCheckbox, RnuiImage, RnuiTable, RnuiTableCell, RnuiTableHeader, RnuiTableRow, RnuiTableTitle, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { useState, type FC } from 'react';
 import { View } from 'react-native';
 
 type ProductInventoryTablePropsT = TestableComponentT & {
   productSummaries: ProductSummaryT[],
+  imageSize?: number,
 }
 
 export const ProductInventoryTable: FC<ProductInventoryTablePropsT> = (props) => {
-  const { productSummaries } = props;
+  const { productSummaries, imageSize = 32 } = props;
   const { t } = useAppLocalization();
   const [isCheckedItems, setIsCheckedItems] = useState(productSummaries.map(() => false));
   const genericStyles = useGenericStyles();
@@ -59,7 +60,14 @@ export const ProductInventoryTable: FC<ProductInventoryTablePropsT> = (props) =>
         {productSummaries.map((e, index) =>
           <RnuiTableRow key={index} noHorizontalPadding>
             <RnuiTableCell>
-              <RnuiText>{e.name}</RnuiText>
+              <View style={genericStyles.flexRow}>
+                <View style={{ width: imageSize }}>
+                  <RnuiCard noPadding borderRadius={4}>
+                    <RnuiImage imageSource={e.imageUrl} height={imageSize}></RnuiImage>
+                  </RnuiCard>
+                </View>
+                <RnuiText>{e.name}</RnuiText>
+              </View>
             </RnuiTableCell>
 
             <RnuiTableCell endContent>

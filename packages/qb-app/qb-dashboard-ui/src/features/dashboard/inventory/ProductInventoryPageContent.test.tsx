@@ -18,6 +18,24 @@ jest.mock('../../common/ModelLoadingView', () => {
   };
 });
 
+jest.mock('../../common/PaginationControl', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    PaginationControl: View,
+  };
+});
+
+jest.mock('./ProductInventoryTable', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ProductInventoryTable: View,
+  };
+});
+
 jest.mock('./ProductInventoryTable', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
@@ -82,7 +100,7 @@ describe('ProductInventoryPageContent', () => {
     getByTestId('ModelLoadingViewTid');
   });
 
-  it('displays content, pageNumStr search param is not defined', async () => {
+  it('displays content', async () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({});
     spy_useProductsPageModel.mockReturnValue({
@@ -97,12 +115,30 @@ describe('ProductInventoryPageContent', () => {
     );
 
     // verify components
-    expect(spy_useProductsPageModel).toHaveBeenCalledWith(expect.objectContaining({ pageNum: 0 }));
-    getByText('mocked-t-app:inventoryManagement');
+    getByText('mocked-t-app:inventoryManagementDesc');
+    getByTestId('PaginationControlTid');
     getByTestId('ProductInventoryTableTid');
   });
 
-  it('displays content, pageNumStr search param is defined', async () => {
+  it('pageNumStr search param is not defined', async () => {
+    // setup mocks
+    mock_useSearchParams.mockReturnValue({});
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+
+    // render
+    render(
+      <ProductInventoryPageContent />
+    );
+
+    // verify components
+    expect(spy_useProductsPageModel).toHaveBeenCalledWith(expect.objectContaining({ pageNum: 0 }));
+  });
+
+  it('pageNumStr search param is defined', async () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
 
@@ -113,13 +149,58 @@ describe('ProductInventoryPageContent', () => {
     });
 
     // render
-    const { getByTestId, getByText } = render(
+   render(
       <ProductInventoryPageContent />
     );
 
     // verify components
     expect(spy_useProductsPageModel).toHaveBeenCalledWith(expect.objectContaining({ pageNum: 1 }));
-    getByText('mocked-t-app:inventoryManagement');
-    getByTestId('ProductInventoryTableTid');
+  });
+
+  it('handles next / prev', async () => {
+    // setup mocks
+    mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
+
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+
+    // render
+    const { getByTestId } = render(
+      <ProductInventoryPageContent />
+    );
+
+    // verify components
+    const pagControl = getByTestId('PaginationControlTid');
+    expect(pagControl.props.totalItemsNum).toEqual(10);
+    expect(pagControl.props.curPage).toEqual(1);
+    expect(pagControl.props.curPageItemsNum).toEqual(0);
+    expect(pagControl.props.isLastPage).toEqual(false);
+    expect(pagControl.props.itemsPerPage).toEqual(productsPerPage);
+
+    // next
+    jest.clearAllMocks();
+    pagControl.props.onNext();
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: '2',
+      category: undefined,
+      availabilityMinStr: undefined,
+      availabilityMaxStr: undefined,
+      sort: undefined,
+    });
+
+
+    // prev
+    jest.clearAllMocks();
+    pagControl.props.onPrev();
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: '0',
+      category: undefined,
+      availabilityMinStr: undefined,
+      availabilityMaxStr: undefined,
+      sort: undefined,
+    });
   });
 });

@@ -5,7 +5,7 @@ import darkThemeJson from '../../assets/theme/darkTheme.json';
 import lightThemeJson from '../../assets/theme/lightTheme.json';
 
 export const contentPaddingHorizontal = 24;
-export const contentPaddingVertical = 8;
+export const contentPaddingVertical = 16;
 
 // app theme hook
 type AppThemeT = {

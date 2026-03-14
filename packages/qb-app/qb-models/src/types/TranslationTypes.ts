@@ -9,6 +9,7 @@ export type AppTextTranslationKeyT =
   | 'app:productListing'
   | 'app:productDetails'
   | 'app:inventoryManagement'
+  | 'app:inventoryManagementDesc'
   | 'app:productName'
   | 'app:description'
   | 'app:fullDescription'
