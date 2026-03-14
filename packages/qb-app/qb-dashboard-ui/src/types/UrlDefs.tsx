@@ -13,6 +13,14 @@ export type ProductDetailsPageSearchParamsT = {
   imgView?: 'true',
 }
 
+export type ProductInventoryPageUrlParamsT = {
+  pageNumStr?: string,
+  category?: ProductCategoryT,
+  availabilityMinStr?: string,
+  availabilityMaxStr?: string,
+  sort?: SortT,
+}
+
 export const buildAvailabilityOption = (
   availabilityMinStr: string | undefined,
   availabilityMaxStr: string | undefined,
