@@ -62,7 +62,7 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
           visible
           style={modalStyle}
           contentContainerStyle={{
-            height: isFullScreen ? '100%' : undefined,
+            height: isFullScreen ? '100%' : '75%',
             width: !isFullScreen ? nonFullScreenWidthLimit : '100%',
           }}
           onDismiss={onDismiss}
@@ -71,6 +71,7 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
             includeCloseButton={includeCloseButton}
             onClose={onClose}
             notScrollable={notScrollable}
+            isFullScreen={isFullScreen}
           >
             {children}
           </RnuiModalContent>

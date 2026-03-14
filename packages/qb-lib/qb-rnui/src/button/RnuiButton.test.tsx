@@ -71,7 +71,40 @@ describe('RnuiButton', () => {
     expect(button.props.uppercase).toBe(true);
   });
 
-  it('renders with size xs, without rnuiStyles override', () => {
+  it('renders with size not xs', () => {
+    useRnuiContextSpy.mockReturnValue({
+      rnuiStyles: {},
+    });
+    spy_isWeb.mockReturnValue(true);
+
+    const { getByTestId } = render(
+      <RnuiButton size='small'>XS Button</RnuiButton>
+    );
+
+    const button = getByTestId('btn-tid');
+    const finalButtonStyle = StyleSheet.flatten(button.props.style);
+    expect(finalButtonStyle.minWidth).toBeUndefined();
+    expect(finalButtonStyle.height).toBeUndefined();
+  });
+
+  it('renders with size xs', () => {
+    useRnuiContextSpy.mockReturnValue({
+      rnuiStyles: {},
+    });
+    spy_isWeb.mockReturnValue(true);
+
+    const { getByTestId } = render(
+      <RnuiButton size='xs'>XS Button</RnuiButton>
+    );
+
+    const button = getByTestId('btn-tid');
+    const finalButtonStyle = StyleSheet.flatten(button.props.style);
+    expect(finalButtonStyle.minWidth).toBe(48);
+    expect(finalButtonStyle.height).toBe(32);
+  });
+
+  it('renders with size xs, in web, without rnuiStyles override', () => {
+    spy_isWeb.mockReturnValue(true);
     useRnuiContextSpy.mockReturnValue({
       rnuiStyles: {}
     });
@@ -82,7 +115,28 @@ describe('RnuiButton', () => {
 
     const button = getByTestId('btn-tid');
     expect(button.props.labelStyle).toBeDefined();
-    expect(button.props.labelStyle.margin).toBe(8);
+    expect(button.props.labelStyle.marginHorizontal).toBe(8);
+    expect(button.props.labelStyle.marginVertical).toBe(8);
+    expect(button.props.labelStyle.fontSize).toBe(12);
+    expect(button.props.labelStyle.lineHeight).toBe(16);
+
+    const finalButtonStyle = StyleSheet.flatten(button.props.style);
+    expect(finalButtonStyle.minWidth).toBe(48);
+  });
+
+  it('renders with size xs, not in web, without rnuiStyles override', () => {
+    spy_isWeb.mockReturnValue(false);
+    useRnuiContextSpy.mockReturnValue({
+      rnuiStyles: {}
+    });
+
+    const { getByTestId } = render(
+      <RnuiButton size='xs'>XS Button</RnuiButton>
+    );
+
+    const button = getByTestId('btn-tid');
+    expect(button.props.labelStyle.marginHorizontal).toBe(16);
+    expect(button.props.labelStyle.marginVertical).toBe(8);
     expect(button.props.labelStyle.fontSize).toBe(12);
     expect(button.props.labelStyle.lineHeight).toBe(16);
 
@@ -109,9 +163,9 @@ describe('RnuiButton', () => {
 
     const button = getByTestId('btn-tid');
     expect(button.props.labelStyle).toBeDefined();
-    expect(button.props.labelStyle).toEqual({
+    expect(button.props.labelStyle).toEqual(expect.objectContaining({
       ...xsButtonLabelStyle,
-    });
+    }));
 
     const finalButtonStyle = StyleSheet.flatten(button.props.style);
     expect(finalButtonStyle.minWidth).toBe(48);
@@ -136,10 +190,10 @@ describe('RnuiButton', () => {
 
     const button = getByTestId('btn-tid');
     expect(button.props.labelStyle).toBeDefined();
-    expect(button.props.labelStyle).toEqual({
+    expect(button.props.labelStyle).toEqual(expect.objectContaining({
       ...xsButtonLabelStyle,
       paddingHorizontal: 16,
-    });
+    }));
 
     const finalButtonStyle = StyleSheet.flatten(button.props.style);
     expect(finalButtonStyle.minWidth).toBe(48);
@@ -164,10 +218,10 @@ describe('RnuiButton', () => {
 
     const button = getByTestId('btn-tid');
     expect(button.props.labelStyle).toBeDefined();
-    expect(button.props.labelStyle).toEqual({
+    expect(button.props.labelStyle).toEqual(expect.objectContaining({
       ...xsButtonLabelStyle,
       paddingHorizontal: 8,
-    });
+    }));
 
     const finalButtonStyle = StyleSheet.flatten(button.props.style);
     expect(finalButtonStyle.minWidth).toBe(48);

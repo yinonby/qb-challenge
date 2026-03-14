@@ -17,7 +17,7 @@ export const RnuiTextInput: FC<RnuiTextInputPropsT> = ({
     <RnpTextInput
       testID="text-input-tid"
       mode={mode}
-      style={[styles.input, style, size === "xs" && styles.xs]}
+      style={[style, size === "xs" && styles.xs]}
       dense={size === "small"}
       {...props}
     />
@@ -25,9 +25,6 @@ export const RnuiTextInput: FC<RnuiTextInputPropsT> = ({
 };
 
 const styles = StyleSheet.create({
-  input: {
-    backgroundColor: 'white', // Paper TextInput defaults to transparent
-  },
   xs: {
     height: 32,
   }

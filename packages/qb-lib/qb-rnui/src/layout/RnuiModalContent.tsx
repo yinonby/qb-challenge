@@ -12,6 +12,7 @@ type RnuiModalContentPropsT = TestableComponentT & {
   onClose ?: () => void,
   notScrollable ?: boolean,
   closeButtomSize?: number,
+  isFullScreen?: boolean,
 }
 
 export const RnuiModalContent: FC<PropsWithChildren<RnuiModalContentPropsT>> = (props) => {
@@ -21,6 +22,7 @@ export const RnuiModalContent: FC<PropsWithChildren<RnuiModalContentPropsT>> = (
     onClose,
     notScrollable,
     closeButtomSize = 20,
+    isFullScreen = false,
     children,
   } = props;
 
@@ -59,6 +61,7 @@ export const RnuiModalContent: FC<PropsWithChildren<RnuiModalContentPropsT>> = (
             keyboardShouldPersistTaps={keyboardShouldPersistTaps}
             showsVerticalScrollIndicator
             persistentScrollbar
+            contentContainerStyle={[!isFullScreen && { flex: 1 }]}
             style={[
               styles.content,
               { paddingHorizontal: appContentPaddingHorizontal },

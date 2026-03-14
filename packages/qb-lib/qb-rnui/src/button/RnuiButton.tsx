@@ -18,18 +18,19 @@ export const RnuiButton: FC<RnuiButtonPropsT> = ({
   const { rnuiStyles } = useRnuiContext();
   let labelStyle: TextStyle | undefined = undefined;
   if (size === 'xs') {
-    labelStyle = {}
+    labelStyle = {
+      marginHorizontal: isWeb() ? 8 : 16,
+      marginVertical: 8,
+      fontSize: 12,
+      lineHeight: 16,
+    };
+
     if (rnuiStyles.xsButtonLabelStyle) {
       labelStyle = {
+        ...labelStyle,
         ...rnuiStyles.xsButtonLabelStyle,
       }
-    } else {
-      labelStyle = {
-        margin: 8,
-        fontSize: 12,
-        lineHeight: 16,
-      }
-    }
+    };
 
     if (isWeb()) {
       if (props.icon) {
@@ -37,13 +38,17 @@ export const RnuiButton: FC<RnuiButtonPropsT> = ({
       } else {
         labelStyle.paddingHorizontal = 8;
       }
-    }
+    };
   }
 
   return (
     <RnpButton
       testID='btn-tid'
-      style={{ minWidth: size === 'xs' ? 48 : undefined }}
+      style={{
+        minWidth: size === 'xs' ? 48 : undefined,
+        height: size === 'xs' ? 32 : undefined,
+        justifyContent: 'center',
+      }}
       labelStyle={labelStyle}
       mode={mode}
       uppercase={uppercase}
