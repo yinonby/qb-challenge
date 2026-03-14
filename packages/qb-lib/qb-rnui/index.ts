@@ -9,6 +9,7 @@ export * from './src/grid/RnuiGridItem';
 export * from './src/grid/RnuiMasonryGrid';
 export * from './src/icon/RnuiMaterialIcon';
 export * from './src/image/RnuiImage';
+export * from './src/input/RnuiCheckbox';
 export * from './src/input/RnuiCodeInput';
 export * from './src/input/RnuiRadioButtonGroup';
 export * from './src/input/RnuiSwitch';

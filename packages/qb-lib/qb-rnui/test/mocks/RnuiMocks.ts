@@ -45,6 +45,7 @@ export const initRnuiMocks = () => {
       RnuiModal: View,
       RnuiSwitch: View,
       RnuiImage: View,
+      RnuiCheckbox: View,
 
       useRnuiSnackbar: () => ({
         onShowSnackbar: onShowSnackbarMock,
