@@ -1,5 +1,5 @@
 
-import { isAndroid, isWeb } from './RnuiUtils';
+import { isAndroid, isIos, isWeb } from './RnuiUtils';
 
 // Mock react-native Platform module
 jest.mock("react-native", () => ({
@@ -40,6 +40,21 @@ describe("RnuiUtils", () => {
 
       (Platform as PlatformT).OS = "web";
       expect(isAndroid()).toBe(false);
+    });
+  });
+
+  describe("isIos", () => {
+    it("returns true when Platform.OS is 'ios'", () => {
+      (Platform as PlatformT).OS = "ios";
+      expect(isIos()).toBe(true);
+    });
+
+    it("returns false when Platform.OS is not 'ios'", () => {
+      (Platform as PlatformT).OS = "android";
+      expect(isIos()).toBe(false);
+
+      (Platform as PlatformT).OS = "web";
+      expect(isIos()).toBe(false);
     });
   });
 });
