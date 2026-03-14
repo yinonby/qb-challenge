@@ -68,11 +68,16 @@ export function msToStr(ms: number): string {
   }
 }
 
-export const tsToLocalDateString = (ts: number): string => new Intl.DateTimeFormat(undefined, {
+export const tsToLocalDateString = (
+  ts: number,
+  languageTag: string | undefined,
+  timeZone: string | undefined,
+): string => new Intl.DateTimeFormat(languageTag, {
   year: 'numeric',
   month: 'short',
   day: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
   timeZoneName: 'short',
+  timeZone: timeZone,
 }).format(new Date(ts));
