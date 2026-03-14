@@ -29,8 +29,8 @@ export function getExpoEnvVars(): ExpoEnvVarsT {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: config.name || "",
-  slug: config.slug || "",
+  name: config.name || "QiiBee Expo Dashboard",
+  slug: config.slug || "QiiBee Expo Dashboard",
   extra: {
     ...config.extra,
     env: {
