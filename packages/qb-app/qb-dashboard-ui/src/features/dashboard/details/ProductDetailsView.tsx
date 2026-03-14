@@ -2,6 +2,7 @@
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { productCategoryToTranslationKeyMap, type ProductDetailsT } from '@qb/models';
+import { usePlatformUiDeviceLocale } from '@qb/platform-ui';
 import { RnuiText, type TestableComponentT } from '@qb/rnui';
 import { tsToLocalDateString } from '@qb/utils';
 import React, { type FC } from 'react';
@@ -18,6 +19,7 @@ export const ProductDetailsView: FC<ProductDetailsViewPropsT> = (props) => {
   const genericStyles = useGenericStyles();
   const { t } = useAppLocalization();
   const categoryTranslationKey = productCategoryToTranslationKeyMap[productDetails.category];
+  const { langTag, timeZone } = usePlatformUiDeviceLocale();
 
   return (
     <View>
@@ -84,7 +86,9 @@ export const ProductDetailsView: FC<ProductDetailsViewPropsT> = (props) => {
 
           <View>
             <RnuiText variant='titleSmall'>{t('app:lastUpdateTime')}</RnuiText>
-            <RnuiText>{tsToLocalDateString(productDetails.lastStockUpdateTs)}</RnuiText>
+            <RnuiText>
+              {tsToLocalDateString(productDetails.lastStockUpdateTs, langTag, timeZone )}
+            </RnuiText>
           </View>
         </View>
       </View>

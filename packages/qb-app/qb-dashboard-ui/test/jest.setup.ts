@@ -22,6 +22,7 @@ initPlatformUiMocks();
 
 declare module '@qb/platform-ui' {
   export const __puiMocks: {
+    mock_usePlatformUiDeviceLocale: jest.Mock,
     mock_getDeviceLangCodeStr: jest.Mock,
     mock_navigate: jest.Mock,
     mock_navigateReplace: jest.Mock,

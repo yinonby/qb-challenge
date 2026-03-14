@@ -1,9 +1,18 @@
 
 import { buildProductDetailsMock } from '@qb/models/test-utils';
-import { tsToLocalDateString } from '@qb/utils';
+import { __puiMocks } from '@qb/platform-ui';
+import * as QbUtils from '@qb/utils';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { ProductDetailsView } from './ProductDetailsView';
+
+// mocks
+
+jest.mock('@qb/utils', () => {
+  return {
+    tsToLocalDateString: jest.fn(),
+  };
+});
 
 jest.mock('./ProductDetailsHeader', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -24,6 +33,10 @@ jest.mock('./ProductImagesSummary', () => {
 });
 
 describe('ProductDetailsView', () => {
+  const spy_tsToLocalDateString = jest.spyOn(QbUtils, 'tsToLocalDateString');
+  const { mock_usePlatformUiDeviceLocale } = __puiMocks;
+  mock_usePlatformUiDeviceLocale.mockReturnValue({ langTag: 'MOCK_LANG_TAG', timeZone: 'MOCK_TIMEZONE' });
+
   it('renders title', async () => {
     // render
     const productDetails = buildProductDetailsMock({
@@ -188,6 +201,8 @@ describe('ProductDetailsView', () => {
   });
 
   it('renders lastStockUpdateTs', async () => {
+    spy_tsToLocalDateString.mockReturnValue('MOCK_TS_STR');
+
     // render
     const productDetails = buildProductDetailsMock({
       lastStockUpdateTs: 122,
@@ -197,7 +212,8 @@ describe('ProductDetailsView', () => {
     );
 
     // verify components
+    expect(spy_tsToLocalDateString).toHaveBeenCalledWith(122, 'MOCK_LANG_TAG', 'MOCK_TIMEZONE');
     getByText('mocked-t-app:lastUpdateTime');
-    getByText(tsToLocalDateString(122));
+    getByText('MOCK_TS_STR');
   });
 });
