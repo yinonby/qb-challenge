@@ -47,9 +47,10 @@ export type TranslatedProductSpecificationT = {
 
 // API structures
 
-const _availabilityOptions = ['inStock', 'outOfStock'] as const;
-export type AvailabilityOptionT = typeof _availabilityOptions[number];
-export const availabilityOptions: AvailabilityOptionT[] = [..._availabilityOptions];
+export type AvailabilityOptionT = { // range limit
+  minStock: number | undefined,
+  maxStock: number | undefined,
+}
 
 const _sortOptions = ['priceAscending', 'priceDescending', 'popularity', 'newest'] as const;
 export type SortT = typeof _sortOptions[number];

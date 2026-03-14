@@ -6,7 +6,7 @@ import { useSearchParams } from '@qb/platform-ui';
 import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
 import { View } from 'react-native';
-import type { ProductListingPageUrlParamsT } from '../../../../types/UrlDefs';
+import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../../types/UrlDefs';
 import { AvailabilitySelect } from './AvailabilitySelect';
 import { CategorySelect } from './CategorySelect';
 import { SortSelect } from './SortSelect';
@@ -21,9 +21,10 @@ type FiltersViewPropsT = TestableComponentT & {
 
 export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   const { onApply } = props;
-  const { category, availability, sort } = useSearchParams<ProductListingPageUrlParamsT>();
+  const { category, availabilityMinStr, availabilityMaxStr, sort } = useSearchParams<ProductListingPageUrlParamsT>();
   const { t } = useAppLocalization();
   const [selectedCategory, setSelectedCategory] = useState<ProductCategoryT | undefined>(category);
+  const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
   const [selectedAvailability, setSelectedAvailability] = useState<AvailabilityOptionT | undefined>(availability);
   const sortParam = sort || DEFAULT_SORT_OPTION;
   const [selectedSort, setSelectedSort] = useState<SortT>(sortParam);

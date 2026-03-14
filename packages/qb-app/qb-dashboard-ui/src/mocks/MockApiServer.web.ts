@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 import { setupWorker } from 'msw/browser';
 import { handleMockApiServerRequest } from './MockApiRequestHandler';
 import {
-  type GetProductsPageParamsT,
+  type GetProductSummariesPaginatedParamsT,
   type GraphQLBody,
   type MockApiServerProvider
 } from './MockApiServerDefs';
@@ -14,7 +14,7 @@ export const createMockApiServer = (apiUrl: string): MockApiServerProvider => {
       const body = await request.json() as GraphQLBody;
       const { query, variables } = body;
 
-      const response = handleMockApiServerRequest(query, variables as GetProductsPageParamsT);
+      const response = handleMockApiServerRequest(query, variables as GetProductSummariesPaginatedParamsT);
       return HttpResponse.json(response);
     }),
   );

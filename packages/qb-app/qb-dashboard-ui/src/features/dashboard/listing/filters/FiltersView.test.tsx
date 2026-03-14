@@ -78,7 +78,8 @@ describe('FiltersView', () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({
       category: 'MOCK_CATEGORY',
-      availability: 'MOCK_AVAILABILITY',
+      availabilityMinStr: '1',
+      availabilityMaxStr: '2',
       sort: 'MOCK_SORT',
     });
     const onApply = jest.fn();
@@ -91,7 +92,7 @@ describe('FiltersView', () => {
 
     expect(sortSelect.props.value).toEqual('MOCK_SORT');
     expect(categorySelect.props.value).toEqual('MOCK_CATEGORY');
-    expect(availabilitySelect.props.value).toEqual('MOCK_AVAILABILITY');
+    expect(availabilitySelect.props.value).toEqual({ minStock: 1, maxStock: 2 });
   });
 
   it('renders filters and disabled apply button initially', () => {

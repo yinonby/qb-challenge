@@ -4,20 +4,22 @@ import {
   mock_getProductDetailsGraphqlQuery,
   mock_getProductSummariesPaginatedGraphqlQuery, mock_updateProductGraphqlQuery,
   type GetProductDetailsParamsT, type GetProductDetailsResponseT,
-  type GetProductsPageParamsT,
-  type GetProductsPageResponseT,
+  type GetProductSummariesPaginatedParamsT,
+  type GetProductSummariesPaginatedResponseT,
   type ProductUpdateParamsT, type ProductUpdateResponseT
 } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import { stableHash } from '@qb/utils';
 
-function buildProductPageHash(params: GetProductsPageParamsT): string {
+function buildProductPageHash(params: GetProductSummariesPaginatedParamsT): string {
   return stableHash(params);
 }
 
 const productRtkApi = appRtkApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProductSummariesPaginated: builder.query<GetProductsPageResponseT['data'], GetProductsPageParamsT>({
-      query: (params: GetProductsPageParamsT) => ({
+    getProductSummariesPaginated:
+      builder.query<GetProductSummariesPaginatedResponseT['data'], GetProductSummariesPaginatedParamsT>(
+    {
+      query: (params: GetProductSummariesPaginatedParamsT) => ({
         url: '/product/graphql',
         kind: 'graphql',
         graphql: {

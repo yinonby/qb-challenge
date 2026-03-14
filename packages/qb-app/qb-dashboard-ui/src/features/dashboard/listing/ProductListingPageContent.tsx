@@ -8,7 +8,7 @@ import { isIos, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiAppContent, RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
-import type { ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
+import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
 import { ModelLoadingView } from '../../common/ModelLoadingView';
 import { FiltersButton } from './filters/FiltersButton';
 import { ProductListingGrid } from './product-summary/ProductListingGrid';
@@ -17,11 +17,12 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
   const { productsPerPage } = useDashboard();
   const { t, langCode } = useAppLocalization();
   const searchParams = useSearchParams<ProductListingPageUrlParamsT>();
-  const { pageNumStr, category, availability, sort } = searchParams;
+  const { pageNumStr, category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
   const { setParams } = useSetSearchParams<ProductListingPageUrlParamsT>();
   const pageNum = pageNumStr === undefined ? 0 : parseInt(pageNumStr);
+  const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
   const { isLoading, isError, appErrCode, data } = useProductsPageModel({
-    langCode: langCode,
+    langCode,
     pageNum,
     productsPerPage: productsPerPage,
     category,
@@ -39,7 +40,8 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     setParams({
       pageNumStr: newPageNum.toString(),
       category,
-      availability,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
       sort,
     });
   }
@@ -50,7 +52,8 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     setParams({
       pageNumStr: newPageNum.toString(),
       category,
-      availability,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
       sort,
     });
   };
@@ -59,7 +62,8 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     setParams({
       pageNumStr: undefined,
       category: undefined,
-      availability: undefined,
+      availabilityMinStr: undefined,
+      availabilityMaxStr: undefined,
       sort: undefined,
     });
   };
@@ -78,7 +82,8 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     setParams({
       pageNumStr: newPageNum.toString(),
       category,
-      availability,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
       sort,
     });
   }

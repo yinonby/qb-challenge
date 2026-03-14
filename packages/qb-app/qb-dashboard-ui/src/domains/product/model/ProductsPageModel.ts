@@ -1,5 +1,5 @@
 
-import type { GetProductsPageParamsT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
+import type { GetProductSummariesPaginatedParamsT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import type { AppModelT } from '@qb-dashboard-ui/types/ModelTypes';
 import type { ProductSummaryT } from '@qb/models';
 import { useGetProductSummariesPaginatedQuery } from '../rtk/ProductRtkApi';
@@ -15,7 +15,7 @@ export type ProductsPageModelDataT = {
 
 export type ProductsPageModelT = AppModelT<ProductsPageModelDataT>;
 
-export const useProductsPageModel = (params: GetProductsPageParamsT): ProductsPageModelT => {
+export const useProductsPageModel = (params: GetProductSummariesPaginatedParamsT): ProductsPageModelT => {
   const {
     isUninitialized,
     isLoading,

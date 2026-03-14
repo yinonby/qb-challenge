@@ -1,5 +1,5 @@
 
-import type { GetProductsPageParamsT, GetProductsPageResponseT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
+import type { GetProductSummariesPaginatedParamsT, GetProductSummariesPaginatedResponseT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import { renderHook } from '@testing-library/react-native';
 import * as ProductRtkApi from '../rtk/ProductRtkApi';
 import { useProductsPageModel } from './ProductsPageModel';
@@ -8,7 +8,7 @@ jest.mock('../rtk/ProductRtkApi');
 
 describe('ProductsPageModel', () => {
   const spy_useGetProductSummariesPaginatedQuery = jest.spyOn(ProductRtkApi, 'useGetProductSummariesPaginatedQuery');
-  const params: GetProductsPageParamsT = {
+  const params: GetProductSummariesPaginatedParamsT = {
     langCode: 'en',
     pageNum: 0,
     productsPerPage: 12,
@@ -86,7 +86,7 @@ describe('ProductsPageModel', () => {
 
   it('returns data, isLastPage is false', () => {
     // setup mocks
-    const response: GetProductsPageResponseT = {
+    const response: GetProductSummariesPaginatedResponseT = {
       data: {
         data: [],
         total: 10,
@@ -118,7 +118,7 @@ describe('ProductsPageModel', () => {
 
   it('returns data, isLastPage is true', () => {
     // setup mocks
-    const response: GetProductsPageResponseT = {
+    const response: GetProductSummariesPaginatedResponseT = {
       data: {
         data: [],
         total: 10,

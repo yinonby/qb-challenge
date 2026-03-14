@@ -14,7 +14,7 @@ export const baseSonyTvProduct: BaseProductT = {
     'https://m.media-amazon.com/images/I/718w5MDpAzL._AC_SL1500_.jpg',
   ],
   category: 'electronics',
-  stock: 12,
+  stock: 0,
   reorderLevel: 5,
   popularity: 94,
   reviews: {

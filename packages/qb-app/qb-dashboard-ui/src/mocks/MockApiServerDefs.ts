@@ -19,7 +19,7 @@ export type GraphQLBody = {
   variables: GraphQLVariables;
 }
 
-export type GraphQLVariables = GetProductsPageParamsT | GetProductDetailsParamsT | ProductUpdateParamsT;
+export type GraphQLVariables = GetProductSummariesPaginatedParamsT | GetProductDetailsParamsT | ProductUpdateParamsT;
 
 export type GraphQLResponse<T> = T | {
   errors: GraphQLFormattedError[],
@@ -48,7 +48,7 @@ export type PaginatedResponseT<T> = {
   limit: number,
 }
 
-export type GetProductsPageParamsT = {
+export type GetProductSummariesPaginatedParamsT = {
   langCode: QbLangCodeT,
   pageNum: number,
   productsPerPage: number,
@@ -57,7 +57,7 @@ export type GetProductsPageParamsT = {
   sort: SortT,
 }
 
-export type GetProductsPageResponseT = {
+export type GetProductSummariesPaginatedResponseT = {
   data: PaginatedResponseT<ProductSummaryT>,
 }
 

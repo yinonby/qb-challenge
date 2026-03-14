@@ -1,10 +1,12 @@
 
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
-import { availabilityOptions, type AvailabilityOptionT } from '@qb/models';
+import { type AvailabilityOptionT } from '@qb/models';
 import { RnuiRadioButtonGroup, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC, type ReactNode } from 'react';
 
-type AvailabilitySelectOptionT = AvailabilityOptionT | 'all';
+const _availabilitySelectOptions = ['all', 'inStock', 'outOfStock'] as const;
+export type AvailabilitySelectOptionT = typeof _availabilitySelectOptions[number];
+export const availabilitySelectOptions: AvailabilitySelectOptionT[] = [..._availabilitySelectOptions];
 
 type AvailabilitySelectPropsT = TestableComponentT & {
   value: AvailabilityOptionT | undefined,
@@ -14,13 +16,21 @@ type AvailabilitySelectPropsT = TestableComponentT & {
 export const AvailabilitySelect: FC<AvailabilitySelectPropsT> = (props) => {
   const { value, onChange } = props;
   const { t } = useAppLocalization();
-  const options: AvailabilitySelectOptionT[] = ['all', ...availabilityOptions];
+  const options: AvailabilitySelectOptionT[] = availabilitySelectOptions;
 
   const handleChange = (newOption: AvailabilitySelectOptionT): void => {
     if (newOption === 'all') {
       onChange(undefined);
+    } else if (newOption === 'inStock') {
+      onChange({ // min 1 product in stock
+        minStock: 1,
+        maxStock: undefined,
+      });
     } else {
-      onChange(newOption);
+      onChange({ // no products in stock
+        minStock: undefined,
+        maxStock: 0,
+      });
     }
   }
 
@@ -38,7 +48,7 @@ export const AvailabilitySelect: FC<AvailabilitySelectPropsT> = (props) => {
     <RnuiRadioButtonGroup<AvailabilitySelectOptionT>
       testID='RnuiRadioButtonGroupTid'
       optionKeys={options}
-      selectedOptionKey={value ?? 'all'}
+      selectedOptionKey={value === undefined ? 'all' : value.minStock === 1 ? 'inStock' : 'outOfStock'}
       onChange={handleChange}
       renderOption={renderOption}
     />

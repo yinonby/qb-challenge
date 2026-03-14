@@ -2,7 +2,7 @@
 import { appRtkApiReducerPath } from '@qb-dashboard-ui/app/redux/rtk/AppRtkApi';
 import type {
   GetProductDetailsResponseT,
-  GetProductsPageResponseT,
+  GetProductSummariesPaginatedResponseT,
   ProductUpdateResponseT
 } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import type { AppRtkHttpAdapterGeneratorProvider } from '@qb-dashboard-ui/types/NetworkTypes';
@@ -29,7 +29,7 @@ const getProductResponse: GetProductDetailsResponseT = {
   },
 };
 
-const getProductsPageResponse: GetProductsPageResponseT = {
+const getProductsPageResponse: GetProductSummariesPaginatedResponseT = {
   data: {
     data: [],
     total: 0,
@@ -119,7 +119,7 @@ describe('ProductRtkApi', () => {
           pageNum: 2,
           productsPerPage: 5,
           category: 'beauty',
-          availability: 'outOfStock',
+          availability: { minStock: undefined, maxStock: 0 },
           sort: 'priceAscending',
         })
       );
@@ -137,7 +137,7 @@ describe('ProductRtkApi', () => {
           pageNum: 2,
           productsPerPage: 5,
           category: 'beauty',
-          availability: 'outOfStock',
+          availability: { minStock: undefined, maxStock: 0 },
           sort: 'priceAscending',
         })
       );

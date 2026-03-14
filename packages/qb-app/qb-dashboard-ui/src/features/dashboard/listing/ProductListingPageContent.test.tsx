@@ -241,7 +241,7 @@ describe('ProductListingPageContent', () => {
       isError: false,
       data: { productSummaries: [], pageNum: 0, isLastPage: true },
     });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", availability: 'MOCK_VALUE' });
+    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", availabilityMinStr: '1' });
 
     // render
     const { getByTestId } = render(

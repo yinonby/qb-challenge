@@ -8,17 +8,17 @@ import {
   mock_getProductSummariesPaginatedGraphqlQuery,
   type GetProductDetailsParamsT,
   type GetProductDetailsResponseT,
-  type GetProductsPageParamsT,
-  type GetProductsPageResponseT,
+  type GetProductSummariesPaginatedParamsT,
+  type GetProductSummariesPaginatedResponseT,
   type GraphQLResponse, type GraphQLVariables
 } from './MockApiServerDefs';
 
 export const handleMockApiServerRequest = (
   query: string,
   variabales: GraphQLVariables,
-): GraphQLResponse<GetProductsPageResponseT | GetProductDetailsResponseT> => {
+): GraphQLResponse<GetProductSummariesPaginatedResponseT | GetProductDetailsResponseT> => {
   if (query === mock_getProductSummariesPaginatedGraphqlQuery) {
-    const response = getProductSummariesPaginated(variabales as GetProductsPageParamsT);
+    const response = getProductSummariesPaginated(variabales as GetProductSummariesPaginatedParamsT);
     return response;
   } else if (query === mock_getProductDetailsGraphqlQuery) {
     const response = getProductDetails(variabales as GetProductDetailsParamsT);
@@ -27,7 +27,7 @@ export const handleMockApiServerRequest = (
   throw new Error('Unexpected request');
 }
 
-const getProductSummariesPaginated = (params: GetProductsPageParamsT): GraphQLResponse<GetProductsPageResponseT> => {
+const getProductSummariesPaginated = (params: GetProductSummariesPaginatedParamsT): GraphQLResponse<GetProductSummariesPaginatedResponseT> => {
   let filteredProducts = mockProducts.filter(e => e.langCode === params.langCode);
 
   if (params.productsPerPage > MAX_PRODUCTS_PER_PAGE) {
@@ -45,10 +45,13 @@ const getProductSummariesPaginated = (params: GetProductsPageParamsT): GraphQLRe
   }
 
   // filter by availability if provided
-  if (params.availability === 'inStock') {
-    filteredProducts = filteredProducts.filter(e => e.stock > 0);
-  } else if (params.availability === 'outOfStock') {
-    filteredProducts = filteredProducts.filter(e => e.stock === 0);
+  const minStock = params.availability?.minStock;
+  if (minStock !== undefined) {
+    filteredProducts = filteredProducts.filter(e => e.stock >= minStock);
+  }
+  const maxStock = params.availability?.maxStock;
+  if (maxStock !== undefined) {
+    filteredProducts = filteredProducts.filter(e => e.stock <= maxStock);
   }
 
   // sort if provided
@@ -78,7 +81,7 @@ const getProductSummariesPaginated = (params: GetProductsPageParamsT): GraphQLRe
     .slice(startIdx, endIdx)
     .map(e => toProductSummary(e));
 
-  const response: GetProductsPageResponseT = {
+  const response: GetProductSummariesPaginatedResponseT = {
     data: {
       data: productSummaries,
       total: filteredProducts.length,
