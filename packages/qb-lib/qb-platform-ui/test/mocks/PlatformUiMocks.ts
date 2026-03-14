@@ -16,11 +16,13 @@ export const initPlatformUiMocks = () => {
     const mock_setStorageItem = jest.fn();
     const mock_isWeb = jest.fn();
     const mock_isIos = jest.fn();
+    const mock_usePlatformUiDeviceLocale = jest.fn();
 
     return {
       __esModule: true,
       PlatformUiLink: View,
 
+      usePlatformUiDeviceLocale: mock_usePlatformUiDeviceLocale,
       usePlatformUiLocalization: () => ({
         getDeviceLangCodeStr: mock_getDeviceLangCodeStr,
       }),
@@ -39,6 +41,7 @@ export const initPlatformUiMocks = () => {
 
       // expose for tests
       __puiMocks: {
+        mock_usePlatformUiDeviceLocale,
         mock_getDeviceLangCodeStr,
         mock_navigate,
         mock_navigateReplace,
