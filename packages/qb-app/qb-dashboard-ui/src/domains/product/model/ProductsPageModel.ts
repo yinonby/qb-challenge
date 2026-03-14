@@ -10,6 +10,7 @@ export const MAX_INITIAL_CHAT_MESSAGES = 100;
 export type ProductsPageModelDataT = {
   productSummaries: ProductSummaryT[],
   pageNum: number,
+  totalItems: number,
   isLastPage: boolean,
 };
 
@@ -51,6 +52,7 @@ export const useProductsPageModel = (params: GetProductSummariesPaginatedParamsT
     data: {
       productSummaries: data.data,
       pageNum: data.page,
+      totalItems: data.total,
       isLastPage: data.page * data.limit + data.data.length >= data.total,
     }
   }

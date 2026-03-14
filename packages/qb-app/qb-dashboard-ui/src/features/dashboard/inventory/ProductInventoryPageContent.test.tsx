@@ -88,7 +88,7 @@ describe('ProductInventoryPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: false },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
     });
 
     // render
@@ -109,7 +109,7 @@ describe('ProductInventoryPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: false },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
     });
 
     // render

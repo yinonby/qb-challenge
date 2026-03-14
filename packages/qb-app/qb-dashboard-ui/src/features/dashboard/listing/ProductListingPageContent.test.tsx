@@ -94,7 +94,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: false },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
     });
 
     // render
@@ -114,7 +114,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: false },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
     });
 
     // render
@@ -137,7 +137,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: productSummaries.slice(0, 2), pageNum: 0, isLastPage: false },
+      data: { productSummaries: productSummaries.slice(0, 2), totalItems: 10, pageNum: 0, isLastPage: false },
     });
 
     // render
@@ -172,7 +172,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: productSummaries.slice(2, 3), pageNum: 1, isLastPage: true },
+      data: { productSummaries: productSummaries.slice(2, 3), totalItems: 10, pageNum: 1, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
 
@@ -203,7 +203,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
 
@@ -221,7 +221,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_VALUE' });
 
@@ -239,7 +239,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", availabilityMinStr: '1' });
 
@@ -257,7 +257,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", sort: undefined });
 
@@ -275,7 +275,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", sort: DEFAULT_SORT_OPTION });
 
@@ -293,7 +293,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", sort: 'MOCK_VALUE' });
 
@@ -311,7 +311,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_CATEGORY' });
 
@@ -340,7 +340,7 @@ describe('ProductListingPageContent', () => {
     spy_useProductsPageModel.mockReturnValue({
       isLoading: false,
       isError: false,
-      data: { productSummaries: [], pageNum: 0, isLastPage: true },
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
     });
     mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_CATEGORY' });
 

@@ -111,6 +111,7 @@ describe('ProductsPageModel', () => {
       data: {
         productSummaries: response.data.data,
         pageNum: 1,
+        totalItems: 10,
         isLastPage: false,
       },
     });
@@ -143,6 +144,7 @@ describe('ProductsPageModel', () => {
       data: {
         productSummaries: response.data.data,
         pageNum: 1,
+        totalItems: 10,
         isLastPage: true,
       },
     });

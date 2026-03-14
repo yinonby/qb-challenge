@@ -5,12 +5,13 @@ import { useProductsPageModel } from '@qb-dashboard-ui/domains/product/model/Pro
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { DEFAULT_SORT_OPTION, type AvailabilityOptionT, type ProductCategoryT, type SortT } from '@qb/models';
 import { isIos, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
-import { RnuiAppContent, RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
+import { RnuiAppContent, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
 import { ModelLoadingView } from '../../common/ModelLoadingView';
 import { FiltersButton } from './filters/FiltersButton';
+import { PaginationControl } from './PaginationControl';
 import { ProductListingGrid } from './product-summary/ProductListingGrid';
 
 export const ProductListingPageContent: FC<TestableComponentT> = () => {
@@ -113,22 +114,16 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
           }
 
           <View style={genericStyles.flex1} />
-          <RnuiButton
-            testID='PrevButtonTid'
-            size='xs'
-            disabled={pageNum === 0}
-            onPress={handlePressPrev}
-          >
-            {t('app:previous')}
-          </RnuiButton>
-          <RnuiButton
-            testID='NextButtonTid'
-            size='xs'
-            disabled={data.isLastPage}
-            onPress={handlePressNext}
-          >
-            {t('app:next')}
-          </RnuiButton>
+
+          <PaginationControl
+            totalItemsNum={data.totalItems}
+            curPage={pageNum}
+            curPageItemsNum={data.productSummaries.length}
+            isLastPage={data.isLastPage}
+            itemsPerPage={productsPerPage}
+            onNext={handlePressNext}
+            onPrev={handlePressPrev}
+          />
         </View>
 
         {data.productSummaries.length === 0 &&
