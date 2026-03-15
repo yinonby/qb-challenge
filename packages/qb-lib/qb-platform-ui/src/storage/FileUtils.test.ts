@@ -17,17 +17,23 @@ describe('exportTextFile', () => {
     mock_isWeb.mockReturnValue(true);
 
     // Mock Blob entirely (dummy class)
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).Blob = class {
-      constructor(_parts: any[], _options: any) {}
+      constructor() {}
     };
 
     // Mock URL
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).URL = {
       createObjectURL: jest.fn().mockReturnValue('blob://url'),
       revokeObjectURL: jest.fn(),
     };
 
     // Mock document
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).document = {
       createElement: jest.fn().mockReturnValue({
         href: '',
