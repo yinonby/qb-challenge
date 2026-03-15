@@ -6,6 +6,16 @@ import React, { act } from 'react';
 import { Share } from 'react-native';
 import { ShareButton } from './ShareButton';
 
+// mocks
+
+jest.mock('@qb-dashboard-ui/logger/ClientLogger', () => ({
+  useClientLogger: () => ({
+    info: jest.fn(),
+  }),
+}));
+
+// tests
+
 describe('ShareButton', () => {
   const spy_useAppErrorHandling = jest.spyOn(AppErrorHandlingProvider, 'useAppErrorHandling');
   const mock_onUnknownError = jest.fn();
@@ -38,6 +48,26 @@ describe('ShareButton', () => {
     expect(spy_share).toHaveBeenCalledWith({
       message: 'share this text',
     });
+  });
+
+  it('handles share errors with AbortError', async () => {
+    class AbortError extends Error {
+      constructor() {
+        super('AbortError');
+        this.name = 'AbortError';
+      }
+    }
+    spy_share.mockRejectedValue(new AbortError());
+
+    const { getByTestId } = render(
+      <ShareButton shareStr="test" />
+    );
+
+    await act(async () => {
+      fireEvent.press(getByTestId('RnuiIconButtonTid'));
+    })
+
+    expect(mock_onUnknownError).not.toHaveBeenCalled()
   });
 
   it('handles share errors with onUnknownError', async () => {
