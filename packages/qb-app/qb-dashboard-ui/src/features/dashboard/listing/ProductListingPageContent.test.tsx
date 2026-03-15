@@ -5,7 +5,7 @@ import * as ProductsPageModel from '@qb-dashboard-ui/domains/product/model/Produ
 import { DEFAULT_SORT_OPTION } from '@qb/models';
 import { buildProductSummaryMock } from '@qb/models/test-utils';
 import { __puiMocks } from '@qb/platform-ui';
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
 import { ProductListingPageContent } from './ProductListingPageContent';
 
@@ -339,34 +339,5 @@ describe('ProductListingPageContent', () => {
       availability: undefined,
       sort: undefined,
     });
-  });
-
-  it('applies filters', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_CATEGORY' });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // apply some filters
-    const filtersButton = getByTestId('FiltersButtonTid');
-    act(() => {
-      filtersButton.props.onApply('MOCK_CATEGORY', undefined, 'MOCK_SORT');
-    });
-    await waitFor(() => {
-      expect(mock_setParams).toHaveBeenCalledWith({
-        pageNumStr: "0",
-        category: 'MOCK_CATEGORY',
-        availability: undefined,
-        sort: 'MOCK_SORT',
-      });
-    })
   });
 });

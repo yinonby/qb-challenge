@@ -43,12 +43,14 @@ jest.mock('./AvailabilitySelect', () => {
 // tests
 
 describe('FiltersView', () => {
-  const { mock_useSearchParams } = __puiMocks;
+  const { mock_useSearchParams, mock_useSetSearchParams } = __puiMocks;
+  const mock_setParams = jest.fn();
   mock_useSearchParams.mockReturnValue({
     category: undefined,
     availability: undefined,
     sort: undefined,
   });
+  mock_useSetSearchParams.mockReturnValue({ setParams: mock_setParams });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -132,10 +134,12 @@ describe('FiltersView', () => {
 
     fireEvent.press(getByTestId('ApplyButtonTid'));
 
-    expect(onApply).toHaveBeenCalledWith(
-      'MOCK_CATEGORY',
-      'MOCK_AVAILABILITY',
-      'MOCK_SORT',
-    );
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: "0",
+      category: 'MOCK_CATEGORY',
+      availability: undefined,
+      sort: 'MOCK_SORT',
+    });
+    expect(onApply).toHaveBeenCalled();
   });
 });

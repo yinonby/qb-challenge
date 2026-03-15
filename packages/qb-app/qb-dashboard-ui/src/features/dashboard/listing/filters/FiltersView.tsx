@@ -2,7 +2,7 @@
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { DEFAULT_SORT_OPTION, type AvailabilityOptionT, type ProductCategoryT, type SortT } from '@qb/models';
-import { useSearchParams } from '@qb/platform-ui';
+import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -12,11 +12,7 @@ import { CategorySelect } from './CategorySelect';
 import { SortSelect } from './SortSelect';
 
 type FiltersViewPropsT = TestableComponentT & {
-  onApply: (
-    category: ProductCategoryT | undefined,
-    availability: AvailabilityOptionT | undefined,
-    sort: SortT | undefined,
-  ) => void,
+  onApply: () => void,
 }
 
 export const FiltersView: FC<FiltersViewPropsT> = (props) => {
@@ -31,6 +27,7 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   const genericStyles = useGenericStyles();
   const spacing = 8;
   const marginCompensation = spacing / 2;
+  const { setParams } = useSetSearchParams<ProductListingPageUrlParamsT>();
 
   const handleCategoryChange = (newValue: ProductCategoryT | undefined): void => {
     setSelectedCategory(newValue);
@@ -45,7 +42,17 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   }
 
   const handleApply = (): void => {
-    onApply(selectedCategory, selectedAvailability, selectedSort);
+    const newPageNum = 0; // we must reset the page number when filters are changed
+
+    setParams({
+      pageNumStr: newPageNum.toString(),
+      category: selectedCategory,
+      availabilityMinStr: selectedAvailability?.minStock?.toString(),
+      availabilityMaxStr: selectedAvailability?.maxStock?.toString(),
+      sort: selectedSort,
+    });
+
+    onApply();
   }
 
   const isChanged = (): boolean => {
@@ -80,7 +87,8 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
       <View style={genericStyles.flex1}/>
 
       <View style={genericStyles.flexRowReverse}>
-        <RnuiButton testID='ApplyButtonTid'
+        <RnuiButton
+          testID='ApplyButtonTid'
           size='xs'
           disabled={!isChanged()}
           onPress={handleApply}

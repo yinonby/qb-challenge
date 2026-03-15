@@ -3,7 +3,7 @@ import { useDashboard } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { useProductsPageModel } from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
-import { DEFAULT_SORT_OPTION, type AvailabilityOptionT, type ProductCategoryT, type SortT } from '@qb/models';
+import { DEFAULT_SORT_OPTION, type AvailabilityOptionT } from '@qb/models';
 import { isIos, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiAppContent, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
@@ -73,22 +73,6 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     return category !== undefined || availability !== undefined || (sort !== undefined && sort !== DEFAULT_SORT_OPTION);
   }
 
-  const handleApplyFilters = (
-    category: ProductCategoryT | undefined,
-    availability: AvailabilityOptionT | undefined,
-    sort: SortT | undefined,
-  ): void => {
-    const newPageNum = 0; // we must reset the page number when filters are changed
-
-    setParams({
-      pageNumStr: newPageNum.toString(),
-      category,
-      availabilityMinStr: availability?.minStock?.toString(),
-      availabilityMaxStr: availability?.maxStock?.toString(),
-      sort,
-    });
-  }
-
   if (isLoading || isError) {
     return <ModelLoadingView
       testID='ModelLoadingViewTid'
@@ -101,7 +85,7 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     <RnuiAppContent testID="RnuiAppContentTid">
       <View style={genericStyles.spacing}>
         <View style={genericStyles.flexRow}>
-          <FiltersButton testID='FiltersButtonTid' onApply={handleApplyFilters} />
+          <FiltersButton testID='FiltersButtonTid' />
 
           {isFilterChange() &&
             <RnuiIconButton

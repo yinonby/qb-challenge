@@ -1,6 +1,6 @@
 
 import { __puiMocks } from '@qb/platform-ui';
-import { fireEvent, render } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { FiltersButton } from './FiltersButton';
 
@@ -33,7 +33,7 @@ describe('FiltersButton', () => {
   it('renders button (non-ios)', () => {
     mock_isIos.mockReturnValue(false);
 
-    const { getByTestId } = render(<FiltersButton onApply={jest.fn()} />);
+    const { getByTestId } = render(<FiltersButton />);
 
     getByTestId('FilterButtonTid');
   });
@@ -41,7 +41,7 @@ describe('FiltersButton', () => {
   it('renders icon button on ios', () => {
     mock_isIos.mockReturnValue(true);
 
-    const { getByTestId } = render(<FiltersButton onApply={jest.fn()} />);
+    const { getByTestId } = render(<FiltersButton />);
 
     getByTestId('IosFilterButtonTid');
   });
@@ -50,7 +50,7 @@ describe('FiltersButton', () => {
     mock_isIos.mockReturnValue(false);
 
     const { getByTestId, queryByTestId } = render(
-      <FiltersButton onApply={jest.fn()} />
+      <FiltersButton />
     );
 
     expect(queryByTestId('FiltersViewTid')).not.toBeTruthy();
@@ -63,13 +63,11 @@ describe('FiltersButton', () => {
     getByTestId('FiltersViewTid');
   });
 
-  it('calls onApply and closes modal', () => {
+  it('calls FiltersView.onApply and closes modal', async () => {
     mock_isIos.mockReturnValue(false);
 
-    const mock_onApply = jest.fn();
-
     const { getByTestId, queryByTestId } = render(
-      <FiltersButton onApply={mock_onApply} />
+      <FiltersButton />
     );
 
     const btn = getByTestId('FilterButtonTid');
@@ -79,11 +77,11 @@ describe('FiltersButton', () => {
 
     const filtersView = getByTestId('FiltersViewTid');
     act(() => {
-      filtersView.props.onApply('electronics', 'inStock', 'priceAscending');
+      filtersView.props.onApply();
     });
 
-    expect(mock_onApply).toHaveBeenCalledWith('electronics', 'inStock', 'priceAscending');
-
-    expect(queryByTestId('FiltersViewTid')).toBeNull();
+    await waitFor(() => {
+      expect(queryByTestId('FiltersViewTid')).toBeNull();
+    });
   });
 });

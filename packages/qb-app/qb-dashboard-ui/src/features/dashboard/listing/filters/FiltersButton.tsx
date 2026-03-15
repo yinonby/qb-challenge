@@ -1,23 +1,13 @@
 
 import { useDashboard } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
-import type { AvailabilityOptionT, ProductCategoryT, SortT } from '@qb/models';
 import { isIos } from '@qb/platform-ui';
 import { RnuiButton, RnuiIconButton, RnuiModal, type TestableComponentT } from '@qb/rnui';
 import React, { useState, type FC } from 'react';
 import { View } from 'react-native';
 import { FiltersView } from './FiltersView';
 
-type FiltersButtonPropsT = TestableComponentT & {
-  onApply: (
-    category: ProductCategoryT | undefined,
-    availability: AvailabilityOptionT | undefined,
-    sort: SortT | undefined,
-  ) => void,
-}
-
-export const FiltersButton: FC<FiltersButtonPropsT> = (props) => {
-  const { onApply } = props;
+export const FiltersButton: FC<TestableComponentT> = () => {
   const { t } = useAppLocalization();
   const [isOpen, setIsOpen] = useState(false);
   const { appHeaderHeight } = useDashboard();
@@ -33,12 +23,7 @@ export const FiltersButton: FC<FiltersButtonPropsT> = (props) => {
     setIsOpen(true);
   };
 
-  const handleApply = (
-    category: ProductCategoryT | undefined,
-    availability: AvailabilityOptionT | undefined,
-    sort: SortT | undefined,
-  ): void => {
-    onApply(category, availability, sort);
+  const handleApply = (): void => {
     handleClose();
   }
 
