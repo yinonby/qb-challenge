@@ -3,34 +3,28 @@ Qiibee Take-Home Coding Challenge
 
 ## Environment Setup
 - Run repository tests:
-```bash
+```
 npm t
 ```
+
 - Produce a coverage report and open it in the local browser:
-```bash
+```
 npm run cover:report
 ```
 
-## Environment Infrastructure
-- Use `husky` for consistent git hook scripts.
-- Use `nyc` and `istanbul` for coverage report.
-- Use Github Actions to ensure PRs and merges require status checks (under `.github`).
-- Reuse utility libraries from another project (under `packages/qb-lib`):
-  - Production:
-    - `qb/utils` - provides generic utilities.
-    - `qb/rnui` - provides React Native components styled using MUI guidelines (Material UI). Uses react-native-paper and other third-parties under the hood. Supports MD3 themes.
-    - `qb/platform-ui` - provides client-platform-specific utilities, such as navigation, localization, storage etc. Under the hood uses Expo-specific libraries. Designed to easily extend project support for Next.js.
-    - `@qb/client-utils` - provides client utils, such as logger, axios client etc.
-  - Development and testing:
-    - `qb/lint` - provides generic eslint config and dependencies.
-    - `qb/vitest` - provides generic vitest config and dependencies.
-    - `qb/ts-deps` - provides typescript dependencies. Simplifies typescript version upgrades.
-    - `qb/rn-testing` - provides React Native testing utilities and dependencies.
+- In order to start the app, run:
+```
+npm start
+```
+You will then get this link [](http://localhost:4100/)
 
-## Shared application packages (under `packages/qb-app`)
-- `qb/models` - a library for shared models.
-- `qb/dashboard-ui` - a library for shared UI compponents.
+- In order to load the app on mobile, assuming you have emulators installed, after you started the app, from the terminal you can type `i` for ios, or `a` for android.
 
-## Application package (under `apps`)
-- `@qb/dashboard-expo` - an minimal expo app, using shared UI components from `qb/dashboard-ui`.
+
+## More Reading
+- For repository structure, see [REPO STRUCTURE](./docs/REPO_STRUCTURE.md).
+- For requirements overview, see [REQUIREMENTS](./docs/REQUIREMENTS.md).
+- For components overview, see [COMPONENTS](./docs/COMPONENTS.md).
+- For key notes overview, see [KEY NOTES](./docs/KEY_NOTES.md).
+- For testing overview, see [TESTING](./docs/TESTING.md).
 
