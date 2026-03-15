@@ -17,6 +17,7 @@ export const initPlatformUiMocks = () => {
     const mock_isWeb = jest.fn();
     const mock_isIos = jest.fn();
     const mock_usePlatformUiDeviceLocale = jest.fn();
+    const mock_exportTextFileAsync = jest.fn();
 
     return {
       __esModule: true,
@@ -38,6 +39,7 @@ export const initPlatformUiMocks = () => {
       }),
       isWeb: mock_isWeb,
       isIos: mock_isIos,
+      exportTextFileAsync: mock_exportTextFileAsync,
 
       // expose for tests
       __puiMocks: {
@@ -52,6 +54,7 @@ export const initPlatformUiMocks = () => {
         mock_setStorageItem,
         mock_isWeb,
         mock_isIos,
+        mock_exportTextFileAsync,
       },
     };
   });
