@@ -13,7 +13,7 @@ jest.mock('@qb-dashboard-ui/types/GenericStyles', () => ({
   }),
 }));
 
-jest.mock('./SortSelect', () => {
+jest.mock('../../common/SortSelect', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -22,7 +22,7 @@ jest.mock('./SortSelect', () => {
   };
 });
 
-jest.mock('./CategorySelect', () => {
+jest.mock('../../common/CategorySelect', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -31,7 +31,7 @@ jest.mock('./CategorySelect', () => {
   };
 });
 
-jest.mock('./AvailabilitySelect', () => {
+jest.mock('../../common/AvailabilitySelect', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 

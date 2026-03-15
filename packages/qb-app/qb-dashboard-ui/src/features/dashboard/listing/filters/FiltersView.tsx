@@ -7,9 +7,9 @@ import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT }
 import { default as React, useState, type FC } from 'react';
 import { ScrollView, View } from 'react-native';
 import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../../types/UrlDefs';
-import { AvailabilitySelect } from './AvailabilitySelect';
-import { CategorySelect } from './CategorySelect';
-import { SortSelect } from './SortSelect';
+import { AvailabilitySelect } from '../../common/AvailabilitySelect';
+import { CategorySelect } from '../../common/CategorySelect';
+import { SortSelect } from '../../common/SortSelect';
 
 type FiltersViewPropsT = TestableComponentT & {
   onApply: () => void,
