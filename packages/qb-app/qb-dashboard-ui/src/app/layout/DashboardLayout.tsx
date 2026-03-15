@@ -2,6 +2,7 @@
 import { AppLocalizationProvider } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { createReduxStore } from '@qb-dashboard-ui/app/redux/reducers/AppReduxStore';
 import { CartProvider } from '@qb-dashboard-ui/features/cart/context/CartProvider';
+import { InventoryUpdateProvider } from '@qb-dashboard-ui/features/dashboard/inventory/context/InventoryUpdateProvider';
 import { useClientLogger } from '@qb-dashboard-ui/logger/ClientLogger';
 import type { DashboardRouterAdapter } from '@qb-dashboard-ui/types/DashboardTypes';
 import { useStorage } from '@qb/platform-ui';
@@ -92,9 +93,11 @@ export const DashboardLayout: FC<PropsWithChildren<DashboardLayoutPropsT>> = (pr
             <ReduxProvider store={reduxStore}>
               <DashboardContext.Provider value={context}>
                 <CartProvider testID='CartProviderTid'>
-                  <StatusBar style='auto' />
+                  <InventoryUpdateProvider>
+                    <StatusBar style='auto' />
 
-                  {children}
+                    {children}
+                  </InventoryUpdateProvider>
                 </CartProvider>
               </DashboardContext.Provider>
             </ReduxProvider>

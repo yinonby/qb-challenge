@@ -6,7 +6,7 @@ import {
   type GetProductDetailsParamsT, type GetProductDetailsResponseT,
   type GetProductSummariesPaginatedParamsT,
   type GetProductSummariesPaginatedResponseT,
-  type ProductUpdateParamsT, type ProductUpdateResponseT
+  type UpdateProductBatchParamsT, type UpdateProductBatchResponseT
 } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import { stableHash } from '@qb/utils';
 
@@ -46,8 +46,8 @@ const productRtkApi = appRtkApi.injectEndpoints({
       ],
     }),
 
-    updateProduct: builder.mutation<ProductUpdateResponseT['data'], ProductUpdateParamsT>({
-      query: (params: ProductUpdateParamsT) => ({
+    updateProducBatcht: builder.mutation<UpdateProductBatchResponseT['data'], UpdateProductBatchParamsT>({
+      query: (params: UpdateProductBatchParamsT) => ({
         url: '/product/graphql',
         kind: 'graphql',
         graphql: {
@@ -56,7 +56,7 @@ const productRtkApi = appRtkApi.injectEndpoints({
         }
       }),
       invalidatesTags: (result, error, params) => error !== undefined ? [] : [
-        { type: 'ProductTag', id: params.productId },
+        ...params.productStockUpdates.map(e => ({ type: 'ProductTag' as const, id: e.productId })),
         { type: 'ProductPageTag', id: 'all' },
       ],
     }),
@@ -67,7 +67,7 @@ const productRtkApi = appRtkApi.injectEndpoints({
 export const {
   useGetProductSummariesPaginatedQuery,
   useGetProductDetailsQuery,
-  useUpdateProductMutation,
+  useUpdateProducBatchtMutation,
   util: productRtkApiUtil,
   endpoints: productRtkApiEndpoints,
   reducer: productRtkApiReducer,

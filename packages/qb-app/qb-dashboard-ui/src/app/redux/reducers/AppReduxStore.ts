@@ -1,5 +1,9 @@
 
 import { cartReducer, cartReducerPath } from '@qb-dashboard-ui/features/cart/reducer/CartSlice';
+import {
+  inventoryUpdateReducer,
+  inventoryUpdateReducerPath
+} from '@qb-dashboard-ui/features/dashboard/inventory/reducer/InventoryUpdateSlice';
 import { useClientLogger } from '@qb-dashboard-ui/logger/ClientLogger';
 import { configureStore } from '@reduxjs/toolkit';
 import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from '../rtk/AppRtkApi';
@@ -14,6 +18,7 @@ export const createReduxStore = (apiUrl: string) => configureStore({
     [dashboardReducerPath]: dashboardReducer,
     [appRtkApiReducerPath]: appRtkApiReducer,
     [cartReducerPath]: cartReducer,
+    [inventoryUpdateReducerPath]: inventoryUpdateReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

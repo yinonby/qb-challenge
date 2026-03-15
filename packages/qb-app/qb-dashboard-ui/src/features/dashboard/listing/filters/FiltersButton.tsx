@@ -68,6 +68,7 @@ export const FiltersButton: FC<FiltersButtonPropsT> = (props) => {
           onDismiss={handleClose}
           onClose={handleClose}
           fullScreenMarginTop={appHeaderHeight}
+          notScrollable
         >
           <FiltersView testID='FiltersViewTid' onApply={handleApply} />
         </RnuiModal>

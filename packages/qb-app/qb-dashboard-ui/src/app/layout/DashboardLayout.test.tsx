@@ -56,6 +56,15 @@ jest.mock('@qb-dashboard-ui/features/cart/context/CartProvider', () => {
   };
 });
 
+jest.mock('@qb-dashboard-ui/features/dashboard/inventory/context/InventoryUpdateProvider', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    InventoryUpdateProvider: View,
+  };
+});
+
 // tests
 
 describe('DashboardLayout', () => {

@@ -3,13 +3,15 @@ import type { DashboardContextT } from '@qb-dashboard-ui/app/layout/DashboardLay
 import * as DashboardLayoutModule from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as ProductsPageModel from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
 import { __puiMocks } from '@qb/platform-ui';
-import { render } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
+import type { InventoryUpdateContextT } from '../context/InventoryUpdateProvider';
+import * as InventoryUpdateProviderModule from '../context/InventoryUpdateProvider';
 import { ProductInventoryPageContent } from './ProductInventoryPageContent';
 
 // mocks
 
-jest.mock('../../common/ModelLoadingView', () => {
+jest.mock('../../../common/ModelLoadingView', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
@@ -18,21 +20,12 @@ jest.mock('../../common/ModelLoadingView', () => {
   };
 });
 
-jest.mock('../../common/PaginationControl', () => {
+jest.mock('../../../common/PaginationControl', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
 
   return {
     PaginationControl: View,
-  };
-});
-
-jest.mock('./ProductInventoryTable', () => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { View } = require('react-native');
-
-  return {
-    ProductInventoryTable: View,
   };
 });
 
@@ -60,11 +53,18 @@ describe('ProductInventoryPageContent', () => {
     productsPerPage: productsPerPage,
   } as DashboardContextT);
 
+  const spy_useInventoryUpdate = jest.spyOn(InventoryUpdateProviderModule, 'useInventoryUpdate');
+  const mock_isAnyStockUpdated = jest.fn();
+  spy_useInventoryUpdate.mockReturnValue({
+    isAnyStockUpdated: mock_isAnyStockUpdated,
+  } as unknown as InventoryUpdateContextT)
+
   beforeEach(() => {
     jest.clearAllMocks();
 
     mock_isIos.mockReturnValue(false);
     mock_useSearchParams.mockReturnValue({});
+    mock_isAnyStockUpdated.mockReturnValue(false);
   });
 
   it('displays ModelLoadingView when loading', async () => {
@@ -118,6 +118,66 @@ describe('ProductInventoryPageContent', () => {
     getByText('mocked-t-app:inventoryManagementDesc');
     getByTestId('PaginationControlTid');
     getByTestId('ProductInventoryTableTid');
+  });
+
+  it('disables apply button when there are no changes', async () => {
+    // setup mocks
+    mock_useSearchParams.mockReturnValue({});
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+    mock_isAnyStockUpdated.mockReturnValue(false);
+
+    // render
+    const { getByTestId } = render(
+      <ProductInventoryPageContent />
+    );
+
+    // verify components
+    const btn = getByTestId('ApplyButtonTid');
+    expect(btn.props.disabled).toEqual(true);
+  });
+
+  it('does not disable apply button when there are changes', async () => {
+    // setup mocks
+    mock_useSearchParams.mockReturnValue({});
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+    mock_isAnyStockUpdated.mockReturnValue(true);
+
+    // render
+    const { getByTestId } = render(
+      <ProductInventoryPageContent />
+    );
+
+    // verify components
+    const btn = getByTestId('ApplyButtonTid');
+    expect(btn.props.disabled).toEqual(false);
+  });
+
+  it('handled apply', async () => {
+    // setup mocks
+    mock_useSearchParams.mockReturnValue({});
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+    mock_isAnyStockUpdated.mockReturnValue(true);
+
+    // render
+    const { getByTestId } = render(
+      <ProductInventoryPageContent />
+    );
+
+    // verify components
+    const btn = getByTestId('ApplyButtonTid');
+    fireEvent.press(btn);
   });
 
   it('pageNumStr search param is not defined', async () => {

@@ -7,10 +7,11 @@ import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { type ProductInventoryPageUrlParamsT, buildAvailabilityOption } from '@qb-dashboard-ui/types/UrlDefs';
 import { type AvailabilityOptionT, DEFAULT_SORT_OPTION } from '@qb/models';
 import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
-import { RnuiAppContent, RnuiText } from '@qb/rnui';
+import { RnuiAppContent, RnuiButton, RnuiText } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
-import { PaginationControl } from '../../common/PaginationControl';
+import { PaginationControl } from '../../../common/PaginationControl';
+import { useInventoryUpdate } from '../context/InventoryUpdateProvider';
 import { ProductInventoryTable } from './ProductInventoryTable';
 
 export const ProductInventoryPageContent: FC = () => {
@@ -29,7 +30,11 @@ export const ProductInventoryPageContent: FC = () => {
     availability,
     sort: sort || DEFAULT_SORT_OPTION,
   });
+  const { isAnyStockUpdated } = useInventoryUpdate();
   const genericStyles = useGenericStyles();
+
+  const handleApply = (): void => {
+  }
 
   const handlePressNext = (): void => {
     const newPageNum = pageNum + 1;
@@ -78,6 +83,14 @@ export const ProductInventoryPageContent: FC = () => {
           onNext={handlePressNext}
           onPrev={handlePressPrev}
         />
+
+        <RnuiButton testID='ApplyButtonTid'
+          size='xs'
+          disabled={!isAnyStockUpdated()}
+          onPress={handleApply}
+        >
+          {t('app:apply')}
+        </RnuiButton>
       </View>
 
       <ProductInventoryTable

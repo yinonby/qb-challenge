@@ -34,7 +34,6 @@ export const useAppTheme = (): AppThemeT => {
     },
     rnuiStyles: {
       xsButtonLabelStyle: {
-        margin: 8,
         fontSize: 12,
         lineHeight: 16,
       },

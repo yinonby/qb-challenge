@@ -19,7 +19,7 @@ export type GraphQLBody = {
   variables: GraphQLVariables;
 }
 
-export type GraphQLVariables = GetProductSummariesPaginatedParamsT | GetProductDetailsParamsT | ProductUpdateParamsT;
+export type GraphQLVariables = GetProductSummariesPaginatedParamsT | GetProductDetailsParamsT | UpdateProductBatchParamsT;
 
 export type GraphQLResponse<T> = T | {
   errors: GraphQLFormattedError[],
@@ -72,12 +72,16 @@ export type GetProductDetailsResponseT = {
   }
 }
 
-export type ProductUpdateParamsT = {
+export type UpdateProductBatchParamsT = {
+  productStockUpdates: UpdateProductStockInfoT[],
+};
+
+export type UpdateProductStockInfoT = {
   productId: ProductIdT,
   newStock: number,
   reason: string,
 };
 
-export type ProductUpdateResponseT = {
+export type UpdateProductBatchResponseT = {
   data: ProductStockHistoryItemT,
 }

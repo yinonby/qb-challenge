@@ -3,7 +3,7 @@ import { appRtkApiReducerPath } from '@qb-dashboard-ui/app/redux/rtk/AppRtkApi';
 import type {
   GetProductDetailsResponseT,
   GetProductSummariesPaginatedResponseT,
-  ProductUpdateResponseT
+  UpdateProductBatchResponseT
 } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import type { AppRtkHttpAdapterGeneratorProvider } from '@qb-dashboard-ui/types/NetworkTypes';
 import { AxiosClient, type HttpAdapter } from '@qb/client-utils';
@@ -19,7 +19,7 @@ import {
 
 const apiUrl = 'https://api.test';
 const productId1 = 'PID1';
-let currentRequest: 'getProductsPage' | 'getProductDetails' | 'updateProduct' | 'error' = 'error';
+let currentRequest: 'getProductsPage' | 'getProductDetails' | 'updateProducBatcht' | 'error' = 'error';
 
 const getProductResponse: GetProductDetailsResponseT = {
   data: {
@@ -38,7 +38,7 @@ const getProductsPageResponse: GetProductSummariesPaginatedResponseT = {
   },
 };
 
-const productUpdateResponse: ProductUpdateResponseT = {
+const productUpdateResponse: UpdateProductBatchResponseT = {
   data: {
     stockHistoryItemId: 'CHANGE1',
     productId: 'PID1',
@@ -56,7 +56,7 @@ export const server = setupServer(
       return HttpResponse.json(getProductsPageResponse);
     } else if (currentRequest === 'getProductDetails') {
       return HttpResponse.json(getProductResponse);
-    } else if (currentRequest === 'updateProduct') {
+    } else if (currentRequest === 'updateProducBatcht') {
       return HttpResponse.json(productUpdateResponse);
     } else if (currentRequest === 'error') {
       return HttpResponse.json({
@@ -178,16 +178,18 @@ describe('ProductRtkApi', () => {
     });
   });
 
-  describe('updateProduct', () => {
+  describe('updateProducBatcht', () => {
     it('succeeds', async () => {
       const store = createTestStore();
 
-      currentRequest = 'updateProduct';
+      currentRequest = 'updateProducBatcht';
       const rtkResult = await store.dispatch(
-        productRtkApiEndpoints.updateProduct.initiate({
-          productId: 'PID1',
-          newStock: 30,
-          reason: 'reason',
+        productRtkApiEndpoints.updateProducBatcht.initiate({
+          productStockUpdates: [{
+            productId: 'PID1',
+            newStock: 30,
+            reason: 'reason',
+          }],
         })
       );
 
@@ -199,10 +201,12 @@ describe('ProductRtkApi', () => {
 
       currentRequest = 'error';
       const rtkResult = await store.dispatch(
-        productRtkApiEndpoints.updateProduct.initiate({
-          productId: 'PID1',
-          newStock: 30,
-          reason: 'reason',
+        productRtkApiEndpoints.updateProducBatcht.initiate({
+          productStockUpdates: [{
+            productId: 'PID1',
+            newStock: 30,
+            reason: 'reason',
+          }],
         })
       );
 

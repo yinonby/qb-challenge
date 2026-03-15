@@ -5,7 +5,7 @@ import { DEFAULT_SORT_OPTION, type AvailabilityOptionT, type ProductCategoryT, t
 import { useSearchParams } from '@qb/platform-ui';
 import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../../types/UrlDefs';
 import { AvailabilitySelect } from './AvailabilitySelect';
 import { CategorySelect } from './CategorySelect';
@@ -53,27 +53,31 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   }
 
   return (
-    <View style={{ margin: marginCompensation }}>
-      <RnuiGrid spacing={spacing}>
-        <RnuiGridItem xs={12} sm={12} md={4} lg={4} xl={4}>
-          <RnuiText variant='titleSmall'>{t('app:sort')}</RnuiText>
-          <SortSelect testID='SortSelectTid' value={selectedSort} onChange={handleSortChange} />
-        </RnuiGridItem>
+    <View style={[{ margin: marginCompensation }, genericStyles.flex1]}>
+      <ScrollView>
+        <RnuiGrid spacing={spacing}>
+          <RnuiGridItem xs={12} sm={12} md={4} lg={4} xl={4}>
+            <RnuiText variant='titleSmall'>{t('app:sort')}</RnuiText>
+            <SortSelect testID='SortSelectTid' value={selectedSort} onChange={handleSortChange} />
+          </RnuiGridItem>
 
-        <RnuiGridItem xs={12} sm={12} md={4} lg={4} xl={4}>
-          <RnuiText variant='titleSmall'>{t('app:category')}</RnuiText>
-          <CategorySelect testID='CategorySelectTid' value={selectedCategory} onChange={handleCategoryChange} />
-        </RnuiGridItem>
+          <RnuiGridItem xs={12} sm={12} md={4} lg={4} xl={4}>
+            <RnuiText variant='titleSmall'>{t('app:category')}</RnuiText>
+            <CategorySelect testID='CategorySelectTid' value={selectedCategory} onChange={handleCategoryChange} />
+          </RnuiGridItem>
 
-        <RnuiGridItem xs={12} sm={12} md={4} lg={4} xl={4}>
-          <RnuiText variant='titleSmall'>{t('app:availability')}</RnuiText>
-          <AvailabilitySelect
-            testID='AvailabilitySelectTid'
-            value={selectedAvailability}
-            onChange={handleAvailabilityChange}
-          />
-        </RnuiGridItem>
-      </RnuiGrid>
+          <RnuiGridItem xs={12} sm={12} md={4} lg={4} xl={4}>
+            <RnuiText variant='titleSmall'>{t('app:availability')}</RnuiText>
+            <AvailabilitySelect
+              testID='AvailabilitySelectTid'
+              value={selectedAvailability}
+              onChange={handleAvailabilityChange}
+            />
+          </RnuiGridItem>
+        </RnuiGrid>
+      </ScrollView>
+
+      <View style={genericStyles.flex1}/>
 
       <View style={genericStyles.flexRowReverse}>
         <RnuiButton testID='ApplyButtonTid'

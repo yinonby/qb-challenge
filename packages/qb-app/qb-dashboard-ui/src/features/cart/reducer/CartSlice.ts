@@ -47,4 +47,4 @@ export const cartSlice = createSlice({
 
 export const { reducerPath: cartReducerPath } = cartSlice;
 export const { reducer: cartReducer } = cartSlice;
-export type CartPartialReducerStateT = { [cartReducerPath]: CartT };
+export type CartPartialReducerStateT = { [cartReducerPath]: CartReducerStateT };
