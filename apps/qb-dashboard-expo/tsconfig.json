@@ -1,0 +1,18 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@qb-models/*": ["../../packages/qb-app/qb-models/src/*"],
+      "@qb-dashboard-ui/*": ["../../packages/qb-app/qb-dashboard-ui/src/*"],
+      "@qb-rnui/*": ["../../packages/qb-lib/qb-rnui/src/*"],
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ]
+}

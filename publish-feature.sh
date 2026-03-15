@@ -4,7 +4,7 @@ set -e
 # ----------------------------
 # Default values
 # ----------------------------
-FEATURE_NAME=""
+FEATURE_BRANCH_NAME=$(git branch --show-current)
 PR_TITLE=""
 PR_BODY=""
 BASE_BRANCH="devel"
@@ -16,7 +16,6 @@ usage() {
   echo "Usage: $0 -f <feature-name> -t <title> [-b <body>]"
   echo
   echo "Options:"
-  echo "  -f, --feature-name   Local feature branch name"
   echo "  -t, --title          Pull request title"
   echo "  -b, --body           Pull request body/description (optional)"
   exit 1
@@ -27,10 +26,6 @@ usage() {
 # ----------------------------
 while [[ $# -gt 0 ]]; do
   case $1 in
-    -f|--feature-name)
-      FEATURE_NAME="$2"
-      shift 2
-      ;;
     -t|--title)
       PR_TITLE="$2"
       shift 2
@@ -52,7 +47,7 @@ done
 # ----------------------------
 # Validate arguments
 # ----------------------------
-if [[ -z "$FEATURE_NAME" ]] || [[ -z "$PR_TITLE" ]]; then
+if [[ -z "$FEATURE_BRANCH_NAME" ]] || [[ -z "$PR_TITLE" ]]; then
   echo "Error: feature-name and title are required."
   usage
 fi
@@ -60,8 +55,8 @@ fi
 # ----------------------------
 # Make sure feature branch exists
 # ----------------------------
-if ! git rev-parse --verify "feature/$FEATURE_NAME" >/dev/null 2>&1; then
-    echo "Error: local branch 'feature/$FEATURE_NAME' does not exist."
+if ! git rev-parse --verify "$FEATURE_BRANCH_NAME" >/dev/null 2>&1; then
+    echo "Error: local branch '$FEATURE_BRANCH_NAME' does not exist."
     exit 1
 fi
 
@@ -78,13 +73,13 @@ fi
 # ----------------------------
 # Push branch to origin
 # ----------------------------
-echo "Pushing branch 'feature/$FEATURE_NAME' to origin..."
-git push -u origin "feature/$FEATURE_NAME"
+echo "Pushing branch '$FEATURE_BRANCH_NAME' to origin..."
+git push -u origin "$FEATURE_BRANCH_NAME"
 
 # ----------------------------
 # Create Pull Request
 # ----------------------------
-echo "Creating PR from 'feature/$FEATURE_NAME' into '$BASE_BRANCH'..."
-gh pr create --base "$BASE_BRANCH" --head "feature/$FEATURE_NAME" --title "$PR_TITLE" --body "$PR_BODY"
+echo "Creating PR from '$FEATURE_BRANCH_NAME' into '$BASE_BRANCH'..."
+gh pr create --base "$BASE_BRANCH" --head "$FEATURE_BRANCH_NAME" --title "$PR_TITLE" --body "$PR_BODY"
 
 echo "PR created successfully!"

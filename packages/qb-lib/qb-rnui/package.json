@@ -1,0 +1,42 @@
+{
+  "name": "@qb/rnui",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./test-utils": "./test/index.ts"
+  },
+  "scripts": {
+    "test": "npm run pretty && npm run tsc && npm run lint && npm run cover:unit",
+    "pretty": "npm run pretty:package",
+    "pretty:package": "prettier --write package.json",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "eslint -c ./.eslint.config.ts ./src ./test ./index.ts",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "test:unit": "jest",
+    "ut": "npm run test:unit --",
+    "cover:unit": "npm run test:unit -- --coverage"
+  },
+  "dependencies": {
+    "@qb/utils": "*",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-confirmation-code-field": "^8.0.1",
+    "react-native-paper": "^5.14.5",
+    "react-native-qrcode-styled": "^0.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@qb/lint": "*",
+    "@qb/rn-testing": "*",
+    "@qb/ts-deps": "*",
+    "cross-env": "^7.0.3",
+    "globals": "^14.0.0",
+    "jiti": "^2.6.1"
+  }
+}
