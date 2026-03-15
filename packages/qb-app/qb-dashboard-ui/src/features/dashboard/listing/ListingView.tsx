@@ -1,0 +1,108 @@
+
+import { useDashboard } from '@qb-dashboard-ui/app/layout/DashboardLayout';
+import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
+import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
+import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
+import { type AvailabilityOptionT } from '@qb/models';
+import { isWeb, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
+import { RnuiText, type TestableComponentT } from '@qb/rnui';
+import React, { type FC } from 'react';
+import { View } from 'react-native';
+import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
+import { PaginationControl } from '../../common/PaginationControl';
+import { ClearFilterButton } from '../common/ClearFilterButton';
+import { ProductNameInput } from '../common/ProductNameInput';
+import { FiltersButton } from './filters/FiltersButton';
+import { ProductListingGrid } from './product-summary/ProductListingGrid';
+
+type ListingViewPropsT = TestableComponentT & {
+  data: ProductsPageModelDataT,
+  productNameFilter: string | undefined,
+  onProductNameFilterChange: (value: string) => void,
+}
+
+export const ListingView: FC<ListingViewPropsT> = (props) => {
+  const { data, productNameFilter, onProductNameFilterChange } = props;
+  const { productsPerPage } = useDashboard();
+  const { t } = useAppLocalization();
+  const searchParams = useSearchParams<ProductListingPageUrlParamsT>();
+  const { pageNumStr, category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
+  const { setParams } = useSetSearchParams<ProductListingPageUrlParamsT>();
+  const pageNum = pageNumStr === undefined ? 0 : parseInt(pageNumStr);
+  const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
+  const genericStyles = useGenericStyles();
+
+  const handlePressNext = (): void => {
+    const newPageNum = pageNum + 1;
+
+    setParams({
+      pageNumStr: newPageNum.toString(),
+      category,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
+      sort,
+    });
+  }
+
+  const handlePressPrev = (): void => {
+    const newPageNum = pageNum - 1;
+
+    setParams({
+      pageNumStr: newPageNum.toString(),
+      category,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
+      sort,
+    });
+  };
+
+  const handleClearFilters = (): void => {
+    onProductNameFilterChange('');
+  }
+
+  return (
+    <View style={genericStyles.spacing}>
+      <View style={genericStyles.flexRow}>
+        <FiltersButton testID='FiltersButtonTid' />
+
+        {isWeb() &&
+          <ProductNameInput
+            testID='ProductNameInputTid'
+            value={productNameFilter}
+            onChange={onProductNameFilterChange}
+          />
+        }
+
+        <ClearFilterButton
+          testID='ClearFilterButtonTid'
+          onClear={handleClearFilters}
+          isExtraChange={!!productNameFilter}
+        />
+
+        <View style={genericStyles.flex1} />
+
+        <PaginationControl
+          testID='PaginationControlTid'
+          totalItemsNum={data.totalItems}
+          curPage={pageNum}
+          curPageItemsNum={data.productSummaries.length}
+          isLastPage={data.isLastPage}
+          itemsPerPage={productsPerPage}
+          onNext={handlePressNext}
+          onPrev={handlePressPrev}
+        />
+      </View>
+
+      {data.productSummaries.length === 0 &&
+        <RnuiText variant='titleSmall'>{t('app:noProducts')}</RnuiText>
+      }
+
+      {data.productSummaries.length !== 0 &&
+        <ProductListingGrid
+          testID='ProductListingGridTid'
+          productSummaries={data.productSummaries}
+        />
+      }
+    </View>
+  );
+};

@@ -1,0 +1,11 @@
+{
+  "apiError": {
+    "server": "A server error has occurred",
+    "unknown": "An unknown error has occurred",
+    "invalidInput": "Input is invalid"
+  },
+  "appClientError": {
+    "unknown": "An unknown error has occurred",
+    "someProductsNotUpdated": "Some products failed to update"
+  }
+}
