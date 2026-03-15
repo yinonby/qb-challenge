@@ -4,7 +4,7 @@ import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocaliz
 import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { type AvailabilityOptionT } from '@qb/models';
-import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
+import { isWeb, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
@@ -56,14 +56,28 @@ export const ListingView: FC<ListingViewPropsT> = (props) => {
     });
   };
 
+  const handleClearFilters = (): void => {
+    onProductNameFilterChange('');
+  }
+
   return (
     <View style={genericStyles.spacing}>
       <View style={genericStyles.flexRow}>
         <FiltersButton testID='FiltersButtonTid' />
 
-        <ProductNameInput value={productNameFilter} onChange={onProductNameFilterChange}/>
+        {isWeb() &&
+          <ProductNameInput
+            testID='ProductNameInputTid'
+            value={productNameFilter}
+            onChange={onProductNameFilterChange}
+          />
+        }
 
-        <ClearFilterButton testID='ClearFilterButtonTid' />
+        <ClearFilterButton
+          testID='ClearFilterButtonTid'
+          onClear={handleClearFilters}
+          isExtraChange={!!productNameFilter}
+        />
 
         <View style={genericStyles.flex1} />
 

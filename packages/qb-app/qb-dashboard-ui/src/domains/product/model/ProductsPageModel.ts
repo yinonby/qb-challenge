@@ -25,7 +25,6 @@ export const useProductsPageModel = (params: GetProductSummariesPaginatedParamsT
     data,
   } = useGetProductSummariesPaginatedQuery(params);
 
-
   if (isUninitialized) {
     // unexpected, query only returns this when using { skip: true }
     return {

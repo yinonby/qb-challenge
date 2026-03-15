@@ -25,6 +25,15 @@ jest.mock('./filters/FiltersButton', () => {
   };
 });
 
+jest.mock('../common/ProductNameInput', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ProductNameInput: View,
+  };
+});
+
 jest.mock('../common/ClearFilterButton', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
@@ -44,7 +53,7 @@ jest.mock('./product-summary/ProductListingGrid', () => {
 });
 
 describe('ListingView data={data}', () => {
-  const { mock_useSearchParams, mock_useSetSearchParams } = __puiMocks;
+  const { mock_useSearchParams, mock_useSetSearchParams, mock_isWeb } = __puiMocks;
 
   const mock_setParams = jest.fn();
   mock_useSetSearchParams.mockReturnValue({ setParams: mock_setParams });
@@ -58,6 +67,7 @@ describe('ListingView data={data}', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    mock_isWeb.mockReturnValue(true);
     mock_useSearchParams.mockReturnValue({});
   });
 
@@ -67,13 +77,29 @@ describe('ListingView data={data}', () => {
 
     // render
     const { getByTestId, getByText } = render(
-      <ListingView data={data} />
+      <ListingView data={data} productNameFilter='' onProductNameFilterChange={jest.fn()} />
     );
 
     // verify components
     getByTestId('FiltersButtonTid');
+    getByTestId('ProductNameInputTid');
+    getByTestId('ClearFilterButtonTid');
     getByTestId('PaginationControlTid');
     getByText('mocked-t-app:noProducts');
+  });
+
+  it('does not render ProductNameInput in non-web', async () => {
+    // setup mocks
+    const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
+    mock_isWeb.mockReturnValue(false);
+
+    // render
+    const { queryByTestId } = render(
+      <ListingView data={data} productNameFilter='' onProductNameFilterChange={jest.fn()} />
+    );
+
+    // verify components
+    expect(queryByTestId('ProductNameInputTid')).toBeNull();
   });
 
   it('displays content, with products', async () => {
@@ -82,11 +108,12 @@ describe('ListingView data={data}', () => {
 
     // render
     const { getByTestId } = render(
-      <ListingView data={data} />
+      <ListingView data={data} productNameFilter='' onProductNameFilterChange={jest.fn()} />
     );
 
     // verify components
     getByTestId('FiltersButtonTid');
+    getByTestId('ProductNameInputTid');
     getByTestId('ClearFilterButtonTid');
     getByTestId('PaginationControlTid');
     getByTestId('ProductListingGridTid');
@@ -100,7 +127,7 @@ describe('ListingView data={data}', () => {
 
     // render
     const { getByTestId } = render(
-      <ListingView data={data} />
+      <ListingView data={data} productNameFilter='' onProductNameFilterChange={jest.fn()} />
     );
 
     // verify components
@@ -133,5 +160,39 @@ describe('ListingView data={data}', () => {
       availabilityMaxStr: undefined,
       sort: undefined,
     });
+  });
+
+  it('calls onProductNameFilterChange when name filter input changed', async () => {
+    // setup mocks
+    const data = { productSummaries: [buildProductSummaryMock()], pageNum: 0, totalItems: 10, isLastPage: false };
+    const mock_onProductNameFilterChange = jest.fn();
+
+    // render
+    const { getByTestId } = render(
+      <ListingView data={data} productNameFilter='' onProductNameFilterChange={mock_onProductNameFilterChange} />
+    );
+
+    // verify components
+    const input = getByTestId('ProductNameInputTid');
+    input.props.onChange('ABC');
+
+    expect(mock_onProductNameFilterChange).toHaveBeenCalledWith('ABC');
+  });
+
+  it('calls onProductNameFilterChange with empty string when filters cleared', async () => {
+    // setup mocks
+    const data = { productSummaries: [buildProductSummaryMock()], pageNum: 0, totalItems: 10, isLastPage: false };
+    const mock_onProductNameFilterChange = jest.fn();
+
+    // render
+    const { getByTestId } = render(
+      <ListingView data={data} productNameFilter='' onProductNameFilterChange={mock_onProductNameFilterChange} />
+    );
+
+    // verify components
+    const input = getByTestId('ClearFilterButtonTid');
+    input.props.onClear();
+
+    expect(mock_onProductNameFilterChange).toHaveBeenCalledWith('');
   });
 });

@@ -7,10 +7,11 @@ import { buildAvailabilityOption, type PaginatedFiltersUrlParamsT } from '../../
 
 type ClearFilterButtonPropsT = TestableComponentT & {
   onClear?: () => void,
+  isExtraChange?: boolean,
 }
 
 export const ClearFilterButton: FC<ClearFilterButtonPropsT> = (props) => {
-  const { onClear } = props;
+  const { onClear, isExtraChange = false } = props;
   const searchParams = useSearchParams<PaginatedFiltersUrlParamsT>();
   const { category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
   const { setParams } = useSetSearchParams<PaginatedFiltersUrlParamsT>();
@@ -31,11 +32,11 @@ export const ClearFilterButton: FC<ClearFilterButtonPropsT> = (props) => {
   };
 
   const isFilterChange = (): boolean => {
-    return category !== undefined || availability !== undefined || (sort !== undefined && sort !== DEFAULT_SORT_OPTION);
-  }
-
-  if (!isFilterChange()) {
-    return null;
+    return category !== undefined
+      || availability !== undefined
+      || (sort !== undefined && sort !== DEFAULT_SORT_OPTION)
+      || isExtraChange
+    ;
   }
 
   return (
@@ -44,6 +45,7 @@ export const ClearFilterButton: FC<ClearFilterButtonPropsT> = (props) => {
       size='xs'
       onPress={handleClearFilters}
       icon='filter-variant-remove'
+      disabled={!isFilterChange()}
     />
   );
 };

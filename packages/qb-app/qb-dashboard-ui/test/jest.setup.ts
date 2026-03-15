@@ -39,6 +39,7 @@ declare module '@qb/platform-ui' {
     mock_getStorageItem: jest.Mock,
     mock_setStorageItem: jest.Mock,
     mock_isIos: jest.Mock,
+    mock_isWeb: jest.Mock,
   };
 }
 

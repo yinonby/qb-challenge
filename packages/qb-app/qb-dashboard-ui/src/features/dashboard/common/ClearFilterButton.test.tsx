@@ -16,17 +16,17 @@ describe('ClearFilterButton', () => {
     mock_useSearchParams.mockReturnValue({});
   });
 
-  it('does not render clear filters button', async () => {
+  it('disables clear filters button on init', async () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({});
 
     // render
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <ClearFilterButton />
     );
 
     // verify no clear button
-    expect(queryByTestId('RnuiIconButtonTid')).toBeNull();
+    expect(getByTestId('RnuiIconButtonTid').props.disabled).toBeTruthy();
   });
 
   it('renders clear filters button when category is changed', async () => {
@@ -55,30 +55,30 @@ describe('ClearFilterButton', () => {
     getByTestId('RnuiIconButtonTid');
   });
 
-  it('does not render clear filters button when sort is undefined', async () => {
+  it('disables clear filters button when sort is undefined', async () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({ sort: undefined });
 
     // render
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <ClearFilterButton />
     );
 
     // verify no clear button
-    expect(queryByTestId('RnuiIconButtonTid')).toBeNull();
+    expect(getByTestId('RnuiIconButtonTid').props.disabled).toBeTruthy();
   });
 
-  it('does not render clear filters button when sort is at default', async () => {
+  it('disables clear filters button when sort is at default', async () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({ sort: DEFAULT_SORT_OPTION });
 
     // render
-    const { queryByTestId } = render(
+    const { getByTestId } = render(
       <ClearFilterButton />
     );
 
     // verify no clear button
-    expect(queryByTestId('RnuiIconButtonTid')).toBeNull();
+    expect(getByTestId('RnuiIconButtonTid').props.disabled).toBeTruthy();
   });
 
   it('renders clear filters button when sort is changed', async () => {

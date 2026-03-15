@@ -54,6 +54,7 @@ export type GetProductSummariesPaginatedParamsT = {
   productsPerPage: number,
   category?: ProductCategoryT,
   availability?: AvailabilityOptionT,
+  productNameFilter?: string,
   sort: SortT,
 }
 

@@ -3,7 +3,7 @@ import type { DashboardContextT } from '@qb-dashboard-ui/app/layout/DashboardLay
 import * as DashboardLayout from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as ProductsPageModel from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
 import { __puiMocks } from '@qb/platform-ui';
-import { render } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { ProductListingPageContent } from './ProductListingPageContent';
 
@@ -111,5 +111,29 @@ describe('ProductListingPageContent', () => {
 
     // verify components
     getByTestId('ListingViewTid');
+  });
+
+  it('updates productNameFilter', async () => {
+    // setup mocks
+    mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
+    spy_useProductsPageModel.mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
+    });
+
+    // render
+    const { getByTestId } = render(
+      <ProductListingPageContent />
+    );
+
+    // verify components
+    const view = getByTestId('ListingViewTid');
+    expect(view.props.productNameFilter).toBeUndefined();
+
+    view.props.onProductNameFilterChange('ABC');
+    await waitFor(() => {
+      expect(view.props.productNameFilter).toEqual('ABC');
+    });
   });
 });

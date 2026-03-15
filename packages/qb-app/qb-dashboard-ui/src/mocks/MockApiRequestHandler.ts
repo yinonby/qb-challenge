@@ -70,6 +70,21 @@ const getProductSummariesPaginated = (
     filteredProducts = filteredProducts.filter(e => e.stock <= maxStock);
   }
 
+  if (params.productNameFilter) {
+    function normalizeStr(str: string): string {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    const normalizedProductNameFilter = normalizeStr(params.productNameFilter);
+
+    const isProductNameMatch = (product: ProductT): boolean => {
+      const normalizedProductName = normalizeStr(product.name);
+      return normalizedProductName.includes(normalizedProductNameFilter);
+    }
+
+    filteredProducts = filteredProducts.filter(isProductNameMatch);
+  }
+
   // sort if provided
   if (params.sort === 'priceAscending') {
     filteredProducts = filteredProducts.sort(compareProductPricesAscending)
