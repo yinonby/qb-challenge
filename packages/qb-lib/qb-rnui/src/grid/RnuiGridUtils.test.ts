@@ -1,5 +1,6 @@
 
-import { getBreakpoint, lgWidth, mdWidth, smWidth, TOTAL_GRID_COLUMNS, xlWidth } from './RnuiGridUtils';
+import { lgWidth, mdWidth, smWidth, xlWidth } from '@qb-rnui/theme/RnuiDimensionsProvider';
+import { getBreakpoint, TOTAL_GRID_COLUMNS } from './RnuiGridUtils';
 
 describe("RnuiGridUtils", () => {
   it("exports the correct TOTAL_GRID_COLUMNS", () => {

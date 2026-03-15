@@ -88,10 +88,10 @@ describe('RnuiModal', () => {
 
   it('uses wide web layout when width is above threshold', () => {
     spy_isWeb.mockReturnValue(true);
-    spy_useRnuiDimensions.mockReturnValue({ width: 1200 } as RnuiDimensionsT);
+    spy_useRnuiDimensions.mockReturnValue({ isMdScreen: true } as RnuiDimensionsT);
 
     const { getByTestId } = render(
-      <RnuiModal minWideWebWidth={768}>
+      <RnuiModal>
         Child
       </RnuiModal>
     );

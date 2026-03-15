@@ -1,10 +1,10 @@
 
+import { mdWidth } from '@qb-rnui/theme/RnuiDimensionsProvider';
 import { act, render } from '@testing-library/react-native';
 import type { ReactElement } from 'react';
 import * as ReactNative from 'react-native';
 import { Animated, StyleSheet, View, type LayoutChangeEvent, type ScaledSize, type ViewProps } from 'react-native';
 import { RnuiGridItem } from './RnuiGridItem';
-import { mdWidth } from './RnuiGridUtils';
 import { RnuiMasonryGrid } from './RnuiMasonryGrid';
 
 jest.spyOn(ReactNative, 'useWindowDimensions').mockReturnValue({

@@ -21,6 +21,8 @@ jest.mock('react-native-paper', () => {
   };
 });
 
+// tests
+
 describe('RnuiProvider', () => {
   it('renders correctly with children', () => {
     const { getByTestId } = render(

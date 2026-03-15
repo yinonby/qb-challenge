@@ -8,6 +8,7 @@ export const initRnuiMocks = () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const React = require('react');
     const onShowSnackbarMock = jest.fn();
+    const mock_useRnuiDimensions = jest.fn();
 
     const RnuiButton = (props: RnuiButtonPropsT) => {
       // Render a View wrapping the children in a Text
@@ -47,6 +48,7 @@ export const initRnuiMocks = () => {
       RnuiImage: View,
       RnuiCheckbox: View,
 
+      useRnuiDimensions: mock_useRnuiDimensions,
       useRnuiSnackbar: () => ({
         onShowSnackbar: onShowSnackbarMock,
       }),
@@ -54,6 +56,7 @@ export const initRnuiMocks = () => {
       // expose for tests
       __rnuiMocks: {
         onShowSnackbarMock,
+        mock_useRnuiDimensions,
       },
     };
   });

@@ -23,6 +23,7 @@ export * from './src/table/RnuiTableHeader';
 export * from './src/table/RnuiTableRow';
 export * from './src/table/RnuiTableTitle';
 export * from './src/text/RnuiText';
+export * from './src/theme/RnuiDimensionsProvider';
 export * from './src/theme/RnuiProvider';
 export * from './src/types/ComponentTypes';
 export * from './src/widget/RnuiActivityIndicator';

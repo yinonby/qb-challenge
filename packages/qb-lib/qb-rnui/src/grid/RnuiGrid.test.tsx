@@ -2,11 +2,10 @@
 import { render } from '@testing-library/react-native';
 import type { ReactElement } from 'react';
 import { Animated } from 'react-native';
-import type { RnuiDimensionsT } from '../theme/RnuiDimensionsProvider';
 import * as RnuiDimensionsProvider from '../theme/RnuiDimensionsProvider';
+import { mdWidth, type RnuiDimensionsT } from '../theme/RnuiDimensionsProvider';
 import { RnuiGrid } from './RnuiGrid';
 import { RnuiGridItem } from './RnuiGridItem';
-import { mdWidth } from './RnuiGridUtils';
 
 jest.spyOn(Animated, 'timing').mockImplementation(
   ((value: Animated.Value | Animated.ValueXY, config: Animated.TimingAnimationConfig) => {

@@ -14,7 +14,6 @@ type RnuiModalPropsT = TestableComponentT & {
   onClose?: () => void,
   notScrollable?: boolean,
   fullScreenMarginTop?: number,
-  minWideWebWidth?: number,
   nonFullScreenWidthLimit?: number,
 }
 
@@ -27,16 +26,15 @@ export function RnuiModal(props: PropsWithChildren<RnuiModalPropsT>): ReactNode 
     onClose,
     notScrollable,
     fullScreenMarginTop,
-    minWideWebWidth = 768,
     nonFullScreenWidthLimit,
     children
   } = props;
 
   // hooks
-  const { width } = useRnuiDimensions()
+  const { isMdScreen } = useRnuiDimensions()
 
   // variables
-  const isWideWeb = isWeb() && width >= minWideWebWidth;
+  const isWideWeb = isWeb() && isMdScreen;
   const isFullScreen = !isWideWeb;
   const marginTop: number | undefined = isFullScreen ? fullScreenMarginTop : 0;
   const webPaddingHorizontal = 32;
