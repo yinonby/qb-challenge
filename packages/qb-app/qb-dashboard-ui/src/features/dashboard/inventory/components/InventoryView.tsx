@@ -6,10 +6,10 @@ import { useProductController } from '@qb-dashboard-ui/domains/product/controlle
 import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
 import type { UpdateProductStockInfoT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
-import { type ProductInventoryPageUrlParamsT, buildAvailabilityOption } from '@qb-dashboard-ui/types/UrlDefs';
-import { type AvailabilityOptionT } from '@qb/models';
-import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
-import { RnuiAppContent, RnuiButton, RnuiText, type TestableComponentT } from '@qb/rnui';
+import { buildAvailabilityOption, type ProductInventoryPageUrlParamsT } from '@qb-dashboard-ui/types/UrlDefs';
+import { productSummariesToCsv, type AvailabilityOptionT } from '@qb/models';
+import { exportTextFileAsync, isWeb, usePlatformUiDeviceLocale, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
+import { RnuiAppContent, RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { PaginationControl } from '../../../common/PaginationControl';
@@ -35,6 +35,7 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
   const genericStyles = useGenericStyles();
   const { onUpdateProductBatch } = useProductController();
   const { onUnknownError, onAppError } = useAppErrorHandling();
+  const { langTag, timeZone } = usePlatformUiDeviceLocale();
 
   const handleUpdateAll = async (): Promise<void> => {
     const stockEdits = getAllStockUpdates();
@@ -87,6 +88,11 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
     clearAllStockUpdates();
   };
 
+  const handleExportToCsv = async (): Promise<void> => {
+    const csvStr = productSummariesToCsv(data.productSummaries, langTag, timeZone);
+    await exportTextFileAsync('data.csv', csvStr);
+  }
+
   return (
     <RnuiAppContent testID="RnuiAppContentTid">
       <RnuiText variant='titleMedium'>{t('app:inventoryManagementDesc')}</RnuiText>
@@ -95,6 +101,10 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
         <FiltersButton testID='FiltersButtonTid' onApply={handleApplyFilters} />
 
         <ClearFilterButton testID='ClearFilterButtonTid' onClear={handleClearFilters}/>
+
+        {isWeb() &&
+          <RnuiIconButton testID='ExportToCsvButton' icon='file' size='xs' onPress={handleExportToCsv} />
+        }
 
         <View style={genericStyles.flex1} />
 

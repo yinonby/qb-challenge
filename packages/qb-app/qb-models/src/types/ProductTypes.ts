@@ -1,5 +1,5 @@
 
-import { type LangCodeT, type PriceT } from '@qb/utils';
+import { tsToLocalDateString, type LangCodeT, type PriceT } from '@qb/utils';
 
 // Database structures
 
@@ -75,15 +75,20 @@ export type ProductSummaryT = Pick<ProductT,
   | 'price'
   | 'category'
   | 'stock'
+  | 'reorderLevel'
   | 'popularity'
   | 'createdAtTs'
   | 'stockHistoryItems'
 > & {
   langCode: QbLangCodeT,
   imageUrl: string,
+  lastStockUpdateTs: number,
 };
 
 export function toProductSummary(product: ProductT): ProductSummaryT {
+  const lastStockUpdateTs = product.stockHistoryItems.length ?
+    product.stockHistoryItems[product.stockHistoryItems.length - 1].changeTs : product.createdAtTs;
+
   return {
     productId: product.productId,
     name: product.name,
@@ -91,11 +96,13 @@ export function toProductSummary(product: ProductT): ProductSummaryT {
     price: product.price,
     category: product.category,
     stock: product.stock,
+    reorderLevel: product.reorderLevel,
     popularity: product.popularity,
     createdAtTs: product.createdAtTs,
+    stockHistoryItems: product.stockHistoryItems,
     langCode: product.langCode,
     imageUrl: product.imageUrls[0],
-    stockHistoryItems: product.stockHistoryItems,
+    lastStockUpdateTs: lastStockUpdateTs,
   }
 }
 
@@ -136,9 +143,9 @@ export function toProductDetails(product: ProductT): ProductDetailsT {
     popularity: product.popularity,
     reviews: product.reviews,
     createdAtTs: product.createdAtTs,
+    stockHistoryItems: product.stockHistoryItems,
     langCode: product.langCode,
     lastStockUpdateTs: lastStockUpdateTs,
-    stockHistoryItems: product.stockHistoryItems,
   }
 }
 
@@ -151,3 +158,33 @@ export type ProductInventoryDetailsT = Pick<ProductT,
   currentStock: number,
   lastStockUpdateTs: number,
 };
+
+// Helper: convert one product summary to a CSV row
+function productStockToCsvRow(
+  productSummary: ProductSummaryT,
+  langCode: string,
+  timeZone: string | undefined
+): string {
+  // CSV-safe function: wrap strings in quotes and escape inner quotes
+  const quote = (value: string | number) =>
+    `"${String(value).replace(/"/g, '""')}"`;
+
+  return [
+    quote(productSummary.productId),
+    quote(productSummary.name),
+    quote(productSummary.stock),
+    quote(productSummary.reorderLevel),
+    quote(tsToLocalDateString(productSummary.lastStockUpdateTs, langCode, timeZone)),
+  ].join(',');
+}
+
+// Create CSV string from array of products
+export function productSummariesToCsv(
+  productSummaries: ProductSummaryT[],
+  langCode: string,
+  timeZone: string | undefined
+): string {
+  const header = ['productId', 'name', 'currentStock', 'reorderLevel', 'lastStockUpdateTimeStr'].join(',');
+  const rows = productSummaries.map(e => productStockToCsvRow(e, langCode, timeZone));
+  return [header, ...rows].join('\n');
+}
