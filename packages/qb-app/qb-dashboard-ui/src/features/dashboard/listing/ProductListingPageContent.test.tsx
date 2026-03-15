@@ -2,10 +2,9 @@
 import type { DashboardContextT } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as DashboardLayout from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as ProductsPageModel from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
-import { DEFAULT_SORT_OPTION } from '@qb/models';
 import { buildProductSummaryMock } from '@qb/models/test-utils';
 import { __puiMocks } from '@qb/platform-ui';
-import { act, fireEvent, render } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import React from 'react';
 import { ProductListingPageContent } from './ProductListingPageContent';
 
@@ -36,6 +35,15 @@ jest.mock('./filters/FiltersButton', () => {
   };
 });
 
+jest.mock('../common/ClearFilterButton', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ClearFilterButton: View,
+  };
+});
+
 jest.mock('./product-summary/ProductListingGrid', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { View } = require('react-native');
@@ -46,7 +54,7 @@ jest.mock('./product-summary/ProductListingGrid', () => {
 });
 
 describe('ProductListingPageContent', () => {
-  const { mock_useSearchParams, mock_useSetSearchParams, mock_isIos } = __puiMocks;
+  const { mock_useSearchParams, mock_useSetSearchParams } = __puiMocks;
   const spy_useProductsPageModel = jest.spyOn(ProductsPageModel, 'useProductsPageModel');
 
   const mock_setParams = jest.fn();
@@ -61,7 +69,6 @@ describe('ProductListingPageContent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    mock_isIos.mockReturnValue(false);
     mock_useSearchParams.mockReturnValue({});
   });
 
@@ -132,29 +139,9 @@ describe('ProductListingPageContent', () => {
 
     // verify components
     getByTestId('FiltersButtonTid');
+    getByTestId('ClearFilterButtonTid');
     getByTestId('PaginationControlTid');
     getByTestId('ProductListingGridTid');
-  });
-
-  it('sets different margin for clear filters button in ios', async () => {
-    mock_isIos.mockReturnValue(true);
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_CATEGORY' });
-
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false },
-    });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify components
-    const clearBtn = getByTestId('ClearFilterButtonTid');
-    expect(clearBtn.props.style.marginStart).toEqual(-6);
   });
 
   it('handles next / prev', async () => {
@@ -200,143 +187,6 @@ describe('ProductListingPageContent', () => {
       category: undefined,
       availabilityMinStr: undefined,
       availabilityMaxStr: undefined,
-      sort: undefined,
-    });
-  });
-
-  it('does not render clear filters button', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1" });
-
-    // render
-    const { queryByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify no clear button
-    expect(queryByTestId('ClearFilterButtonTid')).toBeNull();
-  });
-
-  it('renders clear filters button when category is changed', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_VALUE' });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify button exists
-    getByTestId('ClearFilterButtonTid');
-  });
-
-  it('renders clear filters button when availability is changed', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", availabilityMinStr: '1' });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify button exists
-    getByTestId('ClearFilterButtonTid');
-  });
-
-  it('does not render clear filters button when sort is undefined', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", sort: undefined });
-
-    // render
-    const { queryByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify no clear button
-    expect(queryByTestId('ClearFilterButtonTid')).toBeNull();
-  });
-
-  it('does not render clear filters button when sort is at default', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", sort: DEFAULT_SORT_OPTION });
-
-    // render
-    const { queryByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify no clear button
-    expect(queryByTestId('ClearFilterButtonTid')).toBeNull();
-  });
-
-  it('renders clear filters button when sort is changed', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", sort: 'MOCK_VALUE' });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // verify button exists
-    getByTestId('ClearFilterButtonTid');
-  });
-
-  it('renders clear filters button, and handles click', async () => {
-    // setup mocks
-    spy_useProductsPageModel.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: true },
-    });
-    mock_useSearchParams.mockReturnValue({ pageNumStr: "1", category: 'MOCK_CATEGORY' });
-
-    // render
-    const { getByTestId } = render(
-      <ProductListingPageContent />
-    );
-
-    // click filters button
-    const clearBtn = getByTestId('ClearFilterButtonTid');
-    act(() => {
-      fireEvent.press(clearBtn);
-    });
-
-    // verify params were set
-    expect(mock_setParams).toHaveBeenCalledWith({
-      pageNumStr: undefined,
-      category: undefined,
-      availability: undefined,
       sort: undefined,
     });
   });

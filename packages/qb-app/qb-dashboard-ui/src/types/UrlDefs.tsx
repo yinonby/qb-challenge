@@ -1,25 +1,21 @@
 
 import type { AvailabilityOptionT, ProductCategoryT, SortT } from '@qb/models';
 
-export type ProductListingPageUrlParamsT = {
+export type PaginatedFiltersUrlParamsT = {
   pageNumStr?: string,
   category?: ProductCategoryT,
   availabilityMinStr?: string,
   availabilityMaxStr?: string,
   sort?: SortT,
 }
+
+export type ProductListingPageUrlParamsT = PaginatedFiltersUrlParamsT;
 
 export type ProductDetailsPageSearchParamsT = {
   imgView?: 'true',
 }
 
-export type ProductInventoryPageUrlParamsT = {
-  pageNumStr?: string,
-  category?: ProductCategoryT,
-  availabilityMinStr?: string,
-  availabilityMaxStr?: string,
-  sort?: SortT,
-}
+export type ProductInventoryPageUrlParamsT = PaginatedFiltersUrlParamsT;
 
 export const buildAvailabilityOption = (
   availabilityMinStr: string | undefined,

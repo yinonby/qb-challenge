@@ -6,7 +6,7 @@ import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
 import { ScrollView, View } from 'react-native';
-import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../../types/UrlDefs';
+import { buildAvailabilityOption, type PaginatedFiltersUrlParamsT } from '../../../../types/UrlDefs';
 import { AvailabilitySelect } from '../../common/AvailabilitySelect';
 import { CategorySelect } from '../../common/CategorySelect';
 import { SortSelect } from '../../common/SortSelect';
@@ -17,7 +17,7 @@ type FiltersViewPropsT = TestableComponentT & {
 
 export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   const { onApply } = props;
-  const { category, availabilityMinStr, availabilityMaxStr, sort } = useSearchParams<ProductListingPageUrlParamsT>();
+  const { category, availabilityMinStr, availabilityMaxStr, sort } = useSearchParams<PaginatedFiltersUrlParamsT>();
   const { t } = useAppLocalization();
   const [selectedCategory, setSelectedCategory] = useState<ProductCategoryT | undefined>(category);
   const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
@@ -27,7 +27,7 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   const genericStyles = useGenericStyles();
   const spacing = 8;
   const marginCompensation = spacing / 2;
-  const { setParams } = useSetSearchParams<ProductListingPageUrlParamsT>();
+  const { setParams } = useSetSearchParams<PaginatedFiltersUrlParamsT>();
 
   const handleCategoryChange = (newValue: ProductCategoryT | undefined): void => {
     setSelectedCategory(newValue);
