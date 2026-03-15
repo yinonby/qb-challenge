@@ -5,21 +5,24 @@ import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/mo
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { type AvailabilityOptionT } from '@qb/models';
 import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
-import { RnuiAppContent, RnuiText, type TestableComponentT } from '@qb/rnui';
+import { RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../types/UrlDefs';
 import { PaginationControl } from '../../common/PaginationControl';
 import { ClearFilterButton } from '../common/ClearFilterButton';
+import { ProductNameInput } from '../common/ProductNameInput';
 import { FiltersButton } from './filters/FiltersButton';
 import { ProductListingGrid } from './product-summary/ProductListingGrid';
 
 type ListingViewPropsT = TestableComponentT & {
   data: ProductsPageModelDataT,
+  productNameFilter: string | undefined,
+  onProductNameFilterChange: (value: string) => void,
 }
 
 export const ListingView: FC<ListingViewPropsT> = (props) => {
-  const { data } = props;
+  const { data, productNameFilter, onProductNameFilterChange } = props;
   const { productsPerPage } = useDashboard();
   const { t } = useAppLocalization();
   const searchParams = useSearchParams<ProductListingPageUrlParamsT>();
@@ -54,38 +57,38 @@ export const ListingView: FC<ListingViewPropsT> = (props) => {
   };
 
   return (
-    <RnuiAppContent testID="RnuiAppContentTid">
-      <View style={genericStyles.spacing}>
-        <View style={genericStyles.flexRow}>
-          <FiltersButton testID='FiltersButtonTid' />
+    <View style={genericStyles.spacing}>
+      <View style={genericStyles.flexRow}>
+        <FiltersButton testID='FiltersButtonTid' />
 
-          <ClearFilterButton testID='ClearFilterButtonTid' />
+        <ProductNameInput value={productNameFilter} onChange={onProductNameFilterChange}/>
 
-          <View style={genericStyles.flex1} />
+        <ClearFilterButton testID='ClearFilterButtonTid' />
 
-          <PaginationControl
-            testID='PaginationControlTid'
-            totalItemsNum={data.totalItems}
-            curPage={pageNum}
-            curPageItemsNum={data.productSummaries.length}
-            isLastPage={data.isLastPage}
-            itemsPerPage={productsPerPage}
-            onNext={handlePressNext}
-            onPrev={handlePressPrev}
-          />
-        </View>
+        <View style={genericStyles.flex1} />
 
-        {data.productSummaries.length === 0 &&
-          <RnuiText variant='titleSmall'>{t('app:noProducts')}</RnuiText>
-        }
-
-        {data.productSummaries.length !== 0 &&
-          <ProductListingGrid
-            testID='ProductListingGridTid'
-            productSummaries={data.productSummaries}
-          />
-        }
+        <PaginationControl
+          testID='PaginationControlTid'
+          totalItemsNum={data.totalItems}
+          curPage={pageNum}
+          curPageItemsNum={data.productSummaries.length}
+          isLastPage={data.isLastPage}
+          itemsPerPage={productsPerPage}
+          onNext={handlePressNext}
+          onPrev={handlePressPrev}
+        />
       </View>
-    </RnuiAppContent>
+
+      {data.productSummaries.length === 0 &&
+        <RnuiText variant='titleSmall'>{t('app:noProducts')}</RnuiText>
+      }
+
+      {data.productSummaries.length !== 0 &&
+        <ProductListingGrid
+          testID='ProductListingGridTid'
+          productSummaries={data.productSummaries}
+        />
+      }
+    </View>
   );
 };
