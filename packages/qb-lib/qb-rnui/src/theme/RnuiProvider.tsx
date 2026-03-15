@@ -1,0 +1,56 @@
+
+import type { TestableComponentT } from '@qb-rnui/types/ComponentTypes';
+import React, { createContext, useContext, type PropsWithChildren } from 'react';
+import { type ColorValue, type TextStyle } from 'react-native';
+import { PaperProvider, type MD3Theme } from 'react-native-paper';
+import { RnuiSnackbarProvider } from '../snackbar/RnuiSnackbarProvider';
+
+export type RnuiStylesT = {
+  content?: {
+    paddingHorizontal?: number,
+    paddingVertical?: number,
+  },
+  xsButtonLabelStyle?: TextStyle,
+  imageLabel?: {
+    textColor?: ColorValue,
+    backgroundColor?: ColorValue,
+    borderRadius?: number,
+    paddingHorizontal?: number,
+    paddingVertical?: number,
+  },
+  tableRow?: {
+    denseMinHeight?: number,
+  },
+}
+
+export interface RnuiContextT {
+  rnuiStyles: RnuiStylesT,
+}
+
+export type RnuiProviderPropsT = TestableComponentT & {
+  theme?: MD3Theme,
+  rnuiStyles?: RnuiStylesT,
+};
+
+const RnuiContext = createContext<RnuiContextT | undefined>(undefined);
+
+// create the context provider
+export const RnuiProvider: React.FC<PropsWithChildren<RnuiProviderPropsT>> = (props) => {
+  const { theme, rnuiStyles, children } = props;
+
+  const value: RnuiContextT = {
+    rnuiStyles: rnuiStyles || {},
+  }
+
+  return (
+    <RnuiContext.Provider value={value}>
+      <PaperProvider theme={theme}>
+        <RnuiSnackbarProvider /* depends on ThemeProvider */>
+          {children}
+        </RnuiSnackbarProvider>
+      </PaperProvider>
+    </RnuiContext.Provider>
+  );
+};
+
+export const useRnuiContext = (): RnuiContextT => useContext(RnuiContext) as RnuiContextT;
