@@ -39,7 +39,8 @@
     "addToUpdateBatch": "Add to batch update",
     "noProducts": "No products found",
     "darkMode": "Dark mode",
-    "language": "Language"
+    "language": "Language",
+    "relatedProducts": "Related products"
   },
   "category": {
     "beauty": "Beauty",

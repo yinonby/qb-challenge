@@ -1,7 +1,8 @@
 
 import {
   DEFAULT_QB_LANG_CODE, toProductDetails, toProductSummary,
-  type ProductStockHistoryItemT, type ProductT
+  type ProductStockHistoryItemT,
+  type ProductT
 } from '@qb/models';
 import { generateUuidv4, type CurrencyCodeT, type PriceT } from '@qb/utils';
 import { mockProducts } from './MockApiProductDb';
@@ -155,6 +156,12 @@ const mockConvertPriceToEur = (price: PriceT): PriceT => {
   }
 }
 
+function pickRandomFour<T>(array: T[]): T[] {
+  return [...array]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+}
+
 const getProductDetails = (params: GetProductDetailsParamsT): GraphQLResponse<GetProductDetailsResponseT> => {
   const product = mockProducts.find(e => e.langCode === params.langCode && e.productId === params.productId);
 
@@ -166,9 +173,16 @@ const getProductDetails = (params: GetProductDetailsParamsT): GraphQLResponse<Ge
       }],
     };
   }
+
+  const productDetails = toProductDetails(product);
+  const relatedProducts = mockProducts.filter(e =>
+    e.productId !== productDetails.productId && e.langCode === params.langCode && e.category == productDetails.category);
+  productDetails.relatedProductSummaries = pickRandomFour<ProductT>(relatedProducts)
+    .map(e => toProductSummary(e));
+
   return {
     data: {
-      productDetails: toProductDetails(product),
+      productDetails: productDetails,
     }
   }
 }

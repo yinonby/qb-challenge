@@ -44,4 +44,16 @@ describe('ProductListingGrid', () => {
     const views = getAllByTestId('ProductSummaryViewTid');
     expect(views).toHaveLength(productSummaries.length);
   });
+
+  it('uses isNarrowContent', () => {
+    const productSummaries: ProductSummaryT[] = [
+      buildProductSummaryMock(),
+      buildProductSummaryMock(),
+    ]
+
+    const { getAllByTestId } = render(<ProductListingGrid productSummaries={productSummaries} isNarrowContent />);
+
+    const views = getAllByTestId('ProductSummaryViewTid');
+    expect(views).toHaveLength(productSummaries.length);
+  });
 });

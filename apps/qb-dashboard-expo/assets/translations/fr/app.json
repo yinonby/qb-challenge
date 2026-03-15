@@ -39,7 +39,8 @@
     "addToUpdateBatch": "Ajouter à la mise à jour par lot",
     "noProducts": "Aucun produit trouvé",
     "darkMode": "Mode sombre",
-    "language": "Langue"
+    "language": "Langue",
+    "relatedProducts": "Produits associés"
   },
   "category": {
     "beauty": "Beauté",

@@ -8,16 +8,17 @@ import { ProductSummaryView } from './ProductSummaryView';
 
 type ProductListingGridPropsT = TestableComponentT & {
   productSummaries: ProductSummaryT[],
+  isNarrowContent?: boolean,
 }
 
 export const ProductListingGrid: FC<ProductListingGridPropsT> = (props) => {
-  const { productSummaries } = props;
+  const { productSummaries, isNarrowContent = false } = props;
   const { dashboardRouterAdapter } = useDashboard();
 
   return (
     <RnuiGrid >
       {productSummaries.map((e, index) =>
-        <RnuiGridItem key={index} xs={12} sm={12} md={6} lg={4} xl={3} >
+        <RnuiGridItem key={index} xs={12} sm={12} md={6} lg={isNarrowContent ? 6 : 4} xl={isNarrowContent ? 6 : 3} >
           <PlatformUiLink href={dashboardRouterAdapter.buildDashboardDetailsRoute(e.productId)} asChild addPressable>
             <ProductSummaryView testID='ProductSummaryViewTid' productSummary={e} />
           </PlatformUiLink>

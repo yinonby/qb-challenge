@@ -7,6 +7,7 @@ import { RnuiText, type TestableComponentT } from '@qb/rnui';
 import { tsToLocalDateString } from '@qb/utils';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
+import { ProductListingGrid } from '../listing/product-summary/ProductListingGrid';
 import { ProductDetailsHeader } from './ProductDetailsHeader';
 import { ProductImagesSummary } from './ProductImagesSummary';
 
@@ -90,6 +91,18 @@ export const ProductDetailsView: FC<ProductDetailsViewPropsT> = (props) => {
               {tsToLocalDateString(productDetails.lastStockUpdateTs, langTag, timeZone )}
             </RnuiText>
           </View>
+
+
+          {productDetails.relatedProductSummaries &&
+            <View style={genericStyles.spacing}>
+              <RnuiText variant='titleSmall'>{t('app:relatedProducts')}</RnuiText>
+              <ProductListingGrid
+                testID='ProductListingGridTid'
+                productSummaries={productDetails.relatedProductSummaries}
+                isNarrowContent
+              />
+            </View>
+          }
         </View>
       </View>
     </View>

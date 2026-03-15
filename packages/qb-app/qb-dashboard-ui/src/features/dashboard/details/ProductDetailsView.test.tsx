@@ -1,5 +1,5 @@
 
-import { buildProductDetailsMock } from '@qb/models/test-utils';
+import { buildProductDetailsMock, buildProductSummaryMock } from '@qb/models/test-utils';
 import { __puiMocks } from '@qb/platform-ui';
 import * as QbUtils from '@qb/utils';
 import { render } from '@testing-library/react-native';
@@ -29,6 +29,15 @@ jest.mock('./ProductImagesSummary', () => {
 
   return {
     ProductImagesSummary: View,
+  };
+});
+
+jest.mock('../listing/product-summary/ProductListingGrid', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    ProductListingGrid: View,
   };
 });
 
@@ -215,5 +224,24 @@ describe('ProductDetailsView', () => {
     expect(spy_tsToLocalDateString).toHaveBeenCalledWith(122, 'MOCK_LANG_TAG', 'MOCK_TIMEZONE');
     getByText('mocked-t-app:lastUpdateTime');
     getByText('MOCK_TS_STR');
+  });
+
+  it('renders relatedProductSummaries', async () => {
+    spy_tsToLocalDateString.mockReturnValue('MOCK_TS_STR');
+
+    // render
+    const productDetails = buildProductDetailsMock({
+      relatedProductSummaries: [
+        buildProductSummaryMock(),
+      ],
+    });
+    const { getByText, getByTestId } = render(
+      <ProductDetailsView productDetails={productDetails} />
+    );
+
+    // verify components
+    expect(spy_tsToLocalDateString).toHaveBeenCalledWith(122, 'MOCK_LANG_TAG', 'MOCK_TIMEZONE');
+    getByText('mocked-t-app:relatedProducts');
+    getByTestId('ProductListingGridTid');
   });
 });

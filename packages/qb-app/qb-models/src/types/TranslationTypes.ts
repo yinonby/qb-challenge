@@ -43,6 +43,7 @@ export type AppTextTranslationKeyT =
   | 'app:noProducts'
   | 'app:darkMode'
   | 'app:language'
+  | 'app:relatedProducts'
 ;
 
 export type ProductCategoryTranslationKeyT =

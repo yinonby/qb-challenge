@@ -113,6 +113,7 @@ export type ProductDetailsT = Pick<ProductT,
   langCode: QbLangCodeT,
   specifications?: Record<string, TranslatedProductSpecificationT>,
   lastStockUpdateTs: number,
+  relatedProductSummaries?: ProductSummaryT[],
 };
 
 export function toProductDetails(product: ProductT): ProductDetailsT {
