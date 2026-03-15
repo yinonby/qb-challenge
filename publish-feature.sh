@@ -13,7 +13,7 @@ BASE_BRANCH="devel"
 # Help
 # ----------------------------
 usage() {
-  echo "Usage: $0 -f <feature-name> -t <title> [-b <body>]"
+  echo "Usage: $0 -t <title> [-b <body>]"
   echo
   echo "Options:"
   echo "  -t, --title          Pull request title"
