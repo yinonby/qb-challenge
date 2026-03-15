@@ -25,6 +25,7 @@
     "rating": "Note",
     "reason": "Raison",
     "changeNum": "Variation",
+    "changedOn": "Modifié le",
     "lastUpdateTime": "Dernière mise à jour",
     "next": "Suivant",
     "previous": "Précédent",
@@ -40,7 +41,8 @@
     "noProducts": "Aucun produit trouvé",
     "darkMode": "Mode sombre",
     "language": "Langue",
-    "relatedProducts": "Produits associés"
+    "relatedProducts": "Produits associés",
+    "stockHistory": "Historique des stocks"
   },
   "category": {
     "beauty": "Beauté",

@@ -1,19 +1,22 @@
 
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
+import type { ProductStockHistoryItemT } from '@qb/models';
 import { RnuiButton, RnuiText, RnuiTextInput, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { StockHistoryView } from './StockHistoryView';
 
 type EditViewPropsT = TestableComponentT & {
   productName: string,
   curStock: number,
+  productStockHistoryItems: ProductStockHistoryItemT[],
   onApply?: (newStock: number, reason: string) => void,
   onAddToBatch?: (newStock: number, reason: string) => void,
 }
 
 export const EditView: FC<EditViewPropsT> = (props) => {
-  const { productName, curStock, onApply, onAddToBatch } = props;
+  const { productName, curStock, productStockHistoryItems, onApply, onAddToBatch } = props;
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
   const [newStock, setNewStock] = useState<number | null>(null);
@@ -81,6 +84,15 @@ export const EditView: FC<EditViewPropsT> = (props) => {
           onChangeText={handleReasonChange}
         />
       </View>
+
+      {productStockHistoryItems.length > 0 &&
+        <>
+          <RnuiText variant='titleMedium'>{t('app:stockHistory')}</RnuiText>
+          <ScrollView>
+            <StockHistoryView testID='StockHistoryViewTid' productStockHistoryItems={productStockHistoryItems} />
+          </ScrollView>
+        </>
+      }
 
       <View style={genericStyles.flex1} />
 

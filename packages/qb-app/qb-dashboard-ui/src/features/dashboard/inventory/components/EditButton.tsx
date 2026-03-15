@@ -1,5 +1,6 @@
 
 import { useDashboard } from '@qb-dashboard-ui/app/layout/DashboardLayout';
+import type { ProductStockHistoryItemT } from '@qb/models';
 import { RnuiIconButton, RnuiModal, type TestableComponentT } from '@qb/rnui';
 import React, { useState, type FC } from 'react';
 import { View } from 'react-native';
@@ -8,12 +9,13 @@ import { EditView } from './EditView';
 type EditButtonPropsT = TestableComponentT & {
   productName: string,
   curStock: number,
+  productStockHistoryItems: ProductStockHistoryItemT[],
   onApply?: (newStock: number, reason: string) => void,
   onAddToBatch?: (newStock: number, reason: string) => void,
 }
 
 export const EditButton: FC<EditButtonPropsT> = (props) => {
-  const { productName, curStock, onApply, onAddToBatch } = props;
+  const { productName, curStock, productStockHistoryItems, onApply, onAddToBatch } = props;
   const [isOpen, setIsOpen] = useState(false);
   const { appHeaderHeight } = useDashboard();
 
@@ -62,6 +64,7 @@ export const EditButton: FC<EditButtonPropsT> = (props) => {
             testID='EditViewTid'
             productName={productName}
             curStock={curStock}
+            productStockHistoryItems={productStockHistoryItems}
             onApply={handleApply}
             onAddToBatch={handleAddToBatch}
           />

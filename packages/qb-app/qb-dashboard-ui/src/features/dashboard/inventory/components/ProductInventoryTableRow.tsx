@@ -91,6 +91,7 @@ export const ProductInventoryTableRow: FC<ProductInventoryTableRowPropsT> = (pro
               testID='EditButtonTid'
               productName={productSummary.name}
               curStock={productSummary.stock}
+              productStockHistoryItems={productSummary.stockHistoryItems}
               onApply={handleApplySingleUpdate}
               onAddToBatch={handleAddToBatch}
             /> :

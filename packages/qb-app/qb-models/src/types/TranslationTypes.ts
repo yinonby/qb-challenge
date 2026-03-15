@@ -28,6 +28,7 @@ export type AppTextTranslationKeyT =
   | 'app:rating'
   | 'app:reason'
   | 'app:changeNum'
+  | 'app:changedOn'
   | 'app:lastUpdateTime'
   | 'app:next'
   | 'app:previous'
@@ -44,6 +45,7 @@ export type AppTextTranslationKeyT =
   | 'app:darkMode'
   | 'app:language'
   | 'app:relatedProducts'
+  | 'app:stockHistory'
 ;
 
 export type ProductCategoryTranslationKeyT =

@@ -1,4 +1,5 @@
 
+import { buildProductStockHistoryItemMock } from '@qb/models/test-utils';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { useInventoryUpdate } from '../context/InventoryUpdateProvider';
@@ -19,6 +20,15 @@ jest.mock('../context/InventoryUpdateProvider', () => ({
   useInventoryUpdate: jest.fn(),
 }));
 
+jest.mock('./StockHistoryView', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { View } = require('react-native');
+
+  return {
+    StockHistoryView: View,
+  };
+});
+
 // tests
 
 describe('EditView', () => {
@@ -26,6 +36,7 @@ describe('EditView', () => {
     productId: 'PID1',
     productName: 'Test Product',
     curStock: 5,
+    productStockHistoryItems: [],
     testID: 'editView',
   };
 
@@ -47,6 +58,15 @@ describe('EditView', () => {
     expect(getByText('5')).toBeTruthy();
     expect(getByTestId('NewStockTextInputTid')).toBeTruthy();
     expect(getByTestId('ReasonTextInputTid')).toBeTruthy();
+  });
+
+  it('renders correctly with StockHistoryView', () => {
+    const productStockHistoryItems = [buildProductStockHistoryItemMock()];
+    const { getByText, getByTestId } =
+      render(<EditView {...defaultProps} productStockHistoryItems={productStockHistoryItems} />);
+
+    expect(getByText('mocked-t-app:stockHistory')).toBeTruthy();
+    expect(getByTestId('StockHistoryViewTid')).toBeTruthy();
   });
 
   it('disables buttons initially', () => {

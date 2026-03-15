@@ -77,6 +77,7 @@ export type ProductSummaryT = Pick<ProductT,
   | 'stock'
   | 'popularity'
   | 'createdAtTs'
+  | 'stockHistoryItems'
 > & {
   langCode: QbLangCodeT,
   imageUrl: string,
@@ -94,6 +95,7 @@ export function toProductSummary(product: ProductT): ProductSummaryT {
     createdAtTs: product.createdAtTs,
     langCode: product.langCode,
     imageUrl: product.imageUrls[0],
+    stockHistoryItems: product.stockHistoryItems,
   }
 }
 
@@ -109,6 +111,7 @@ export type ProductDetailsT = Pick<ProductT,
   | 'popularity'
   | 'reviews'
   | 'createdAtTs'
+  | 'stockHistoryItems'
 > & {
   langCode: QbLangCodeT,
   specifications?: Record<string, TranslatedProductSpecificationT>,
@@ -135,6 +138,7 @@ export function toProductDetails(product: ProductT): ProductDetailsT {
     createdAtTs: product.createdAtTs,
     langCode: product.langCode,
     lastStockUpdateTs: lastStockUpdateTs,
+    stockHistoryItems: product.stockHistoryItems,
   }
 }
 

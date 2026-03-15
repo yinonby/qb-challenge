@@ -1,5 +1,5 @@
 
-import { toProductDetails, toProductSummary, type ProductDetailsT, type ProductSummaryT, type ProductT } from '../../src/types/ProductTypes';
+import { toProductDetails, toProductSummary, type ProductDetailsT, type ProductStockHistoryItemT, type ProductSummaryT, type ProductT } from '../../src/types/ProductTypes';
 
 const baseProduct: ProductT = {
   langCode: 'en',
@@ -44,5 +44,20 @@ export const buildProductSummaryMock = (overrides?: Partial<ProductSummaryT>): P
 const baseProductDetails = toProductDetails(baseProduct);
 export const buildProductDetailsMock = (overrides?: Partial<ProductDetailsT>): ProductDetailsT => ({
   ...baseProductDetails,
+  ...overrides,
+});
+
+const baseProductStockHistoryItem: ProductStockHistoryItemT = {
+  stockHistoryItemId: 'HISID1',
+  productId: 'PID1',
+  previousStock: 2,
+  newStock: 4,
+  reason: 'REASON',
+  change: 2,
+  changeTs: 200,
+}
+
+export const buildProductStockHistoryItemMock = (overrides?: Partial<ProductStockHistoryItemT>): ProductStockHistoryItemT => ({
+  ...baseProductStockHistoryItem,
   ...overrides,
 });

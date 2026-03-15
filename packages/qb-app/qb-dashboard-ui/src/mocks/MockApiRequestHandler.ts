@@ -115,7 +115,7 @@ const getProductSummariesPaginated = (
 
   const response: GetProductSummariesPaginatedResponseT = {
     data: {
-      data: productSummaries,
+      data: structuredClone(productSummaries),
       total: filteredProducts.length,
       page: params.pageNum,
       limit: params.productsPerPage,
@@ -182,7 +182,7 @@ const getProductDetails = (params: GetProductDetailsParamsT): GraphQLResponse<Ge
 
   return {
     data: {
-      productDetails: productDetails,
+      productDetails: structuredClone(productDetails),
     }
   }
 }
@@ -197,7 +197,6 @@ const updateProductBatch = (params: UpdateProductBatchParamsT): GraphQLResponse<
     if (baseProduct === undefined) {
       errors.push(`Product with id ${updateProductStockInfo.productId} not found`);
     } else {
-
       const productStockHistoryItem: ProductStockHistoryItemT = {
         stockHistoryItemId: generateUuidv4(),
         productId: updateProductStockInfo.productId,

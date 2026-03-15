@@ -30,6 +30,7 @@ describe('EditButton', () => {
     productId: 'PID1',
     productName: 'Product A',
     curStock: 5,
+    productStockHistoryItems: [],
   };
 
   beforeEach(() => {
