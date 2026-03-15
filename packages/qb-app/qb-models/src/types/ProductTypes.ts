@@ -29,8 +29,19 @@ export type BaseProductT = {
     rating: number, // 0-5
   },
   createdAtTs: number,
-  stockHistoryItems: StockHistoryItemT[],
+  stockHistoryItems: ProductStockHistoryItemT[],
 }
+
+export type StockHistoryItemIdT = string;
+export type ProductStockHistoryItemT = {
+  stockHistoryItemId: StockHistoryItemIdT,
+  productId: ProductIdT,
+  previousStock: number,
+  newStock: number,
+  reason: string,
+  change: number,
+  changeTs: number,
+};
 
 export type ProductTranslatedValuesT = {
   langCode: QbLangCodeT,
@@ -56,12 +67,6 @@ const _sortOptions = ['priceAscending', 'priceDescending', 'popularity', 'newest
 export type SortT = typeof _sortOptions[number];
 export const sortOptions: SortT[] = [..._sortOptions];
 export const DEFAULT_SORT_OPTION = 'priceAscending';
-
-export type StockHistoryItemT = {
-  stock: number,
-  stockUpdateTs: number,
-  reason: string,
-}
 
 export type ProductSummaryT = Pick<ProductT,
   | 'productId'
@@ -112,7 +117,7 @@ export type ProductDetailsT = Pick<ProductT,
 
 export function toProductDetails(product: ProductT): ProductDetailsT {
   const lastStockUpdateTs = product.stockHistoryItems.length ?
-    product.stockHistoryItems[product.stockHistoryItems.length - 1].stockUpdateTs : product.createdAtTs;
+    product.stockHistoryItems[product.stockHistoryItems.length - 1].changeTs : product.createdAtTs;
 
   return {
     productId: product.productId,
@@ -140,15 +145,4 @@ export type ProductInventoryDetailsT = Pick<ProductT,
 > & {
   currentStock: number,
   lastStockUpdateTs: number,
-};
-
-export type StockHistoryItemIdT = string;
-export type ProductStockHistoryItemT = {
-  stockHistoryItemId: StockHistoryItemIdT,
-  productId: ProductIdT,
-  previousStock: number,
-  newStock: number,
-  reason: string,
-  change: number,
-  changeTs: number,
 };

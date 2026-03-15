@@ -1,4 +1,6 @@
 
+import { useAppErrorHandling } from '@qb-dashboard-ui/app/error-handling/AppErrorHandlingProvider';
+import { useProductController } from '@qb-dashboard-ui/domains/product/controller/ProductController';
 import { buildProductSummaryMock } from '@qb/models/test-utils';
 import { fireEvent, render } from '@testing-library/react-native';
 import React from 'react';
@@ -27,6 +29,14 @@ jest.mock('../context/InventoryUpdateProvider', () => ({
   useInventoryUpdate: jest.fn(),
 }));
 
+jest.mock('@qb-dashboard-ui/domains/product/controller/ProductController', () => ({
+  useProductController: jest.fn(),
+}));
+
+jest.mock('@qb-dashboard-ui/app/error-handling/AppErrorHandlingProvider', () => ({
+  useAppErrorHandling: jest.fn(),
+}));
+
 describe('ProductInventoryTableRow', () => {
   const productSummary = buildProductSummaryMock({
     productId: 'p1',
@@ -45,10 +55,27 @@ describe('ProductInventoryTableRow', () => {
     removeStockUpdate: mock_removeStockUpdate,
     getStockUpdate: mock_getStockUpdate,
     isStockUpdated: mock_isStockUpdated,
-  })
+  });
+
+  const mock_useProductController = useProductController as jest.Mock;
+  const mock_onUpdateProductBatch = jest.fn();
+  mock_useProductController.mockReturnValue({
+    onUpdateProductBatch: mock_onUpdateProductBatch,
+  });
+
+  const mock_onAppError = jest.fn();
+  const mock_onUnknownError = jest.fn();
+  const mock_useAppErrorHandling = useAppErrorHandling as jest.Mock;
+  mock_useAppErrorHandling.mockReturnValue({
+    onAppError: mock_onAppError,
+    onUnknownError: mock_onUnknownError,
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    mock_isStockUpdated.mockReturnValue(false);
+    mock_getStockUpdate.mockReturnValue(null);
   });
 
   it('renders product name and stock', () => {
@@ -72,25 +99,6 @@ describe('ProductInventoryTableRow', () => {
     );
 
     expect(getByTestId('EditButtonTid')).toBeTruthy();
-  });
-
-  it('calls addStockUpdate when edit happens', () => {
-    mock_isStockUpdated.mockReturnValue(false);
-    mock_getStockUpdate.mockReturnValue(null);
-
-    const { getByTestId } = render(
-      <ProductInventoryTableRow productSummary={productSummary} />
-    );
-
-    const btn = getByTestId('EditButtonTid');
-    btn.props.onEdit(20, 'MOCK_REASON')
-
-    expect(mock_addStockUpdate).toHaveBeenCalledWith({
-      productId: 'p1',
-      newStock: 20,
-      reason: 'MOCK_REASON',
-      originalStock: 5,
-    });
   });
 
   it('shows edited stock and cancel button when stock is changed', () => {
@@ -124,5 +132,83 @@ describe('ProductInventoryTableRow', () => {
     fireEvent.press(getByTestId('CancelButtonTid'));
 
     expect(mock_removeStockUpdate).toHaveBeenCalledWith('p1');
+  });
+
+  it('handles apply single update, no errors', async () => {
+    mock_onUpdateProductBatch.mockResolvedValue({ errors: [] });
+    const { getByTestId } = render(
+      <ProductInventoryTableRow productSummary={productSummary} />
+    );
+
+    const btn = getByTestId('EditButtonTid');
+    await btn.props.onApply(23, 'MOCK_REASON');
+
+    expect(mock_onUpdateProductBatch).toHaveBeenCalledWith([{
+      productId: productSummary.productId,
+      newStock: 23,
+      reason: 'MOCK_REASON',
+    }]);
+    expect(mock_onAppError).not.toHaveBeenCalled();
+    expect(mock_onUnknownError).not.toHaveBeenCalled();
+    expect(mock_removeStockUpdate).toHaveBeenCalled();
+  });
+
+  it('handles apply single update, errors returned', async () => {
+    // setup mocks
+    mock_onUpdateProductBatch.mockResolvedValue({ errors: ['ERROR']});
+
+    const { getByTestId } = render(
+      <ProductInventoryTableRow productSummary={productSummary} />
+    );
+
+    const btn = getByTestId('EditButtonTid');
+    await btn.props.onApply(23, 'MOCK_REASON');
+
+    expect(mock_onUpdateProductBatch).toHaveBeenCalledWith([{
+      productId: productSummary.productId,
+      newStock: 23,
+      reason: 'MOCK_REASON',
+    }]);
+
+    expect(mock_onAppError).toHaveBeenCalledWith('appClientError:someProductsNotUpdated');
+    expect(mock_onUnknownError).not.toHaveBeenCalled();
+    expect(mock_removeStockUpdate).toHaveBeenCalled();
+  });
+
+  it('handles apply single update, error is thrown', async () => {
+    // setup mocks
+    mock_onUpdateProductBatch.mockRejectedValue('ERROR');
+
+    const { getByTestId } = render(
+      <ProductInventoryTableRow productSummary={productSummary} />
+    );
+
+    const btn = getByTestId('EditButtonTid');
+    await btn.props.onApply(23, 'MOCK_REASON');
+
+    expect(mock_onUpdateProductBatch).toHaveBeenCalledWith([{
+      productId: productSummary.productId,
+      newStock: 23,
+      reason: 'MOCK_REASON',
+    }]);
+    expect(mock_onAppError).not.toHaveBeenCalled();
+    expect(mock_onUnknownError).toHaveBeenCalledWith('ERROR');
+    expect(mock_removeStockUpdate).toHaveBeenCalled();
+  });
+
+  it('handles add to batch', async () => {
+    const { getByTestId } = render(
+      <ProductInventoryTableRow productSummary={productSummary} />
+    );
+
+    const btn = getByTestId('EditButtonTid');
+    await btn.props.onAddToBatch(23, 'MOCK_REASON');
+
+    expect(mock_addStockUpdate).toHaveBeenCalledWith({
+      productId: productSummary.productId,
+      newStock: 23,
+      reason: 'MOCK_REASON',
+      originalStock: productSummary.stock,
+    });
   });
 });

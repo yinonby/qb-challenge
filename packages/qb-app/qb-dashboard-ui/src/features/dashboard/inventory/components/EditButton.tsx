@@ -8,11 +8,12 @@ import { EditView } from './EditView';
 type EditButtonPropsT = TestableComponentT & {
   productName: string,
   curStock: number,
-  onEdit: (newStock: number, reason: string) => void,
+  onApply?: (newStock: number, reason: string) => void,
+  onAddToBatch?: (newStock: number, reason: string) => void,
 }
 
 export const EditButton: FC<EditButtonPropsT> = (props) => {
-  const { productName, curStock, onEdit } = props;
+  const { productName, curStock, onApply, onAddToBatch } = props;
   const [isOpen, setIsOpen] = useState(false);
   const { appHeaderHeight } = useDashboard();
 
@@ -24,8 +25,17 @@ export const EditButton: FC<EditButtonPropsT> = (props) => {
     setIsOpen(true);
   };
 
-  const handleEdit = (newStock: number, reason: string): void => {
-    onEdit(newStock, reason);
+  const handleApply = (newStock: number, reason: string): void => {
+    if (onApply) {
+      onApply(newStock, reason);
+    }
+    handleClose();
+  }
+
+  const handleAddToBatch = (newStock: number, reason: string): void => {
+    if (onAddToBatch) {
+      onAddToBatch(newStock, reason);
+    }
     handleClose();
   }
 
@@ -52,7 +62,8 @@ export const EditButton: FC<EditButtonPropsT> = (props) => {
             testID='EditViewTid'
             productName={productName}
             curStock={curStock}
-            onEdit={handleEdit}
+            onApply={handleApply}
+            onAddToBatch={handleAddToBatch}
           />
         </RnuiModal>
       }

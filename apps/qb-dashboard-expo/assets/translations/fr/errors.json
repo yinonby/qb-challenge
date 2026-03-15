@@ -5,6 +5,7 @@
     "invalidInput": "Les données saisies sont invalides"
   },
   "appClientError": {
-    "unknown": "Une erreur inconnue s'est produite"
+    "unknown": "Une erreur inconnue s'est produite",
+    "someProductsNotUpdated": "Certains produits n'ont pas été mis à jour"
   }
 }

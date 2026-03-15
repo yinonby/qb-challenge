@@ -35,6 +35,8 @@
     "inStock": "In stock",
     "outOfStock": "Out of stock",
     "apply": "Apply",
+    "applyAll": "Apply all",
+    "addToUpdateBatch": "Add to batch update",
     "noProducts": "No products found",
     "darkMode": "Dark mode",
     "language": "Language"

@@ -38,6 +38,8 @@ export type AppTextTranslationKeyT =
   | 'app:inStock'
   | 'app:outOfStock'
   | 'app:apply'
+  | 'app:applyAll'
+  | 'app:addToUpdateBatch'
   | 'app:noProducts'
   | 'app:darkMode'
   | 'app:language'

@@ -1,9 +1,11 @@
 
+import { useAppErrorHandling } from '@qb-dashboard-ui/app/error-handling/AppErrorHandlingProvider';
 import type { DashboardContextT } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as DashboardLayoutModule from '@qb-dashboard-ui/app/layout/DashboardLayout';
+import { useProductController } from '@qb-dashboard-ui/domains/product/controller/ProductController';
 import { __puiMocks } from '@qb/platform-ui';
 import { __rnuiMocks } from '@qb/rnui';
-import { fireEvent, render } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import type { InventoryUpdateContextT } from '../context/InventoryUpdateProvider';
 import * as InventoryUpdateProviderModule from '../context/InventoryUpdateProvider';
@@ -47,6 +49,14 @@ jest.mock('./ProductInventoryTable', () => {
   };
 });
 
+jest.mock('@qb-dashboard-ui/domains/product/controller/ProductController', () => ({
+  useProductController: jest.fn(),
+}));
+
+jest.mock('@qb-dashboard-ui/app/error-handling/AppErrorHandlingProvider', () => ({
+  useAppErrorHandling: jest.fn(),
+}));
+
 // tests
 
 describe('InventoryView', () => {
@@ -65,10 +75,26 @@ describe('InventoryView', () => {
   const spy_useInventoryUpdate = jest.spyOn(InventoryUpdateProviderModule, 'useInventoryUpdate');
   const mock_isAnyStockUpdated = jest.fn();
   const mock_clearAllStockUpdates = jest.fn();
+  const mock_getAllStockUpdates = jest.fn();
   spy_useInventoryUpdate.mockReturnValue({
     isAnyStockUpdated: mock_isAnyStockUpdated,
     clearAllStockUpdates: mock_clearAllStockUpdates,
+    getAllStockUpdates: mock_getAllStockUpdates,
   } as unknown as InventoryUpdateContextT)
+
+  const mock_useProductController = useProductController as jest.Mock;
+  const mock_onUpdateProductBatch = jest.fn();
+  mock_useProductController.mockReturnValue({
+    onUpdateProductBatch: mock_onUpdateProductBatch,
+  });
+
+  const mock_onAppError = jest.fn();
+  const mock_onUnknownError = jest.fn();
+  const mock_useAppErrorHandling = useAppErrorHandling as jest.Mock;
+  mock_useAppErrorHandling.mockReturnValue({
+    onAppError: mock_onAppError,
+    onUnknownError: mock_onUnknownError,
+  });
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -76,8 +102,8 @@ describe('InventoryView', () => {
     mock_useRnuiDimensions.mockReturnValue({ isXsScreen: false });
     mock_useSearchParams.mockReturnValue({});
     mock_isAnyStockUpdated.mockReturnValue(false);
+    mock_getAllStockUpdates.mockReturnValue([]);
   });
-
 
   it('displays content', async () => {
     // setup mocks
@@ -128,22 +154,6 @@ describe('InventoryView', () => {
     // verify components
     const btn = getByTestId('ApplyButtonTid');
     expect(btn.props.disabled).toEqual(false);
-  });
-
-  it('handled apply', async () => {
-    // setup mocks
-    mock_useSearchParams.mockReturnValue({});
-    const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
-    mock_isAnyStockUpdated.mockReturnValue(true);
-
-    // render
-    const { getByTestId } = render(
-      <InventoryView data={data} />
-    );
-
-    // verify components
-    const btn = getByTestId('ApplyButtonTid');
-    fireEvent.press(btn);
   });
 
   it('handles next / prev', async () => {
@@ -222,6 +232,75 @@ describe('InventoryView', () => {
     const btn = getByTestId('ClearFilterButtonTid');
     btn.props.onClear();
 
+    expect(mock_clearAllStockUpdates).toHaveBeenCalled();
+  });
+
+  it('handles apply all, no errors', async () => {
+    // setup mocks
+    const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
+    mock_getAllStockUpdates.mockReturnValue([{ productId: 'PID1', newStock: 3, reason: 'MOCK_REASON' }]);
+    mock_onUpdateProductBatch.mockResolvedValue({ errors: [] });
+
+    // render
+    const { getByTestId } = render(
+      <InventoryView data={data} />
+    );
+
+    // verify components
+    const btn = getByTestId('ApplyButtonTid');
+    await waitFor(() => {
+      fireEvent.press(btn);
+    });
+
+    expect(mock_onUpdateProductBatch).toHaveBeenCalledWith([{ productId: 'PID1', newStock: 3, reason: 'MOCK_REASON' }]);
+    expect(mock_onAppError).not.toHaveBeenCalled();
+    expect(mock_onUnknownError).not.toHaveBeenCalled();
+    expect(mock_clearAllStockUpdates).toHaveBeenCalled();
+  });
+
+  it('handles apply all, errors are returned', async () => {
+    // setup mocks
+    const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
+    mock_getAllStockUpdates.mockReturnValue([{ productId: 'PID1', newStock: 3, reason: 'MOCK_REASON' }]);
+    mock_onUpdateProductBatch.mockResolvedValue({ errors: ['ERROR'] });
+
+    // render
+    const { getByTestId } = render(
+      <InventoryView data={data} />
+    );
+
+    // verify components
+    const btn = getByTestId('ApplyButtonTid');
+    await waitFor(() => {
+      fireEvent.press(btn);
+    });
+
+    expect(mock_onUpdateProductBatch).toHaveBeenCalledWith([{ productId: 'PID1', newStock: 3, reason: 'MOCK_REASON' }]);
+    expect(mock_onAppError).toHaveBeenCalledWith('appClientError:someProductsNotUpdated');
+    expect(mock_onUnknownError).not.toHaveBeenCalled();
+    expect(mock_clearAllStockUpdates).toHaveBeenCalled();
+  });
+
+  it('handles apply all, error is thrown', async () => {
+    // setup mocks
+    const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
+    mock_getAllStockUpdates.mockReturnValue([{ productId: 'PID1', newStock: 3, reason: 'MOCK_REASON' }]);
+    mock_onUpdateProductBatch.mockRejectedValue('ERROR');
+
+    // render
+    const { getByTestId } = render(
+      <InventoryView data={data} />
+    );
+
+    // verify components
+    const btn = getByTestId('ApplyButtonTid');
+    await waitFor(() => {
+      fireEvent.press(btn);
+    });
+
+    expect(mock_onUpdateProductBatch).toHaveBeenCalledWith([{ productId: 'PID1', newStock: 3, reason: 'MOCK_REASON' }]);
+    expect(mock_onAppError).not.toHaveBeenCalled();
+    expect(mock_onUnknownError).toHaveBeenCalledWith('ERROR');
     expect(mock_clearAllStockUpdates).toHaveBeenCalled();
   });
 });

@@ -73,7 +73,7 @@ export type GetProductDetailsResponseT = {
 }
 
 export type UpdateProductBatchParamsT = {
-  productStockUpdates: UpdateProductStockInfoT[],
+  updateProductStockInfos: UpdateProductStockInfoT[],
 };
 
 export type UpdateProductStockInfoT = {
@@ -83,5 +83,8 @@ export type UpdateProductStockInfoT = {
 };
 
 export type UpdateProductBatchResponseT = {
-  data: ProductStockHistoryItemT,
+  data: {
+    errors: string[],
+    productStockHistoryItems: ProductStockHistoryItemT[],
+  },
 }

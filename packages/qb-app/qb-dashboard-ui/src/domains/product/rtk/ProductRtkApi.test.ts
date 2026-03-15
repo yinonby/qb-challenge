@@ -19,7 +19,7 @@ import {
 
 const apiUrl = 'https://api.test';
 const productId1 = 'PID1';
-let currentRequest: 'getProductsPage' | 'getProductDetails' | 'updateProducBatcht' | 'error' = 'error';
+let currentRequest: 'getProductsPage' | 'getProductDetails' | 'updateProducBatch' | 'error' = 'error';
 
 const getProductResponse: GetProductDetailsResponseT = {
   data: {
@@ -40,13 +40,16 @@ const getProductsPageResponse: GetProductSummariesPaginatedResponseT = {
 
 const productUpdateResponse: UpdateProductBatchResponseT = {
   data: {
-    stockHistoryItemId: 'CHANGE1',
-    productId: 'PID1',
-    previousStock: 4,
-    newStock: 5,
-    reason: 'eason',
-    change: 4,
-    changeTs: 200,
+    errors: [],
+    productStockHistoryItems: [{
+      stockHistoryItemId: 'CHANGE1',
+      productId: 'PID1',
+      previousStock: 4,
+      newStock: 5,
+      reason: 'eason',
+      change: 4,
+      changeTs: 200,
+    }]
   },
 };
 
@@ -56,7 +59,7 @@ export const server = setupServer(
       return HttpResponse.json(getProductsPageResponse);
     } else if (currentRequest === 'getProductDetails') {
       return HttpResponse.json(getProductResponse);
-    } else if (currentRequest === 'updateProducBatcht') {
+    } else if (currentRequest === 'updateProducBatch') {
       return HttpResponse.json(productUpdateResponse);
     } else if (currentRequest === 'error') {
       return HttpResponse.json({
@@ -178,14 +181,14 @@ describe('ProductRtkApi', () => {
     });
   });
 
-  describe('updateProducBatcht', () => {
+  describe('updateProducBatch', () => {
     it('succeeds', async () => {
       const store = createTestStore();
 
-      currentRequest = 'updateProducBatcht';
+      currentRequest = 'updateProducBatch';
       const rtkResult = await store.dispatch(
-        productRtkApiEndpoints.updateProducBatcht.initiate({
-          productStockUpdates: [{
+        productRtkApiEndpoints.updateProducBatch.initiate({
+          updateProductStockInfos: [{
             productId: 'PID1',
             newStock: 30,
             reason: 'reason',
@@ -201,8 +204,8 @@ describe('ProductRtkApi', () => {
 
       currentRequest = 'error';
       const rtkResult = await store.dispatch(
-        productRtkApiEndpoints.updateProducBatcht.initiate({
-          productStockUpdates: [{
+        productRtkApiEndpoints.updateProducBatch.initiate({
+          updateProductStockInfos: [{
             productId: 'PID1',
             newStock: 30,
             reason: 'reason',

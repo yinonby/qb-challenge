@@ -8,11 +8,12 @@ import { View } from 'react-native';
 type EditViewPropsT = TestableComponentT & {
   productName: string,
   curStock: number,
-  onEdit: (newStock: number, reason: string) => void,
+  onApply?: (newStock: number, reason: string) => void,
+  onAddToBatch?: (newStock: number, reason: string) => void,
 }
 
 export const EditView: FC<EditViewPropsT> = (props) => {
-  const { productName, curStock, onEdit } = props;
+  const { productName, curStock, onApply, onAddToBatch } = props;
   const { t } = useAppLocalization();
   const genericStyles = useGenericStyles();
   const [newStock, setNewStock] = useState<number | null>(null);
@@ -39,9 +40,19 @@ export const EditView: FC<EditViewPropsT> = (props) => {
     return newStock !== null && reason !== '';
   }
 
-  const handleApply = (): void => {
-    if (newStock !== null) {
-      onEdit(newStock, reason);
+  const handleApply = async (): Promise<void> => {
+    if (newStock !== null && isValid()) {
+      if (onApply) {
+        onApply(newStock, reason);
+      }
+    }
+  }
+
+  const handleAddToBatch = (): void => {
+    if (newStock !== null && isValid()) {
+      if (onAddToBatch) {
+        onAddToBatch(newStock, reason);
+      }
     }
   }
 
@@ -57,8 +68,8 @@ export const EditView: FC<EditViewPropsT> = (props) => {
 
         <RnuiTextInput
           testID='NewStockTextInputTid'
-          value={newStock === null ? '' : newStock.toString()}
           label={t('app:newStockLevel')}
+          value={newStock === null ? '' : newStock.toString()}
           onChangeText={handleNewStockChange}
         />
 
@@ -66,6 +77,7 @@ export const EditView: FC<EditViewPropsT> = (props) => {
           testID='ReasonTextInputTid'
           keyboardType='numeric'
           label={t('app:reason')}
+          value={reason}
           onChangeText={handleReasonChange}
         />
       </View>
@@ -79,6 +91,15 @@ export const EditView: FC<EditViewPropsT> = (props) => {
           onPress={handleApply}
         >
           {t('app:apply')}
+        </RnuiButton>
+
+        <RnuiButton testID='AddToBatchButtonTid'
+          mode='outlined'
+          size='xs'
+          disabled={!isValid()}
+          onPress={handleAddToBatch}
+        >
+          {t('app:addToUpdateBatch')}
         </RnuiButton>
       </View>
     </View>

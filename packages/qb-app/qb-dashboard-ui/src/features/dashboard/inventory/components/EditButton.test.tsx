@@ -27,9 +27,9 @@ jest.mock('./EditView', () => {
 
 describe('EditButton', () => {
   const defaultProps = {
+    productId: 'PID1',
     productName: 'Product A',
     curStock: 5,
-    onEdit: jest.fn(),
   };
 
   beforeEach(() => {
@@ -67,22 +67,71 @@ describe('EditButton', () => {
     });
   });
 
-  it('calls onEdit and closes modal when EditView triggers edit', async () => {
-    const mock_onEdit = jest.fn();
+  it('closes modal when EditView.onApply is triggered', async () => {
     const { getByTestId, queryByTestId } = render(
-      <EditButton {...defaultProps} onEdit={mock_onEdit} />
+      <EditButton {...defaultProps} />
     );
 
     fireEvent.press(getByTestId('EditButtonTid'));
 
     const editView = getByTestId('EditViewTid');
     act(() => {
-      editView.props.onEdit(20, 'adjustment');
+      editView.props.onApply();
     });
 
-    expect(mock_onEdit).toHaveBeenCalledWith(20, 'adjustment');
     await waitFor(() => {
       expect(queryByTestId('EditViewTid')).toBeNull();
     });
+  });
+
+  it('calls onApply when EditView.onApply is triggered', async () => {
+    const mock_onApply = jest.fn();
+
+    const { getByTestId } = render(
+      <EditButton {...defaultProps} onApply={mock_onApply} />
+    );
+
+    fireEvent.press(getByTestId('EditButtonTid'));
+
+    const editView = getByTestId('EditViewTid');
+    act(() => {
+      editView.props.onApply();
+    });
+
+    expect(mock_onApply).toHaveBeenCalled();
+  });
+
+  it('closes modal when EditView.onAddToBatch is triggered', async () => {
+    const { getByTestId, queryByTestId } = render(
+      <EditButton {...defaultProps} />
+    );
+
+    fireEvent.press(getByTestId('EditButtonTid'));
+
+    const editView = getByTestId('EditViewTid');
+    act(() => {
+      editView.props.onAddToBatch();
+    });
+
+    await waitFor(() => {
+      expect(queryByTestId('EditViewTid')).toBeNull();
+    });
+  });
+
+  it('calls onAddToBatch when EditView.onAddToBatch is triggered', async () => {
+    const mock_onAddToBatch = jest.fn();
+
+    const { getByTestId } = render(
+      <EditButton {...defaultProps} onAddToBatch={mock_onAddToBatch} />
+    );
+
+    fireEvent.press(getByTestId('EditButtonTid'));
+
+    const editView = getByTestId('EditViewTid');
+    act(() => {
+      editView.props.onAddToBatch();
+    });
+
+    expect(mock_onAddToBatch).toHaveBeenCalled();
   });
 });

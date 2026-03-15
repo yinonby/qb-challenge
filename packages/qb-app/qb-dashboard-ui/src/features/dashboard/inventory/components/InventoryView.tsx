@@ -1,7 +1,10 @@
 
+import { useAppErrorHandling } from '@qb-dashboard-ui/app/error-handling/AppErrorHandlingProvider';
 import { useDashboard } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
+import { useProductController } from '@qb-dashboard-ui/domains/product/controller/ProductController';
 import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
+import type { UpdateProductStockInfoT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { type ProductInventoryPageUrlParamsT, buildAvailabilityOption } from '@qb-dashboard-ui/types/UrlDefs';
 import { type AvailabilityOptionT } from '@qb/models';
@@ -28,10 +31,28 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
   const { pageNumStr, category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
   const pageNum = pageNumStr === undefined ? 0 : parseInt(pageNumStr);
   const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
-  const { isAnyStockUpdated, clearAllStockUpdates } = useInventoryUpdate();
+  const { isAnyStockUpdated, clearAllStockUpdates, getAllStockUpdates } = useInventoryUpdate();
   const genericStyles = useGenericStyles();
+  const { onUpdateProductBatch } = useProductController();
+  const { onUnknownError, onAppError } = useAppErrorHandling();
 
-  const handleUpdateAll = (): void => {
+  const handleUpdateAll = async (): Promise<void> => {
+    const stockEdits = getAllStockUpdates();
+    const updateProductStockInfos: UpdateProductStockInfoT[] = stockEdits.map(e => ({
+      productId: e.productId,
+      newStock: e.newStock,
+      reason: e.reason,
+    }));
+
+    try {
+      const response = await onUpdateProductBatch(updateProductStockInfos);
+      if (response.errors.length) {
+        onAppError('appClientError:someProductsNotUpdated');
+      }
+    } catch (error: unknown) {
+      onUnknownError(error);
+    }
+    clearAllStockUpdates(); // clear stock edits no matter what
   }
 
   const handlePressNext = (): void => {
@@ -83,7 +104,7 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
           disabled={!isAnyStockUpdated()}
           onPress={handleUpdateAll}
         >
-          {t('app:apply')}
+          {t('app:applyAll')}
         </RnuiButton>
 
         <PaginationControl

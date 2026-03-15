@@ -1,33 +1,49 @@
 
-import { toProductDetails, toProductSummary, type ProductT } from '@qb/models';
-import type { CurrencyCodeT, PriceT } from '@qb/utils';
+import {
+  DEFAULT_QB_LANG_CODE, toProductDetails, toProductSummary,
+  type ProductStockHistoryItemT, type ProductT
+} from '@qb/models';
+import { generateUuidv4, type CurrencyCodeT, type PriceT } from '@qb/utils';
 import { mockProducts } from './MockApiProductDb';
 import {
   MAX_PRODUCTS_PER_PAGE,
   mock_getProductDetailsGraphqlQuery,
   mock_getProductSummariesPaginatedGraphqlQuery,
+  mock_updateProductGraphqlQuery,
   type GetProductDetailsParamsT,
   type GetProductDetailsResponseT,
   type GetProductSummariesPaginatedParamsT,
   type GetProductSummariesPaginatedResponseT,
-  type GraphQLResponse, type GraphQLVariables
+  type GraphQLResponse, type GraphQLVariables,
+  type UpdateProductBatchParamsT,
+  type UpdateProductBatchResponseT
 } from './MockApiServerDefs';
+
+type ProductApiResponseT =
+  | GetProductSummariesPaginatedResponseT
+  | GetProductDetailsResponseT
+  | UpdateProductBatchResponseT;
 
 export const handleMockApiServerRequest = (
   query: string,
   variabales: GraphQLVariables,
-): GraphQLResponse<GetProductSummariesPaginatedResponseT | GetProductDetailsResponseT> => {
+): GraphQLResponse<ProductApiResponseT> => {
   if (query === mock_getProductSummariesPaginatedGraphqlQuery) {
     const response = getProductSummariesPaginated(variabales as GetProductSummariesPaginatedParamsT);
     return response;
   } else if (query === mock_getProductDetailsGraphqlQuery) {
     const response = getProductDetails(variabales as GetProductDetailsParamsT);
     return response;
+  } else if (query === mock_updateProductGraphqlQuery) {
+    const response = updateProductBatch(variabales as UpdateProductBatchParamsT);
+    return response;
   }
   throw new Error('Unexpected request');
 }
 
-const getProductSummariesPaginated = (params: GetProductSummariesPaginatedParamsT): GraphQLResponse<GetProductSummariesPaginatedResponseT> => {
+const getProductSummariesPaginated = (
+  params: GetProductSummariesPaginatedParamsT
+): GraphQLResponse<GetProductSummariesPaginatedResponseT> => {
   let filteredProducts = mockProducts.filter(e => e.langCode === params.langCode);
 
   if (params.productsPerPage > MAX_PRODUCTS_PER_PAGE) {
@@ -138,6 +154,39 @@ const getProductDetails = (params: GetProductDetailsParamsT): GraphQLResponse<Ge
   return {
     data: {
       productDetails: toProductDetails(product),
+    }
+  }
+}
+
+const updateProductBatch = (params: UpdateProductBatchParamsT): GraphQLResponse<UpdateProductBatchResponseT> => {
+  const productStockHistoryItems: ProductStockHistoryItemT[] = [];
+  const errors: string[] = [];
+
+  for (const updateProductStockInfo of params.updateProductStockInfos) {
+    const baseProduct = mockProducts.find(e =>
+      e.langCode === DEFAULT_QB_LANG_CODE && e.productId === updateProductStockInfo.productId);
+    if (baseProduct === undefined) {
+      errors.push(`Product with id ${updateProductStockInfo.productId} not found`);
+    } else {
+
+      const productStockHistoryItem: ProductStockHistoryItemT = {
+        stockHistoryItemId: generateUuidv4(),
+        productId: updateProductStockInfo.productId,
+        previousStock: baseProduct.stock,
+        newStock: updateProductStockInfo.newStock,
+        reason: updateProductStockInfo.reason,
+        change: baseProduct.stockHistoryItems.length + 1,
+        changeTs: Date.now(),
+      }
+      baseProduct.stock = updateProductStockInfo.newStock;
+      baseProduct.stockHistoryItems.push(productStockHistoryItem);
+    }
+  }
+
+  return {
+    data: {
+      errors,
+      productStockHistoryItems,
     }
   }
 }
