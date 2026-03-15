@@ -6,6 +6,7 @@ import {
 } from '@qb-dashboard-ui/features/dashboard/inventory/reducer/InventoryUpdateSlice';
 import { useClientLogger } from '@qb-dashboard-ui/logger/ClientLogger';
 import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 import { appRtkApiMiddleware, appRtkApiReducer, appRtkApiReducerPath } from '../rtk/AppRtkApi';
 import { appRtkHttpAdapterGenerator } from './AppReduxUtils';
 import {
@@ -39,3 +40,4 @@ export const createReduxStore = (apiUrl: string) => configureStore({
 export type DashboardAppReduxStore = ReturnType<typeof createReduxStore>;
 export type DashboardAppReduxRootState = ReturnType<DashboardAppReduxStore['getState']>;
 export type DashboardAppReduxDispatch = DashboardAppReduxStore['dispatch'];
+export const useDashboardDispatch: () => DashboardAppReduxDispatch = useDispatch;

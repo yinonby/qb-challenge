@@ -8,6 +8,7 @@ export const MAX_PRODUCTS_PER_PAGE = 24;
 export const mock_getProductSummariesPaginatedGraphqlQuery = 'mock_getProductSummariesPaginatedGraphqlQuery';
 export const mock_getProductDetailsGraphqlQuery = 'mock_getProductDetailsGraphqlQuery';
 export const mock_updateProductGraphqlQuery = 'mock_updateProductGraphqlQuery';
+export const mock_getProductInventoryAsCsv = 'mock_getProductInventoryAsCsv';
 
 export interface MockApiServerProvider{
   start: () => Promise<void>;
@@ -19,7 +20,12 @@ export type GraphQLBody = {
   variables: GraphQLVariables;
 }
 
-export type GraphQLVariables = GetProductSummariesPaginatedParamsT | GetProductDetailsParamsT | UpdateProductBatchParamsT;
+export type GraphQLVariables =
+  | GetProductSummariesPaginatedParamsT
+  | GetProductDetailsParamsT
+  | UpdateProductBatchParamsT
+  | GetProductInventoryAsCsvParamsT
+;
 
 export type GraphQLResponse<T> = T | {
   errors: GraphQLFormattedError[],
@@ -87,5 +93,16 @@ export type UpdateProductBatchResponseT = {
   data: {
     errors: string[],
     productStockHistoryItems: ProductStockHistoryItemT[],
+  },
+}
+
+export type GetProductInventoryAsCsvParamsT = {
+  langTag: string,
+  timeZone: string | undefined,
+};
+
+export type GetProductInventoryAsCsvResponseT = {
+  data: {
+    csvStr: string,
   },
 }

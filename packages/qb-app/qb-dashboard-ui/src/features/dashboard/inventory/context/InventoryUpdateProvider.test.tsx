@@ -4,10 +4,15 @@ import { act, renderHook } from '@testing-library/react-native';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { inventoryUpdateReducer, InventoryUpdateRootStateT } from '../reducer/InventoryUpdateSlice';
+import { fetchProductsCsv } from '../reducer/ProductsCsvThunk';
 import {
   InventoryUpdateProvider,
   useInventoryUpdate,
 } from './InventoryUpdateProvider';
+
+jest.mock('../reducer/ProductsCsvThunk', () => ({
+  fetchProductsCsv: jest.fn(),
+}));
 
 // Helper to render hook with redux provider
 const renderInventoryHook = (preloadedState?: InventoryUpdateRootStateT) => {
@@ -28,6 +33,9 @@ const renderInventoryHook = (preloadedState?: InventoryUpdateRootStateT) => {
 };
 
 describe('InventoryUpdateProvider', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mockFetchProductsCsv = fetchProductsCsv as any;
+
   it('should add a stock update', () => {
     const { result } = renderInventoryHook();
 
@@ -114,5 +122,68 @@ describe('InventoryUpdateProvider', () => {
     expect(result.current.isStockUpdated('p1')).toBe(true);
     expect(result.current.isStockUpdated('p2')).toBe(false);
     expect(result.current.isAnyStockUpdated()).toBe(true);
+  });
+
+  it('throws AppError when fetchProductsCsv returns a business error', async () => {
+    // Mock a successful dispatch but with an error payload from the API
+    mockFetchProductsCsv.mockReturnValue({
+      type: 'fetchProductsCsv/fulfilled',
+      payload: {
+        error: { appErrCode: 'appClientError:invalidParams' },
+      },
+    });
+
+    // Add the .match helper to the mock so the code inside the Provider works
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockFetchProductsCsv.fulfilled = { match: (action: any) => action.type === 'fetchProductsCsv/fulfilled' };
+
+    const { result } = renderInventoryHook();
+
+    await expect(
+      act(async () => {
+        await result.current.getProductInventoryAsCsv('en', 'UTC');
+      })
+    ).rejects.toThrow('appClientError:invalidParams');
+  });
+
+  it('throws unknown AppError when fetchProductsCsv fails/rejects', async () => {
+    // Mock a rejected action (e.g. network failure)
+    mockFetchProductsCsv.mockReturnValue({
+      type: 'fetchProductsCsv/rejected',
+    });
+
+    // Ensure .match returns false for fulfilled
+    mockFetchProductsCsv.fulfilled = { match: () => false };
+
+    const { result } = renderInventoryHook();
+
+    await expect(
+      act(async () => {
+        await result.current.getProductInventoryAsCsv('en', 'UTC');
+      })
+    ).rejects.toThrow('appClientError:unknown');
+  });
+
+  it('successfully returns csv string when fetchProductsCsv is fulfilled', async () => {
+    const csvStr = 'productId,newStock\np1,10';
+
+    mockFetchProductsCsv.mockReturnValue({
+      type: 'fetchProductsCsv/fulfilled',
+      payload: {
+        data: { csvStr },
+      },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockFetchProductsCsv.fulfilled = { match: (action: any) => action.type === 'fetchProductsCsv/fulfilled' };
+
+    const { result } = renderInventoryHook();
+
+    let csv: string | undefined;
+    await act(async () => {
+      csv = await result.current.getProductInventoryAsCsv('en', 'UTC');
+    });
+
+    expect(csv).toBe(csvStr);
   });
 });

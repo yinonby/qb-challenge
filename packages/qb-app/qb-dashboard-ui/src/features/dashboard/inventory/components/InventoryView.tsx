@@ -7,7 +7,7 @@ import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/mo
 import type { UpdateProductStockInfoT } from '@qb-dashboard-ui/mocks/MockApiServerDefs';
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { buildAvailabilityOption, type ProductInventoryPageUrlParamsT } from '@qb-dashboard-ui/types/UrlDefs';
-import { productSummariesToCsv, type AvailabilityOptionT } from '@qb/models';
+import { type AvailabilityOptionT } from '@qb/models';
 import { exportTextFileAsync, isWeb, usePlatformUiDeviceLocale, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
 import { RnuiAppContent, RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
@@ -31,7 +31,12 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
   const { pageNumStr, category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
   const pageNum = pageNumStr === undefined ? 0 : parseInt(pageNumStr);
   const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
-  const { isAnyStockUpdated, clearAllStockUpdates, getAllStockUpdates } = useInventoryUpdate();
+  const {
+    isAnyStockUpdated,
+    clearAllStockUpdates,
+    getAllStockUpdates,
+    getProductInventoryAsCsv
+  } = useInventoryUpdate();
   const genericStyles = useGenericStyles();
   const { onUpdateProductBatch } = useProductController();
   const { onUnknownError, onAppError } = useAppErrorHandling();
@@ -89,8 +94,12 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
   };
 
   const handleExportToCsv = async (): Promise<void> => {
-    const csvStr = productSummariesToCsv(data.productSummaries, langTag, timeZone);
-    await exportTextFileAsync('data.csv', csvStr);
+    try {
+      const csvStr = await getProductInventoryAsCsv(langTag, timeZone);
+      await exportTextFileAsync('data.csv', csvStr);
+    } catch (error: unknown) {
+      onUnknownError(error);
+    }
   }
 
   return (

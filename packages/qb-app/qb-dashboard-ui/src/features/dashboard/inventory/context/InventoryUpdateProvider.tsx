@@ -1,6 +1,8 @@
 
+import { useDashboardDispatch } from '@qb-dashboard-ui/app/redux/reducers/AppReduxStore';
+import { AppError } from '@qb-dashboard-ui/types/ErrorTypes';
 import React, { createContext, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   addStockUpdateAction,
   clearAllStockUpdatesAction,
@@ -8,6 +10,7 @@ import {
   selectEdits,
   StockEditT
 } from '../reducer/InventoryUpdateSlice';
+import { fetchProductsCsv } from '../reducer/ProductsCsvThunk';
 
 // Define the context type
 export interface InventoryUpdateContextT {
@@ -23,6 +26,7 @@ export interface InventoryUpdateContextT {
   getAllStockUpdates: () => StockEditT[];
   isStockUpdated: (productId: string) => boolean;
   isAnyStockUpdated: () => boolean;
+  getProductInventoryAsCsv: (langTag: string, timeZone: string | undefined) => Promise<string>,
 }
 
 // Create the context
@@ -30,7 +34,7 @@ const InventoryUpdateContext = createContext<InventoryUpdateContextT | undefined
 
 // Provider component
 export const InventoryUpdateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDashboardDispatch();
   const stockEditMap = useSelector(selectEdits);
 
   // Add or update stock
@@ -73,6 +77,21 @@ export const InventoryUpdateProvider: React.FC<{ children: React.ReactNode }> = 
     return Object.keys(stockEditMap).length > 0;
   };
 
+  const getProductInventoryAsCsv = async (langTag: string, timeZone: string | undefined): Promise<string> => {
+    const result = await dispatch(fetchProductsCsv({ langTag, timeZone }));
+
+    if (fetchProductsCsv.fulfilled.match(result)) {
+      if (result.payload.error) {
+        throw new AppError(result.payload.error.appErrCode);
+      }
+
+      const csvString = result.payload.data?.csvStr;
+      return csvString;
+    } else {
+      throw new AppError('appClientError:unknown');
+    }
+  };
+
   const value: InventoryUpdateContextT = {
     addStockUpdate,
     removeStockUpdate,
@@ -81,6 +100,7 @@ export const InventoryUpdateProvider: React.FC<{ children: React.ReactNode }> = 
     isStockUpdated,
     isAnyStockUpdated,
     clearAllStockUpdates,
+    getProductInventoryAsCsv,
   };
 
   return <InventoryUpdateContext.Provider value={value}>{children}</InventoryUpdateContext.Provider>;

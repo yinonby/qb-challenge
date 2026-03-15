@@ -3,7 +3,6 @@ import { useAppErrorHandling } from '@qb-dashboard-ui/app/error-handling/AppErro
 import type { DashboardContextT } from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import * as DashboardLayoutModule from '@qb-dashboard-ui/app/layout/DashboardLayout';
 import { useProductController } from '@qb-dashboard-ui/domains/product/controller/ProductController';
-import { productSummariesToCsv } from '@qb/models';
 import { __puiMocks } from '@qb/platform-ui';
 import { __rnuiMocks } from '@qb/rnui';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
@@ -89,10 +88,12 @@ describe('InventoryView', () => {
   const mock_isAnyStockUpdated = jest.fn();
   const mock_clearAllStockUpdates = jest.fn();
   const mock_getAllStockUpdates = jest.fn();
+  const mock_getProductInventoryAsCsv = jest.fn();
   spy_useInventoryUpdate.mockReturnValue({
     isAnyStockUpdated: mock_isAnyStockUpdated,
     clearAllStockUpdates: mock_clearAllStockUpdates,
     getAllStockUpdates: mock_getAllStockUpdates,
+    getProductInventoryAsCsv: mock_getProductInventoryAsCsv,
   } as unknown as InventoryUpdateContextT)
 
   const mock_useProductController = useProductController as jest.Mock;
@@ -108,8 +109,6 @@ describe('InventoryView', () => {
     onAppError: mock_onAppError,
     onUnknownError: mock_onUnknownError,
   });
-
-  const mock_productSummariesToCsv = productSummariesToCsv as jest.Mock;
 
   const langTag = 'MOCK_LANG_TAG';
   const timeZone = 'MOCK_TIMEZONE';
@@ -341,7 +340,7 @@ describe('InventoryView', () => {
     // setup mocks
     const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
     mock_isWeb.mockReturnValue(true);
-    mock_productSummariesToCsv.mockReturnValue('MOCK_CSV');
+    mock_getProductInventoryAsCsv.mockReturnValue('MOCK_CSV');
 
     // render
     const { getByTestId } = render(
@@ -354,7 +353,29 @@ describe('InventoryView', () => {
       fireEvent.press(btn);
     });
 
-    expect(mock_productSummariesToCsv).toHaveBeenCalledWith([], langTag, timeZone);
+    expect(mock_getProductInventoryAsCsv).toHaveBeenCalledWith(langTag, timeZone);
     expect(mock_exportTextFileAsync).toHaveBeenCalledWith('data.csv', 'MOCK_CSV');
+  });
+
+  it('handles export-to-csv error', async () => {
+    // setup mocks
+    const data = { productSummaries: [], pageNum: 0, totalItems: 10, isLastPage: false };
+    mock_isWeb.mockReturnValue(true);
+    mock_getProductInventoryAsCsv.mockRejectedValue('ERROR');
+
+    // render
+    const { getByTestId } = render(
+      <InventoryView data={data} />
+    );
+
+    // verify components
+    const btn = getByTestId('ExportToCsvButton');
+    await waitFor(() => {
+      fireEvent.press(btn);
+    });
+
+    expect(mock_getProductInventoryAsCsv).toHaveBeenCalledWith(langTag, timeZone);
+    expect(mock_exportTextFileAsync).not.toHaveBeenCalled();
+    expect(mock_onUnknownError).toHaveBeenCalledWith('ERROR');
   });
 });

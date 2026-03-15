@@ -9,6 +9,7 @@ export type AppRtkErrorT = {
 
 export class AppError extends Error {
   constructor(public appErrCode: AppErrorCodeT) {
-    super("AppError");
+    super(appErrCode);
+    this.name = 'AppError';
   }
 }

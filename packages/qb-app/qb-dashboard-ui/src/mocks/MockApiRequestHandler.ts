@@ -1,6 +1,6 @@
 
 import {
-  DEFAULT_QB_LANG_CODE, toProductDetails, toProductSummary,
+  DEFAULT_QB_LANG_CODE, productSummariesToCsv, toProductDetails, toProductSummary,
   type ProductStockHistoryItemT,
   type ProductT
 } from '@qb/models';
@@ -9,10 +9,13 @@ import { mockProducts } from './MockApiProductDb';
 import {
   MAX_PRODUCTS_PER_PAGE,
   mock_getProductDetailsGraphqlQuery,
+  mock_getProductInventoryAsCsv,
   mock_getProductSummariesPaginatedGraphqlQuery,
   mock_updateProductGraphqlQuery,
   type GetProductDetailsParamsT,
   type GetProductDetailsResponseT,
+  type GetProductInventoryAsCsvParamsT,
+  type GetProductInventoryAsCsvResponseT,
   type GetProductSummariesPaginatedParamsT,
   type GetProductSummariesPaginatedResponseT,
   type GraphQLResponse, type GraphQLVariables,
@@ -23,7 +26,9 @@ import {
 type ProductApiResponseT =
   | GetProductSummariesPaginatedResponseT
   | GetProductDetailsResponseT
-  | UpdateProductBatchResponseT;
+  | UpdateProductBatchResponseT
+  | GetProductInventoryAsCsvResponseT
+;
 
 export const handleMockApiServerRequest = (
   query: string,
@@ -37,6 +42,9 @@ export const handleMockApiServerRequest = (
     return response;
   } else if (query === mock_updateProductGraphqlQuery) {
     const response = updateProductBatch(variabales as UpdateProductBatchParamsT);
+    return response;
+  } else if (query === mock_getProductInventoryAsCsv) {
+    const response = getProductInventoryAsCsv(variabales as GetProductInventoryAsCsvParamsT);
     return response;
   }
   throw new Error('Unexpected request');
@@ -217,4 +225,16 @@ const updateProductBatch = (params: UpdateProductBatchParamsT): GraphQLResponse<
       productStockHistoryItems,
     }
   }
+}
+
+const getProductInventoryAsCsv = (
+  params: GetProductInventoryAsCsvParamsT
+): GetProductInventoryAsCsvResponseT => {
+  const productSummaries = mockProducts.filter(e => e.langCode === params.langTag.slice(0, 2)).map(toProductSummary);
+  const csvStr = productSummariesToCsv(productSummaries, params.langTag, params.timeZone);
+  return {
+    data: {
+      csvStr: csvStr,
+    }
+  };
 }
