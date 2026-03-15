@@ -6,7 +6,12 @@ import React, { useState, type FC } from 'react';
 import { View } from 'react-native';
 import { FiltersView } from './FiltersView';
 
-export const FiltersButton: FC<TestableComponentT> = () => {
+type FiltersButtonPropsT = TestableComponentT & {
+  onApply?: () => void,
+}
+
+export const FiltersButton: FC<FiltersButtonPropsT> = (props) => {
+  const { onApply } = props;
   const { t } = useAppLocalization();
   const [isOpen, setIsOpen] = useState(false);
   const { appHeaderHeight } = useDashboard();
@@ -22,6 +27,9 @@ export const FiltersButton: FC<TestableComponentT> = () => {
 
   const handleApply = (): void => {
     handleClose();
+    if (onApply) {
+      onApply();
+    }
   }
 
   return (

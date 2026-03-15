@@ -17,6 +17,8 @@ export type AppTextTranslationKeyT =
   | 'app:price'
   | 'app:category'
   | 'app:stockLevel'
+  | 'app:minStock'
+  | 'app:maxStock'
   | 'app:prevStockLevel'
   | 'app:newStockLevel'
   | 'app:reorderLevel'

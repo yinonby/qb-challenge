@@ -94,7 +94,7 @@ describe('ClearFilterButton', () => {
     getByTestId('RnuiIconButtonTid');
   });
 
-  it('renders clear filters button, and handles click', async () => {
+  it('handles click, without onClear', async () => {
     // setup mocks
     mock_useSearchParams.mockReturnValue({ category: 'MOCK_CATEGORY' });
 
@@ -116,5 +116,25 @@ describe('ClearFilterButton', () => {
       availability: undefined,
       sort: undefined,
     });
+  });
+
+  it('handles click, with onClear', async () => {
+    // setup mocks
+    const mock_onClear = jest.fn();
+    mock_useSearchParams.mockReturnValue({ category: 'MOCK_CATEGORY' });
+
+    // render
+    const { getByTestId } = render(
+      <ClearFilterButton onClear={mock_onClear} />
+    );
+
+    // click filters button
+    const clearBtn = getByTestId('RnuiIconButtonTid');
+    act(() => {
+      fireEvent.press(clearBtn);
+    });
+
+    // verify params were set
+    expect(mock_onClear).toHaveBeenCalled();
   });
 });

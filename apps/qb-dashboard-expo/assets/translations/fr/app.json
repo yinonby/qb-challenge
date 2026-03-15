@@ -14,6 +14,8 @@
     "price": "Prix",
     "category": "Catégorie",
     "stockLevel": "Niveau de stock",
+    "minStock": "Stock minimum",
+    "maxStock": "Stock maximum",
     "prevStockLevel": "Niveau de stock précédent",
     "newStockLevel": "Nouveau niveau de stock",
     "reorderLevel": "Seuil de réapprovisionnement",

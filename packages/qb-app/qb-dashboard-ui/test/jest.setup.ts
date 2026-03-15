@@ -20,6 +20,12 @@ initReactNativeMocks();
 initRnuiMocks();
 initPlatformUiMocks();
 
+declare module '@qb/rnui' {
+  export const __rnuiMocks: {
+    mock_useRnuiDimensions: jest.Mock,
+  };
+}
+
 declare module '@qb/platform-ui' {
   export const __puiMocks: {
     mock_usePlatformUiDeviceLocale: jest.Mock,

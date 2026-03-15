@@ -1,0 +1,108 @@
+
+import { useDashboard } from '@qb-dashboard-ui/app/layout/DashboardLayout';
+import { useAppLocalization } from '@qb-dashboard-ui/app/localization/AppLocalizationProvider';
+import { type ProductsPageModelDataT } from '@qb-dashboard-ui/domains/product/model/ProductsPageModel';
+import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
+import { type ProductInventoryPageUrlParamsT, buildAvailabilityOption } from '@qb-dashboard-ui/types/UrlDefs';
+import { type AvailabilityOptionT } from '@qb/models';
+import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
+import { RnuiAppContent, RnuiButton, RnuiText, type TestableComponentT } from '@qb/rnui';
+import React, { type FC } from 'react';
+import { View } from 'react-native';
+import { PaginationControl } from '../../../common/PaginationControl';
+import { ClearFilterButton } from '../../common/ClearFilterButton';
+import { useInventoryUpdate } from '../context/InventoryUpdateProvider';
+import { ProductInventoryTable } from './ProductInventoryTable';
+import { FiltersButton } from './filters/FiltersButton';
+
+type InventoryViewPropsT = TestableComponentT & {
+  data: ProductsPageModelDataT,
+}
+
+export const InventoryView: FC<InventoryViewPropsT> = (props) => {
+  const { data } = props;
+  const { productsPerPage } = useDashboard();
+  const { t } = useAppLocalization();
+  const searchParams = useSearchParams<ProductInventoryPageUrlParamsT>();
+  const { setParams } = useSetSearchParams<ProductInventoryPageUrlParamsT>();
+  const { pageNumStr, category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
+  const pageNum = pageNumStr === undefined ? 0 : parseInt(pageNumStr);
+  const availability: AvailabilityOptionT | undefined = buildAvailabilityOption(availabilityMinStr, availabilityMaxStr);
+  const { isAnyStockUpdated, clearAllStockUpdates } = useInventoryUpdate();
+  const genericStyles = useGenericStyles();
+
+  const handleUpdateAll = (): void => {
+  }
+
+  const handlePressNext = (): void => {
+    const newPageNum = pageNum + 1;
+
+    setParams({
+      pageNumStr: newPageNum.toString(),
+      category,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
+      sort,
+    });
+  }
+
+  const handlePressPrev = (): void => {
+    const newPageNum = pageNum - 1;
+
+    setParams({
+      pageNumStr: newPageNum.toString(),
+      category,
+      availabilityMinStr: availability?.minStock?.toString(),
+      availabilityMaxStr: availability?.maxStock?.toString(),
+      sort,
+    });
+  };
+
+  const handleApplyFilters = (): void => {
+    clearAllStockUpdates();
+  };
+
+  const handleClearFilters = (): void => {
+    clearAllStockUpdates();
+  };
+
+  return (
+    <RnuiAppContent testID="RnuiAppContentTid">
+      <RnuiText variant='titleMedium'>{t('app:inventoryManagementDesc')}</RnuiText>
+
+      <View style={genericStyles.flexRow}>
+        <FiltersButton testID='FiltersButtonTid' onApply={handleApplyFilters} />
+
+        <ClearFilterButton testID='ClearFilterButtonTid' onClear={handleClearFilters}/>
+
+        <View style={genericStyles.flex1} />
+
+        <RnuiButton
+          testID='ApplyButtonTid'
+          size='xs'
+          disabled={!isAnyStockUpdated()}
+          onPress={handleUpdateAll}
+        >
+          {t('app:apply')}
+        </RnuiButton>
+
+        <PaginationControl
+          testID='PaginationControlTid'
+          totalItemsNum={data.totalItems}
+          curPage={pageNum}
+          curPageItemsNum={data.productSummaries.length}
+          isLastPage={data.isLastPage}
+          itemsPerPage={productsPerPage}
+          onNext={handlePressNext}
+          onPrev={handlePressPrev}
+        />
+      </View>
+
+      <ProductInventoryTable
+        testID='ProductInventoryTableTid'
+        productSummaries={data.productSummaries}
+        imageSize={32}
+      />
+    </RnuiAppContent>
+  );
+};

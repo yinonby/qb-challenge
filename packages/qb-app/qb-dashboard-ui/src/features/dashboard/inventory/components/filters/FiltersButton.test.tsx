@@ -61,7 +61,7 @@ describe('FiltersButton', () => {
     getByTestId('FiltersViewTid');
   });
 
-  it('calls FiltersView.onApply and closes modal', async () => {
+  it('calls FiltersView.onApply and closes modal, without onApply callback', async () => {
     const { getByTestId, queryByTestId } = render(
       <FiltersButton />
     );
@@ -79,5 +79,28 @@ describe('FiltersButton', () => {
     await waitFor(() => {
       expect(queryByTestId('FiltersViewTid')).toBeNull();
     });
+  });
+
+  it('calls FiltersView.onApply and closes modal, with onApply callback', async () => {
+    const mock_onApply = jest.fn();
+
+    const { getByTestId, queryByTestId } = render(
+      <FiltersButton onApply={mock_onApply} />
+    );
+
+    const btn = getByTestId('FilterButtonTid');
+    act(() => {
+      fireEvent.press(btn);
+    });
+
+    const filtersView = getByTestId('FiltersViewTid');
+    act(() => {
+      filtersView.props.onApply();
+    });
+
+    await waitFor(() => {
+      expect(queryByTestId('FiltersViewTid')).toBeNull();
+    });
+    expect(mock_onApply).toHaveBeenCalled();
   });
 });

@@ -5,7 +5,12 @@ import { RnuiIconButton, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { buildAvailabilityOption, type PaginatedFiltersUrlParamsT } from '../../../types/UrlDefs';
 
-export const ClearFilterButton: FC<TestableComponentT> = () => {
+type ClearFilterButtonPropsT = TestableComponentT & {
+  onClear?: () => void,
+}
+
+export const ClearFilterButton: FC<ClearFilterButtonPropsT> = (props) => {
+  const { onClear } = props;
   const searchParams = useSearchParams<PaginatedFiltersUrlParamsT>();
   const { category, availabilityMinStr, availabilityMaxStr, sort } = searchParams;
   const { setParams } = useSetSearchParams<PaginatedFiltersUrlParamsT>();
@@ -19,6 +24,10 @@ export const ClearFilterButton: FC<TestableComponentT> = () => {
       availabilityMaxStr: undefined,
       sort: undefined,
     });
+
+    if (onClear) {
+      onClear();
+    }
   };
 
   const isFilterChange = (): boolean => {
