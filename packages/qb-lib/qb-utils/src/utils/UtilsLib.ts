@@ -12,3 +12,16 @@ export const generateUuidv4 = (): string => {
 export const stableHash = (obj: object): string => {
   return hash(obj);
 }
+
+export const strToIntOrUndefined = (str: string): number | undefined => {
+  if (str === '') {
+    return undefined;
+  } else {
+    const intValue = parseInt(str);
+    if (isNaN(intValue)) {
+      return undefined;
+    } else {
+      return intValue;
+    }
+  }
+}

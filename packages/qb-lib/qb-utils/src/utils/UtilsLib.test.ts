@@ -1,5 +1,5 @@
 
-import { generateUuidv4, stableHash } from './UtilsLib';
+import { generateUuidv4, stableHash, strToIntOrUndefined } from './UtilsLib';
 
 const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -47,3 +47,28 @@ describe('stableHash', () => {
   });
 });
 
+describe('strToIntOrUndefined', () => {
+  it('returns number for valid integer string', () => {
+    expect(strToIntOrUndefined('10')).toBe(10);
+    expect(strToIntOrUndefined('0')).toBe(0);
+    expect(strToIntOrUndefined('-5')).toBe(-5);
+  });
+
+  it('returns undefined for empty string', () => {
+    expect(strToIntOrUndefined('')).toBeUndefined();
+  });
+
+  it('returns undefined for invalid numbers', () => {
+    expect(strToIntOrUndefined('abc')).toBeUndefined();
+    expect(strToIntOrUndefined('10abc')).toBe(10); // parseInt behavior
+  });
+
+  it('handles whitespace', () => {
+    expect(strToIntOrUndefined(' 15 ')).toBe(15);
+  });
+
+  it('returns undefined for non-numeric symbols', () => {
+    expect(strToIntOrUndefined('#')).toBeUndefined();
+    expect(strToIntOrUndefined('!')).toBeUndefined();
+  });
+});
