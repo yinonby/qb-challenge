@@ -166,7 +166,7 @@ function productStockToCsvRow(
   timeZone: string | undefined
 ): string {
   // CSV-safe function: wrap strings in quotes and escape inner quotes
-  const quote = (value: string | number) =>
+  const quote = (value: string | number): string =>
     `"${String(value).replace(/"/g, '""')}"`;
 
   return [
