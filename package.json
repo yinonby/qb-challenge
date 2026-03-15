@@ -16,6 +16,7 @@
   "scripts": {
     "test": "npm run husky:verify:setup && npm run test:all",
     "test:all": "./scripts/python/src/test/test-all.py",
+    "start": "pushd apps/qb-dashboard-expo >/dev/null && npm run start:clean",
     "cover:report": "npm run cover:report:produce && npm run cover:report:open",
     "cover:report:produce": "npm run cover:report:produce:npm",
     "cover:report:produce:npm": "./scripts/python/src/coverage/npm/produce-coverage-report.py",
