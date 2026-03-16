@@ -22,11 +22,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // verify no clear button
-    expect(getByTestId('RnuiIconButtonTid').props.disabled).toBeTruthy();
+    expect(getByTestId('ClearFilterButtonTid').props.disabled).toBeTruthy();
   });
 
   it('renders clear filters button when category is changed', async () => {
@@ -35,11 +35,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // verify button exists
-    getByTestId('RnuiIconButtonTid');
+    getByTestId('ClearFilterButtonTid');
   });
 
   it('renders clear filters button when availability is changed', async () => {
@@ -48,11 +48,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // verify button exists
-    getByTestId('RnuiIconButtonTid');
+    getByTestId('ClearFilterButtonTid');
   });
 
   it('disables clear filters button when sort is undefined', async () => {
@@ -61,11 +61,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // verify no clear button
-    expect(getByTestId('RnuiIconButtonTid').props.disabled).toBeTruthy();
+    expect(getByTestId('ClearFilterButtonTid').props.disabled).toBeTruthy();
   });
 
   it('disables clear filters button when sort is at default', async () => {
@@ -74,11 +74,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // verify no clear button
-    expect(getByTestId('RnuiIconButtonTid').props.disabled).toBeTruthy();
+    expect(getByTestId('ClearFilterButtonTid').props.disabled).toBeTruthy();
   });
 
   it('renders clear filters button when sort is changed', async () => {
@@ -87,11 +87,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // verify button exists
-    getByTestId('RnuiIconButtonTid');
+    getByTestId('ClearFilterButtonTid');
   });
 
   it('handles click, without onClear', async () => {
@@ -100,11 +100,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton />
+      <ClearFilterButton testID='ClearFilterButtonTid' />
     );
 
     // click filters button
-    const clearBtn = getByTestId('RnuiIconButtonTid');
+    const clearBtn = getByTestId('ClearFilterButtonTid');
     act(() => {
       fireEvent.press(clearBtn);
     });
@@ -125,11 +125,11 @@ describe('ClearFilterButton', () => {
 
     // render
     const { getByTestId } = render(
-      <ClearFilterButton onClear={mock_onClear} />
+      <ClearFilterButton testID='ClearFilterButtonTid' onClear={mock_onClear} />
     );
 
     // click filters button
-    const clearBtn = getByTestId('RnuiIconButtonTid');
+    const clearBtn = getByTestId('ClearFilterButtonTid');
     act(() => {
       fireEvent.press(clearBtn);
     });

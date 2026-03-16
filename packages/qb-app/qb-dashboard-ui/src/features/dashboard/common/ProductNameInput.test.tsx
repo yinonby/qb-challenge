@@ -34,7 +34,7 @@ describe('ProductNameInput', () => {
 
     expect(mockT).toHaveBeenCalledWith('app:productName');
 
-    const input = getByTestId('MinStockInputTid');
+    const input = getByTestId('ProductNameInputTid');
     expect(input).toBeTruthy();
   });
 
@@ -43,7 +43,7 @@ describe('ProductNameInput', () => {
       <ProductNameInput value={undefined} onChange={jest.fn()} />
     );
 
-    const input = getByTestId('MinStockInputTid');
+    const input = getByTestId('ProductNameInputTid');
 
     expect(input.props.value).toBe('');
   });
@@ -55,7 +55,7 @@ describe('ProductNameInput', () => {
       <ProductNameInput value="123" onChange={onChange} />
     );
 
-    const input = getByTestId('MinStockInputTid');
+    const input = getByTestId('ProductNameInputTid');
 
     fireEvent.changeText(input, '456');
 
@@ -67,7 +67,7 @@ describe('ProductNameInput', () => {
       <ProductNameInput value="789" onChange={jest.fn()} />
     );
 
-    const input = getByTestId('MinStockInputTid');
+    const input = getByTestId('ProductNameInputTid');
 
     expect(input.props.value).toBe('789');
   });

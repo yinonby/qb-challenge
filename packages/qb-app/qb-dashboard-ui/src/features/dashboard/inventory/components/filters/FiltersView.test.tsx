@@ -1,6 +1,7 @@
 
 import { DEFAULT_SORT_OPTION } from '@qb/models';
 import { __puiMocks } from '@qb/platform-ui';
+import { __rnuiMocks } from '@qb/rnui';
 import { fireEvent, render } from '@testing-library/react-native';
 import React, { act } from 'react';
 import { FiltersView } from './FiltersView';
@@ -43,6 +44,7 @@ jest.mock('../../../common/AvailabilityRangeSelect', () => {
 // tests
 
 describe('FiltersView', () => {
+  const { onShowSnackbarMock } = __rnuiMocks;
   const { mock_useSearchParams, mock_useSetSearchParams } = __puiMocks;
   const mock_setParams = jest.fn();
   mock_useSearchParams.mockReturnValue({
@@ -117,7 +119,7 @@ describe('FiltersView', () => {
     expect(applyButton.props.disabled).toBe(false)
   });
 
-  it('handles apply, without onApply callback', () => {
+  it('handles apply, invalid stock range', () => {
     const { getByTestId } = render(<FiltersView />);
 
     const sortSelect = getByTestId('SortSelectTid');
@@ -127,7 +129,28 @@ describe('FiltersView', () => {
     act(() => {
       sortSelect.props.onChange('MOCK_SORT');
       categorySelect.props.onChange('MOCK_CATEGORY');
-      availabilitySelect.props.onChange('MOCK_AVAILABILITY');
+      availabilitySelect.props.onChange({ minStock: 4, maxStock: 2 });
+    });
+
+    fireEvent.press(getByTestId('ApplyButtonTid'));
+
+    expect(onShowSnackbarMock).toHaveBeenCalledWith(expect.objectContaining({
+      message: 'mocked-t-appClientError:invalidRange',
+    }));
+    expect(mock_setParams).not.toHaveBeenCalled();
+  });
+
+  it('handles apply, without onApply callback, only min stock', () => {
+    const { getByTestId } = render(<FiltersView />);
+
+    const sortSelect = getByTestId('SortSelectTid');
+    const categorySelect = getByTestId('CategorySelectTid');
+    const availabilitySelect = getByTestId('AvailabilityRangeSelectTid');
+
+    act(() => {
+      sortSelect.props.onChange('MOCK_SORT');
+      categorySelect.props.onChange('MOCK_CATEGORY');
+      availabilitySelect.props.onChange({ minStock: 1 });
     });
 
     fireEvent.press(getByTestId('ApplyButtonTid'));
@@ -135,7 +158,54 @@ describe('FiltersView', () => {
     expect(mock_setParams).toHaveBeenCalledWith({
       pageNumStr: "0",
       category: 'MOCK_CATEGORY',
-      availability: undefined,
+      availabilityMinStr: "1",
+      sort: 'MOCK_SORT',
+    });
+  });
+
+  it('handles apply, without onApply callback, only max stock', () => {
+    const { getByTestId } = render(<FiltersView />);
+
+    const sortSelect = getByTestId('SortSelectTid');
+    const categorySelect = getByTestId('CategorySelectTid');
+    const availabilitySelect = getByTestId('AvailabilityRangeSelectTid');
+
+    act(() => {
+      sortSelect.props.onChange('MOCK_SORT');
+      categorySelect.props.onChange('MOCK_CATEGORY');
+      availabilitySelect.props.onChange({ maxStock: 1 });
+    });
+
+    fireEvent.press(getByTestId('ApplyButtonTid'));
+
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: "0",
+      category: 'MOCK_CATEGORY',
+      availabilityMaxStr: "1",
+      sort: 'MOCK_SORT',
+    });
+  });
+
+  it('handles apply, without onApply callback, min and max stock', () => {
+    const { getByTestId } = render(<FiltersView />);
+
+    const sortSelect = getByTestId('SortSelectTid');
+    const categorySelect = getByTestId('CategorySelectTid');
+    const availabilitySelect = getByTestId('AvailabilityRangeSelectTid');
+
+    act(() => {
+      sortSelect.props.onChange('MOCK_SORT');
+      categorySelect.props.onChange('MOCK_CATEGORY');
+      availabilitySelect.props.onChange({ minStock: 1, maxStock: 3 });
+    });
+
+    fireEvent.press(getByTestId('ApplyButtonTid'));
+
+    expect(mock_setParams).toHaveBeenCalledWith({
+      pageNumStr: "0",
+      category: 'MOCK_CATEGORY',
+      availabilityMinStr: "1",
+      availabilityMaxStr: "3",
       sort: 'MOCK_SORT',
     });
   });

@@ -22,7 +22,7 @@ export const ProductNameInput: FC<ProductNameInputPropsT> = (props) => {
 
   return (
     <RnuiTextInput
-      testID='MinStockInputTid'
+      testID='ProductNameInputTid'
       size='xs'
       keyboardType='numeric'
       label={t('app:productName')}

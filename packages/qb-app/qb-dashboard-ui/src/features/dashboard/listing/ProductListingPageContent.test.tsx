@@ -135,5 +135,10 @@ describe('ProductListingPageContent', () => {
     await waitFor(() => {
       expect(view.props.productNameFilter).toEqual('ABC');
     });
+
+    view.props.onProductNameFilterChange('');
+    await waitFor(() => {
+      expect(view.props.productNameFilter).toEqual('');
+    });
   });
 });

@@ -6,6 +6,7 @@
   },
   "appClientError": {
     "unknown": "Une erreur inconnue s'est produite",
-    "someProductsNotUpdated": "Certains produits n'ont pas été mis à jour"
+    "someProductsNotUpdated": "Certains produits n'ont pas été mis à jour",
+    "invalidRange": "La plage n'est pas valide"
   }
 }

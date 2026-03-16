@@ -9,7 +9,7 @@ import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { buildAvailabilityOption, type ProductInventoryPageUrlParamsT } from '@qb-dashboard-ui/types/UrlDefs';
 import { type AvailabilityOptionT } from '@qb/models';
 import { exportTextFileAsync, isWeb, usePlatformUiDeviceLocale, useSearchParams, useSetSearchParams } from '@qb/platform-ui';
-import { RnuiAppContent, RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
+import { RnuiButton, RnuiIconButton, RnuiText, type TestableComponentT } from '@qb/rnui';
 import React, { type FC } from 'react';
 import { View } from 'react-native';
 import { PaginationControl } from '../../../common/PaginationControl';
@@ -103,7 +103,7 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
   }
 
   return (
-    <RnuiAppContent testID="RnuiAppContentTid">
+    <View>
       <RnuiText variant='titleMedium'>{t('app:inventoryManagementDesc')}</RnuiText>
 
       <View style={genericStyles.flexRow}>
@@ -143,6 +143,6 @@ export const InventoryView: FC<InventoryViewPropsT> = (props) => {
         productSummaries={data.productSummaries}
         imageSize={32}
       />
-    </RnuiAppContent>
+    </View>
   );
 };

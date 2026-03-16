@@ -23,6 +23,7 @@ initPlatformUiMocks();
 declare module '@qb/rnui' {
   export const __rnuiMocks: {
     mock_useRnuiDimensions: jest.Mock,
+    onShowSnackbarMock: jest.Mock,
   };
 }
 

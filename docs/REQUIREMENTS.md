@@ -40,7 +40,7 @@ Qiibee Take-Home Coding Challenge
 - Real-time stock level updates
 - ✅ Unit tests for Redux slices, components, pure functions
 - Integration tests
-- E2E tests with Playwright
+- ✅ E2E tests with Playwright
 - Performance monitoring
 - Optimistic updates for stock changes
 
@@ -55,4 +55,5 @@ Qiibee Take-Home Coding Challenge
 
 ## Extras
 - ✅ Language selection (currently English or French).
-- ✅ Cart
+- ✅ Supports localization of all data (products).
+- ✅ Cart (the actual cart view is very basic, only showing product names, due to lack of time).

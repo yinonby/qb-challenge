@@ -8,6 +8,7 @@ export type ApiServerErrorCodeT =
 export type AppClientErrorCodeT =
   | 'appClientError:unknown'
   | 'appClientError:someProductsNotUpdated'
+  | 'appClientError:invalidRange'
 ;
 
 export type AppErrorCodeT = ApiServerErrorCodeT | AppClientErrorCodeT; // here we can add more error types
