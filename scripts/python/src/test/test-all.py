@@ -24,6 +24,9 @@ def find_packages(root_dir):
         if root == root_dir:
             continue
 
+        if "qb-e2e" in root:
+            continue
+
         # Skip node_modules packages
         if "node_modules" in root:
             continue

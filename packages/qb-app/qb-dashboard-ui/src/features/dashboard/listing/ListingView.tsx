@@ -61,7 +61,7 @@ export const ListingView: FC<ListingViewPropsT> = (props) => {
   }
 
   return (
-    <View style={genericStyles.spacing}>
+    <View testID={props.testID} style={genericStyles.spacing}>
       <View style={genericStyles.flexRow}>
         <FiltersButton testID='FiltersButtonTid' />
 

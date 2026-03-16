@@ -24,7 +24,7 @@ export const ProductListingPageContent: FC<TestableComponentT> = () => {
     productsPerPage: productsPerPage,
     category,
     availability,
-    productNameFilter,
+    productNameFilter: productNameFilter === '' ? undefined : productNameFilter,
     sort: sort || DEFAULT_SORT_OPTION,
   });
 

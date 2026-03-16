@@ -1,0 +1,29 @@
+{
+  "name": "@qb/e2e",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "test": "npm run pretty && npm run tsc && npm run lint && npm run e2e",
+    "pretty": "npm run pretty:package",
+    "pretty:package": "prettier --write package.json",
+    "tsc": "npx tsc",
+    "lint": "npm run lint:eslint && npm run lint:cycles",
+    "lint:eslint": "eslint -c ./.eslint.config.mjs ./e2e",
+    "lint:fix": "npm run lint:eslint -- --fix",
+    "lint:cycles": "madge --circular --extensions ts,tsx,js .",
+    "e2e": "npm run e2e:install && npm run e2e:test",
+    "e2e:install": "playwright install --with-deps",
+    "e2e:test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@qb/lint": "*",
+    "@qb/ts-deps": "*",
+    "@qb/vitest": "*",
+    "@types/node": "^25.0.3",
+    "cross-env": "^7.0.3"
+  }
+}

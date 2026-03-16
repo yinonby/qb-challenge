@@ -92,8 +92,7 @@ export const ProductDetailsView: FC<ProductDetailsViewPropsT> = (props) => {
             </RnuiText>
           </View>
 
-
-          {productDetails.relatedProductSummaries &&
+          {productDetails.relatedProductSummaries && productDetails.relatedProductSummaries.length > 0 &&
             <View style={genericStyles.spacing}>
               <RnuiText variant='titleSmall'>{t('app:relatedProducts')}</RnuiText>
               <ProductListingGrid
