@@ -1,6 +1,8 @@
 # Qiibee Challenge
 Qiibee Take-Home Coding Challenge
 
+<img src="./apps/qb-dashboard-expo/assets/images/qiibee-logo-wide.png" height="50" />
+
 ## Environment Setup
 
 #### Start the App
@@ -15,7 +17,7 @@ You will then get this link [](http://localhost:4100/)
 
 #### Test the App
 
-- Run all repository tests:
+- Run all repository tests (at the moment e2e disabled due to CI issues):
 ```
 npm t
 ```
@@ -41,3 +43,10 @@ npm run cover:report
 - For testing overview, see [TESTING](./docs/TESTING.md).
 - For key notes overview, see [KEY NOTES](./docs/KEY_NOTES.md).
 - For components overview, see [COMPONENTS](./docs/COMPONENTS.md).
+
+## Screenshots
+
+<img src="./apps/qb-dashboard-expo/assets/screenshots/screenshot-inventory-web.png" height="600" />
+
+<img src="./apps/qb-dashboard-expo/assets/screenshots/screenshot-listing-ios.png" height="600" />
+<img src="./apps/qb-dashboard-expo/assets/screenshots/screenshot-details-android.png" height="600" />
