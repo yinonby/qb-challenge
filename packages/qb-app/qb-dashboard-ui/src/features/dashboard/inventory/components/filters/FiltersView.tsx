@@ -4,7 +4,7 @@ import { AvailabilityRangeSelect } from '@qb-dashboard-ui/features/dashboard/com
 import { useGenericStyles } from '@qb-dashboard-ui/types/GenericStyles';
 import { DEFAULT_SORT_OPTION, type AvailabilityOptionT, type ProductCategoryT, type SortT } from '@qb/models';
 import { useSearchParams, useSetSearchParams } from '@qb/platform-ui';
-import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, type TestableComponentT } from '@qb/rnui';
+import { RnuiButton, RnuiGrid, RnuiGridItem, RnuiText, useRnuiSnackbar, type TestableComponentT } from '@qb/rnui';
 import { default as React, useState, type FC } from 'react';
 import { ScrollView, View } from 'react-native';
 import { buildAvailabilityOption, type ProductListingPageUrlParamsT } from '../../../../../types/UrlDefs';
@@ -28,6 +28,7 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   const spacing = 8;
   const marginCompensation = spacing / 2;
   const { setParams } = useSetSearchParams<ProductListingPageUrlParamsT>();
+  const { onShowSnackbar } = useRnuiSnackbar();
 
   const handleCategoryChange = (newValue: ProductCategoryT | undefined): void => {
     setSelectedCategory(newValue);
@@ -42,6 +43,17 @@ export const FiltersView: FC<FiltersViewPropsT> = (props) => {
   }
 
   const handleApply = (): void => {
+    if (selectedAvailability?.minStock !== undefined && selectedAvailability?.maxStock !== undefined) {
+      if (selectedAvailability.minStock > selectedAvailability.maxStock) {
+        onShowSnackbar({
+          message: t('appClientError:invalidRange'),
+          level: 'warn',
+          withCloseButton: true,
+        });
+        return;
+      }
+    }
+
     const newPageNum = 0; // we must reset the page number when filters are changed
 
     setParams({
