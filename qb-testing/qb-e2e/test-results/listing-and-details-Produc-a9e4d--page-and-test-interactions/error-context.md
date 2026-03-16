@@ -1,0 +1,67 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e8]:
+  - generic [ref=e11]:
+    - button "Product Listing" [ref=e13] [cursor=pointer]:
+      - generic [ref=e16]: Product Listing
+    - button "Inventory Management" [ref=e18] [cursor=pointer]:
+      - generic [ref=e21]: Inventory Management
+    - button "Cart" [ref=e23] [cursor=pointer]:
+      - generic [ref=e26]: Cart
+  - generic [ref=e27]:
+    - generic [ref=e31]:
+      - generic:
+        - generic:
+          - generic:
+            - button "Show navigation menu" [ref=e33] [cursor=pointer]
+            - heading "Product Listing" [level=1] [ref=e36]
+            - button [ref=e39] [cursor=pointer]:
+              - img: 󰒓
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - button "Filter and Sort" [ref=e47] [cursor=pointer]:
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - img: 󰈶
+              - generic [ref=e50]: Filter and Sort
+          - generic [ref=e52]:
+            - generic:
+              - generic:
+                - generic:
+                  - generic: Product name
+                  - generic: Product name
+            - textbox [ref=e53]
+          - generic [ref=e54]:
+            - button [disabled]:
+              - img: 󱀿
+          - generic [ref=e55]:
+            - button [ref=e57] [cursor=pointer]:
+              - img: 󰁍
+            - generic [ref=e58]: 13-13 / 13
+            - generic [ref=e59]:
+              - button [disabled]:
+                - img: 󰁔
+        - link "Electronics Product name Sony BRAVIA XR 65\" Class A80L OLED 4K HDR Google TV Description Experience pure black and natural colors with the Cognitive Processor XR. Price 1699.99 USD Popularity 94 Stock level 0" [ref=e65] [cursor=pointer]:
+          - /url: /app/dashboard/product/SNY-XR65A80L
+          - generic [ref=e68]:
+            - generic [ref=e75]: Electronics
+            - generic [ref=e77]:
+              - generic [ref=e78]:
+                - generic [ref=e79]: Product name
+                - generic [ref=e80]: Sony BRAVIA XR 65" Class A80L OLED 4K HDR Google TV
+              - generic [ref=e81]:
+                - generic [ref=e82]: Description
+                - generic [ref=e83]: Experience pure black and natural colors with the Cognitive Processor XR.
+              - generic [ref=e84]:
+                - generic [ref=e85]: Price
+                - generic [ref=e86]: 1699.99 USD
+              - generic [ref=e87]:
+                - generic [ref=e88]: Popularity
+                - generic [ref=e89]: "94"
+              - generic [ref=e90]:
+                - generic [ref=e91]: Stock level
+                - generic [ref=e92]: "0"
+    - generic:
+      - button
+```

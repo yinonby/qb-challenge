@@ -38,7 +38,7 @@ npm run cover:report
 ## More Reading
 - For repository structure, see [REPO STRUCTURE](./docs/REPO_STRUCTURE.md).
 - For requirements overview, see [REQUIREMENTS](./docs/REQUIREMENTS.md).
-- For components overview, see [COMPONENTS](./docs/COMPONENTS.md).
-- For key notes overview, see [KEY NOTES](./docs/KEY_NOTES.md).
 - For testing overview, see [TESTING](./docs/TESTING.md).
+- For key notes overview, see [KEY NOTES](./docs/KEY_NOTES.md).
+- For components overview, see [COMPONENTS](./docs/COMPONENTS.md).
 
