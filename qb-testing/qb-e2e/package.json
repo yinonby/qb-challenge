@@ -15,12 +15,11 @@
     "lint:fix": "npm run lint:eslint -- --fix",
     "lint:cycles": "madge --circular --extensions ts,tsx,js .",
     "e2e": "npm run e2e:install && npm run e2e:test",
-    "e2e:install": "npx playwright install --with-deps",
-    "e2e:test": "cross-env NODE_ENV=test LOG_LEVEL=SILENT playwright test",
-    "int": "npm run e2e:test"
+    "e2e:install": "playwright install --with-deps",
+    "e2e:test": "playwright test"
   },
-  "@playwright/test": "^1.58.2",
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@qb/lint": "*",
     "@qb/ts-deps": "*",
     "@qb/vitest": "*",

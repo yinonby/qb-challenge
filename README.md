@@ -41,4 +41,3 @@ npm run cover:report
 - For testing overview, see [TESTING](./docs/TESTING.md).
 - For key notes overview, see [KEY NOTES](./docs/KEY_NOTES.md).
 - For components overview, see [COMPONENTS](./docs/COMPONENTS.md).
-
