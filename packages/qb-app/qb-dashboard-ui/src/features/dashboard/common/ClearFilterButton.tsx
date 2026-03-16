@@ -41,7 +41,7 @@ export const ClearFilterButton: FC<ClearFilterButtonPropsT> = (props) => {
 
   return (
     <RnuiIconButton
-      testID='RnuiIconButtonTid'
+      testID={props.testID}
       size='xs'
       onPress={handleClearFilters}
       icon='filter-variant-remove'
