@@ -7,8 +7,10 @@ Qiibee Take-Home Coding Challenge
 
 #### Unit Tests
 - All files are covered by unit tests, with 100% coverage.
-- Run `npm t` to run the tests.
-- Run `npm run cover:report` to get coverage report.
+- Run `npm t` to run all tests.
+- Run `npm run test:unit` to run only unit tests.
+- Run `npm run test:e2e` to run only e2e tests (very basic due to lack of time).
+- Run `npm run cover:report` to get coverage report. A report will open in your browser.
 - Used `Jest` and `Vitest` for unit tests.
 
 #### Github Actions
